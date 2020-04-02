@@ -1,3 +1,6 @@
+# COVID-19 Self-Reporting Tool
+## Frontend
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
