@@ -1,5 +1,5 @@
 # COVID-19 Self-Reporting Tool
-## Frontend
+## Front-end
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
