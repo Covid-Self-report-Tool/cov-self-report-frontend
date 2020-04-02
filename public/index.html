@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <meta name="google-signin-client_id" content="189839898864-ptbdc99c1eirli6eahtddtr1g0f99obm.apps.googleusercontent.com">
     <meta
       name="description"
       content="Web site created using create-react-app"
@@ -39,5 +41,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+  <div class="g-signin2" data-onsuccess="onSignIn"></div>
   </body>
 </html>
