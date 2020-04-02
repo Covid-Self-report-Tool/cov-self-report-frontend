@@ -34,8 +34,8 @@ function App() {
           Learn React
         </a>
       </header>
+      <ShoppingList name="COVID"/>
     </div>
-   <ShoppingList name="COVID"/>
   );
 }
 
