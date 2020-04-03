@@ -47,7 +47,13 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
 
   return (
     <div>
-      <Map center={position} zoom={4} length={1} className={styles.root}>
+      <Map
+        center={position}
+        zoom={4}
+        length={1}
+        className={styles.root}
+        minZoom={2}
+      >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
