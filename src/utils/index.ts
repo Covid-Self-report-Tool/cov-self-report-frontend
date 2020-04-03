@@ -3,3 +3,5 @@ export const prettyPrint = (value: number) => {
     minimumFractionDigits: 0,
   });
 };
+
+export const getCountryJSON = () => {};

@@ -2,8 +2,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { WorldGraphLocation } from 'components';
 import { NotifierCard } from 'components/NotifierCard';
+import { IGeoJson } from 'types';
 
 const superagent = require('superagent');
+const countryGeoJson = require('utils/countries.json');
 
 type ApiResponse = {
   body: {
@@ -41,6 +43,7 @@ export const Home: FC = () => {
   const [confirmed, setConfirmed] = useState<number | null>(null);
   const [deaths, setDeaths] = useState<number | null>(null);
   const [recovered, setRecovered] = useState<number | null>(null);
+  const [features, setFeatures] = useState<IGeoJson[]>([]);
 
   useEffect(() => {
     superagent
@@ -63,6 +66,24 @@ export const Home: FC = () => {
           ['Country', 'Infected'],
           ...Object.entries(infectedByCountry),
         ]);
+        const newFeatures: IGeoJson[] = [];
+
+        countryGeoJson.features.forEach((feature: IGeoJson) => {
+          if (feature.properties !== null) {
+            const newFeature = { ...feature };
+
+            newFeature.properties.confirmed =
+              infectedByCountry[feature.properties.name];
+            newFeatures.push(newFeature);
+          }
+        });
+
+        const geoJson: any = {
+          type: 'FeatureCollection',
+          features: newFeatures,
+        };
+
+        setFeatures(geoJson);
       })
       .catch(console.error);
   }, []);
@@ -74,7 +95,7 @@ export const Home: FC = () => {
       </Typography>
       <Grid container>
         <Grid item xs={10}>
-          <WorldGraphLocation data={covidData} region="Italy" />
+          <WorldGraphLocation data={features} />
         </Grid>
         <Grid item xs={2}>
           {confirmed !== null && (
