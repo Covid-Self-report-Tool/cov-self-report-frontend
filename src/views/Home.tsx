@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import {
   Typography,
   Grid,
@@ -8,8 +8,12 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { WorldGraphLocation, CountryTable } from 'components';
-import { NotifierCard } from 'components/NotifierCard';
+import {
+  WorldGraphLocation,
+  CountryTable,
+  Modal,
+  NotifierCard,
+} from 'components';
 import { IGeoJson } from 'types';
 
 const superagent = require('superagent');
@@ -210,6 +214,7 @@ export const Home: FC = () => {
               >
                 Self Report
               </Button>
+              <Modal isOpen={open} handleClose={handleClose} />
             </Grid>
           </Grid>
         </Grid>

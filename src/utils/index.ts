@@ -5,3 +5,5 @@ export const prettyPrint = (value: number) => {
 };
 
 export const getCountryJSON = () => {};
+
+export const googleApiKey = 'AIzaSyDkLDn27VC9Eczkrz_yXVroDAlj27XS9kI';
