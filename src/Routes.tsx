@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import { Home, Login, About, Models } from 'views';
+import { Home, Login, About, Models, Signup } from 'views';
 import { Dashboard } from 'components';
 
 const Routes: FC = () => {
@@ -17,6 +17,9 @@ const Routes: FC = () => {
           </Route>
           <Route path="/about">
             <About />
+          </Route>
+          <Route path="/signup">
+            <Signup />
           </Route>
           <Route path="/">
             <Home />
