@@ -43,6 +43,21 @@ export const LoginForm: FC = () => {
     [history, email, password]
   );
 
+  const handleGoogleSignIn = useCallback(
+    async event => {
+      event.preventDefault();
+
+      try {
+        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+        await firebase.auth().signInWithPopup(googleAuthProvider);
+        history.push('/');
+      } catch (error) {
+        alert(error);
+      }
+    },
+    [history]
+  );
+
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.currentTarget.value);
   };
@@ -128,6 +143,7 @@ export const LoginForm: FC = () => {
             variant="outlined"
             color="primary"
             style={{ textTransform: 'none' }}
+            onClick={e => handleGoogleSignIn(e)}
           >
             Login with Google
           </Button>
