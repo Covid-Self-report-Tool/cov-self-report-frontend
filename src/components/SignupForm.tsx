@@ -22,11 +22,9 @@ export const SignupForm: FC = () => {
       event.preventDefault();
 
       try {
-        console.log('email/password: ', email, password);
         await firebase
           .app()
           .auth()
-          // @ts-ignore
           .createUserWithEmailAndPassword(email, password);
         history.push('/');
       } catch (error) {
