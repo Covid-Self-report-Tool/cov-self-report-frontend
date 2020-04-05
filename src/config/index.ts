@@ -1,13 +1,13 @@
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
+export const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_PROJECT,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+};
 
-export const app = firebase.initializeApp({
-  apiKey: 'AIzaSyDBv24jpX_gBPGT_BuTVj4r_XCiGhpRK7E',
-  authDomain: 'c19maps-37544.firebaseapp.com',
-  databaseURL: 'https://c19maps-37544.firebaseio.com',
-  projectId: 'c19maps-37544',
-  storageBucket: 'c19maps-37544.appspot.com',
-  messagingSenderId: '524643385019',
-  appId: '1:524643385019:web:7e29694eb42a7aeb31739e',
-  measurementId: 'G-V6TDRK7718',
-});
+export const mapBoxApiKey = process.env.REACT_APP_MAPBOX_TOKEN;
+export const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
