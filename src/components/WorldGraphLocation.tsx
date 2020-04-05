@@ -45,8 +45,6 @@ type MapboxType = {
 };
 
 const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
-  console.log(process.env);
-  console.log('accessToken', accessToken);
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox';
   const attribution = `Ã‚Â© <a href="https://apps.mapbox.com/feedback/">Mapbox</a>`;
   const url = `${baseUrl}/${tilesetId}/tiles/{z}/{x}/{y}?access_token=${accessToken}`;
