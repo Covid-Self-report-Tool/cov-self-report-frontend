@@ -1,5 +1,9 @@
 import React, { FC } from 'react';
 
 export const Models: FC = () => {
-  return <div></div>;
+  return (
+    <div>
+      <h1>Predictive Models</h1>
+    </div>
+  );
 };

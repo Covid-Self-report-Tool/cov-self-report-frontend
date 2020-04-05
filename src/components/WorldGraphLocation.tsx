@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import {
   Map,
-  GeoJSON,
   Popup,
   TileLayer,
   Marker,
@@ -14,7 +13,6 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { IGeoJson } from '../types';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
 
@@ -30,14 +28,32 @@ L.Icon.Default.mergeOptions({
 });
 
 const useStyles = makeStyles({
-  root: {
+  theMapItself: {
     width: '100%',
-    height: '750px',
+    height: '100%',
+    flex: 1,
   },
 });
 
 type WorldGraphProps = {
   data: any[];
+};
+
+type MapboxType = {
+  tilesetId: string;
+};
+
+// TODO: stop using Jason's access token! 🛑
+const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
+  const accessToken =
+    'pk.eyJ1IjoiYWJldHRlcm1hcCIsImEiOiJjazVqengxMTgwOTB1M2pwbGNteHZkYTJrIn0.87lNhqvxIckDr8oZg_32Qg';
+  const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox';
+  const attribution = `Ã‚Â© <a href="https://apps.mapbox.com/feedback/">Mapbox</a>`;
+  const url = `${baseUrl}/${tilesetId}/tiles/{z}/{x}/{y}?access_token=${accessToken}`;
+
+  // CRED: https://stackoverflow.com/a/37043490/1048518
+  // Prevent tiny font/overly sharp resolution
+  return <TileLayer {...{ url, attribution, tileSize: 512, zoomOffset: -1 }} />;
 };
 
 export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
@@ -46,52 +62,47 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
   console.log('data', data);
 
   return (
-    <div>
-      <Map
-        center={position}
-        zoom={4}
-        length={1}
-        className={styles.root}
-        minZoom={2}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <LayersControl position="topright">
-          <LayersControl.Overlay name="Confirmed">
-            <Choropleth
-              data={data}
-              valueProperty={(feature: any) => feature.properties.confirmed}
-              scale={['white', 'red']}
-              steps={7}
-              onEachFeature={(feature: any, layer: any) =>
-                layer.bindPopup(
-                  `${feature.properties.name} Confirmed: ${feature.properties.confirmed}`
-                )
-              }
-              mode="e"
-            />
-          </LayersControl.Overlay>
-          <LayersControl.Overlay name="Dead">
-            <FeatureGroup color="purple">
-              <Popup>
-                <span>Popup in FeatureGroup</span>
-              </Popup>
-              <Circle center={[51.51, -0.06]} radius={200} />
-            </FeatureGroup>
-          </LayersControl.Overlay>
-          <LayersControl.Overlay name="Suspected">
-            <FeatureGroup>
-              <MarkerClusterGroup>
-                <Marker position={[49.8397, 24.0297]} />
-                <Marker position={[52.2297, 21.0122]} />
-                <Marker position={[51.5074, -0.0901]} />
-              </MarkerClusterGroup>
-            </FeatureGroup>
-          </LayersControl.Overlay>
-        </LayersControl>
-      </Map>
-    </div>
+    <Map
+      center={position}
+      zoom={4}
+      length={1}
+      className={styles.theMapItself}
+      minZoom={2}
+    >
+      <MapboxTileLayer tilesetId="dark-v9" />
+      <LayersControl position="topright">
+        <LayersControl.Overlay name="Confirmed">
+          <Choropleth
+            data={data}
+            valueProperty={(feature: any) => feature.properties.confirmed}
+            scale={['white', 'red']}
+            steps={7}
+            onEachFeature={(feature: any, layer: any) =>
+              layer.bindPopup(
+                `${feature.properties.name} Confirmed: ${feature.properties.confirmed}`
+              )
+            }
+            mode="e"
+          />
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Dead">
+          <FeatureGroup color="purple">
+            <Popup>
+              <span>Popup in FeatureGroup</span>
+            </Popup>
+            <Circle center={[51.51, -0.06]} radius={200} />
+          </FeatureGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Suspected">
+          <FeatureGroup>
+            <MarkerClusterGroup>
+              <Marker position={[49.8397, 24.0297]} />
+              <Marker position={[52.2297, 21.0122]} />
+              <Marker position={[51.5074, -0.0901]} />
+            </MarkerClusterGroup>
+          </FeatureGroup>
+        </LayersControl.Overlay>
+      </LayersControl>
+    </Map>
   );
 };

@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
-import { FaGoogle } from 'react-icons/fa';
 
 const useStyles = makeStyles({
   margin: {},
