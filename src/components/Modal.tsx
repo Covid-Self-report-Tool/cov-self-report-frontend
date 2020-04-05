@@ -35,19 +35,6 @@ const getSteps = () => {
   return ['Symptoms', 'Location', 'Submit'];
 };
 
-const getStepContent = (step: number) => {
-  switch (step) {
-    case 0:
-      return 'Symptoms';
-    case 1:
-      return 'Location';
-    case 2:
-      return 'Submit';
-    default:
-      return 'Unknown step';
-  }
-};
-
 export const Modal: FC<ModalType> = ({ isOpen, handleClose }) => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
