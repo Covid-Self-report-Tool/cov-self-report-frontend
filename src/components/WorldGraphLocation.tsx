@@ -15,6 +15,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
+import { mapBoxApiKey as accessToken } from 'config';
 
 require('react-leaflet-markercluster/dist/styles.min.css');
 
@@ -43,10 +44,9 @@ type MapboxType = {
   tilesetId: string;
 };
 
-// TODO: stop using Jason's access token! 🛑
 const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
-  const accessToken =
-    'pk.eyJ1IjoiYWJldHRlcm1hcCIsImEiOiJjazVqengxMTgwOTB1M2pwbGNteHZkYTJrIn0.87lNhqvxIckDr8oZg_32Qg';
+  console.log(process.env);
+  console.log('accessToken', accessToken);
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox';
   const attribution = `Ã‚Â© <a href="https://apps.mapbox.com/feedback/">Mapbox</a>`;
   const url = `${baseUrl}/${tilesetId}/tiles/{z}/{x}/{y}?access_token=${accessToken}`;
