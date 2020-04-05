@@ -1,32 +1,23 @@
 import React, { FC, useCallback, useState } from 'react';
-import {
-  Paper,
-  Grid,
-  TextField,
-  Button,
-  FormControlLabel,
-  Checkbox,
-} from '@material-ui/core';
+import { Paper, Grid, TextField, Button } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
 import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 
 const useStyles = makeStyles({
-  margin: {},
   padding: {
     padding: '20px',
   },
 });
 
-export const LoginForm: FC = () => {
+export const SignupForm: FC = () => {
   const classes = useStyles();
   const history = useHistory();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleSignIn = useCallback(
+  const handleSignUp = useCallback(
     async event => {
       event.preventDefault();
 
@@ -34,28 +25,13 @@ export const LoginForm: FC = () => {
         await firebase
           .app()
           .auth()
-          .signInWithEmailAndPassword(email, password);
+          .createUserWithEmailAndPassword(email, password);
         history.push('/');
       } catch (error) {
         alert(error);
       }
     },
     [history, email, password]
-  );
-
-  const handleGoogleSignIn = useCallback(
-    async event => {
-      event.preventDefault();
-
-      try {
-        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-        await firebase.auth().signInWithPopup(googleAuthProvider);
-        history.push('/');
-      } catch (error) {
-        alert(error);
-      }
-    },
-    [history]
   );
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +44,7 @@ export const LoginForm: FC = () => {
 
   return (
     <Paper className={classes.padding}>
-      <div className={classes.margin}>
+      <div>
         <Grid container spacing={8} alignItems="flex-end">
           <Grid item>
             <Face />
@@ -102,50 +78,14 @@ export const LoginForm: FC = () => {
             />
           </Grid>
         </Grid>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <FormControlLabel
-              control={<Checkbox color="primary" />}
-              label="Remember me"
-            />
-          </Grid>
-          <Grid item>
-            <Button
-              disableFocusRipple
-              disableRipple
-              style={{ textTransform: 'none' }}
-              variant="text"
-              color="primary"
-            >
-              Forgot password ?
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid container justify="center" style={{ marginTop: '10px' }}>
-          <Link to="/signup">
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{ textTransform: 'none', marginRight: '20px' }}
-            >
-              Sign Up
-            </Button>
-          </Link>
+        <Grid container justify="center" style={{ marginTop: '20px' }}>
           <Button
             variant="outlined"
             color="primary"
             style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={e => handleSignIn(e)}
+            onClick={handleSignUp}
           >
-            Login
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none' }}
-            onClick={e => handleGoogleSignIn(e)}
-          >
-            Login with Google
+            Sign Up
           </Button>
         </Grid>
       </div>
