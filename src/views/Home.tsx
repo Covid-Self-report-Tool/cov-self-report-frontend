@@ -8,7 +8,6 @@ import {
   CountryTable,
   Modal,
   NotifierCard,
-  Dashboard,
 } from 'components';
 import { IGeoJson } from 'types';
 
@@ -112,7 +111,6 @@ export const Home: FC = () => {
   const [deaths, setDeaths] = useState<number | null>(null);
   const [recovered, setRecovered] = useState<number | null>(null);
   const [features, setFeatures] = useState<IGeoJson[]>([]);
-  const [] = useState<boolean>(true);
   const styles = useStyles();
   const [open, setModalOpen] = React.useState(false);
 
