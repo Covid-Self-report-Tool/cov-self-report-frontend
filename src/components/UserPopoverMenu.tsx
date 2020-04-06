@@ -18,8 +18,7 @@ const useStyles = makeStyles(theme => ({
   userInfo: {
     '* &:hover': {
       cursor: 'default',
-      // NOTE: if we switch to a dark theme this will look like 💩
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: theme.palette.background.paper,
     },
   },
   exitIcon: {

@@ -12,14 +12,19 @@ const countryGeoJson = require('utils/countries.json');
 const useStyles = makeStyles(theme => ({
   statsCardsWrap: {
     position: 'absolute',
-    top: theme.spacing(4),
     right: theme.spacing(4),
+    top: '15vh',
+    zIndex: 400,
   },
   paper: {
-    position: 'absolute',
-    width: 400,
     backgroundColor: 'white',
     border: '2px solid #000',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+    padding: theme.spacing(2),
+    position: 'absolute',
+    width: 400,
   },
 }));
 
@@ -33,7 +38,6 @@ type StatsCardsTypes = {
   confirmed: number | null;
   deaths: number | null;
   recovered: number | null;
-  className: string;
 };
 
 type ApiResponse = {
@@ -75,7 +79,7 @@ const flattenLocations = (locations: GeoLocation): CountryTable => {
 };
 
 const StatsCards: FC<StatsCardsTypes> = ({ confirmed, deaths, recovered }) => (
-  <div style={{ position: 'absolute' }}>
+  <div className={useStyles().statsCardsWrap}>
     {confirmed !== null && (
       <Grid item xs={12}>
         <NotifierCard text="Confirmed" number={confirmed} />
@@ -100,7 +104,6 @@ export const Home: FC = () => {
   const [deaths, setDeaths] = useState<number | null>(null);
   const [recovered, setRecovered] = useState<number | null>(null);
   const [features, setFeatures] = useState<IGeoJson[]>([]);
-  const styles = useStyles();
 
   useEffect(() => {
     superagent
@@ -168,15 +171,12 @@ export const Home: FC = () => {
           <CountryTable data={covidData} />
         </Route>
         <Route>
-          <div style={{ position: 'absolute' }}>
-            <StatsCards
-              confirmed={confirmed}
-              deaths={deaths}
-              recovered={recovered}
-              className={styles.statsCardsWrap}
-            />
-          </div>
           <WorldGraphLocation data={features} />
+          <StatsCards
+            confirmed={confirmed}
+            deaths={deaths}
+            recovered={recovered}
+          />
         </Route>
       </RouteSwitch>
     </>

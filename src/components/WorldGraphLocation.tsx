@@ -7,6 +7,7 @@ import {
   LayersControl,
   FeatureGroup,
   Circle,
+  ZoomControl,
 } from 'react-leaflet';
 import { makeStyles } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
@@ -66,9 +67,10 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
       length={1}
       className={styles.theMapItself}
       minZoom={2}
+      zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
-      <LayersControl position="topright">
+      <LayersControl position="bottomright">
         <LayersControl.Overlay name="Confirmed">
           <Choropleth
             data={data}
@@ -101,6 +103,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
           </FeatureGroup>
         </LayersControl.Overlay>
       </LayersControl>
+      <ZoomControl position="bottomright" />
     </Map>
   );
 };
