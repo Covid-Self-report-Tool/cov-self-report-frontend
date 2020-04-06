@@ -1,12 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Route, Switch as RouteSwitch } from 'react-router-dom';
-import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { WorldGraphLocation, CountryTable, NotifierCard } from 'components';
 import { IGeoJson } from 'types';
 
 const superagent = require('superagent');
+
+// Should be able to switch to topojson for some big perf gains:
+// https://github.com/topojson/world-atlas/
+// https://www.jsdelivr.com/package/npm/world-atlas
 const countryGeoJson = require('utils/countries.json');
 
 const useStyles = makeStyles(theme => ({
@@ -78,23 +81,16 @@ const flattenLocations = (locations: GeoLocation): CountryTable => {
   return rows;
 };
 
-const StatsCards: FC<StatsCardsTypes> = ({ confirmed, deaths, recovered }) => (
+const StatsCards: FC<StatsCardsTypes> = ({
+  confirmed = 0,
+  deaths = 0,
+  recovered = -1,
+}) => (
   <div className={useStyles().statsCardsWrap}>
-    {confirmed !== null && (
-      <Grid item xs={12}>
-        <NotifierCard text="Confirmed" number={confirmed} />
-      </Grid>
-    )}
-    {deaths !== null && (
-      <Grid item xs={12}>
-        <NotifierCard text="Deaths" number={deaths} />
-      </Grid>
-    )}
-    {recovered !== null && recovered !== 0 && (
-      <Grid item xs={12}>
-        <NotifierCard text="Recovered" number={recovered} />
-      </Grid>
-    )}
+    {!recovered && <NotifierCard text="Recovered" number={-1} />}
+    {confirmed && <NotifierCard text="Confirmed Cases" number={confirmed} />}
+    <NotifierCard text="Self-reported Cases" number={-1} />
+    {deaths && <NotifierCard text="Deaths" number={deaths} />}
   </div>
 );
 
