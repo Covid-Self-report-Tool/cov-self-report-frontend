@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
+import { Link as RouteLink } from 'react-router-dom';
 import {
   Dialog,
   DialogTitle,
@@ -19,11 +20,6 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 
-type ModalType = {
-  isOpen: boolean;
-  handleClose: () => void;
-};
-
 type Symptoms = {
   headache: boolean;
   fever: boolean;
@@ -35,7 +31,7 @@ const getSteps = () => {
   return ['Symptoms', 'Location', 'Submit'];
 };
 
-export const Modal: FC<ModalType> = ({ isOpen, handleClose }) => {
+export const Modal = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
   const [symptoms, setSymptoms] = useState<Symptoms>({
@@ -212,14 +208,13 @@ export const Modal: FC<ModalType> = ({ isOpen, handleClose }) => {
 
   return (
     <Dialog
-      open={isOpen}
-      onClose={handleClose}
+      open={true}
       aria-labelledby="form-dialog-title"
       fullWidth
       maxWidth="xs"
     >
       <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
+        {steps.map(label => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: { optional?: React.ReactNode } = {};
           return (
@@ -231,7 +226,7 @@ export const Modal: FC<ModalType> = ({ isOpen, handleClose }) => {
       </Stepper>
       {displayStep(activeStep)}
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button to="/" component={RouteLink} color="primary">
           Cancel
         </Button>
         <Button

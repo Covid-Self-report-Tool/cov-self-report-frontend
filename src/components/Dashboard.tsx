@@ -23,11 +23,7 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <MainNavBar
-        open={open}
-        classes={classes}
-        handleDrawerOpen={handleDrawerOpen}
-      />
+      <MainNavBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <Sidebar
         open={open}
         classes={classes}
