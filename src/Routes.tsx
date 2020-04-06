@@ -4,7 +4,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { FirebaseAuthProvider } from '@react-firebase/auth';
 
-import { Dashboard } from 'components';
+import { Dashboard, Modal } from 'components';
 import { Home, Login, Signup, About, Models, Logout } from 'views';
 import { firebaseConfig } from 'config';
 
@@ -30,10 +30,13 @@ const Routes: FC = () => {
             <Route path="/signup">
               <Signup />
             </Route>
-            <Route path="/">
+            <Route>
               <Home />
             </Route>
           </Switch>
+          <Route path="/self-report">
+            <Modal />
+          </Route>
         </Dashboard>
       </Router>
     </FirebaseAuthProvider>

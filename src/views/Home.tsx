@@ -1,14 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Route, Switch as RouteSwitch } from 'react-router-dom';
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {
-  WorldGraphLocation,
-  CountryTable,
-  Modal,
-  NotifierCard,
-} from 'components';
+import { WorldGraphLocation, CountryTable, NotifierCard } from 'components';
 import { IGeoJson } from 'types';
 
 const superagent = require('superagent');
@@ -19,12 +14,6 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: theme.spacing(4),
     right: theme.spacing(4),
-  },
-  center: {
-    margin: 'auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   paper: {
     position: 'absolute',
@@ -112,15 +101,6 @@ export const Home: FC = () => {
   const [recovered, setRecovered] = useState<number | null>(null);
   const [features, setFeatures] = useState<IGeoJson[]>([]);
   const styles = useStyles();
-  const [open, setModalOpen] = React.useState(false);
-
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
 
   useEffect(() => {
     superagent
@@ -187,7 +167,7 @@ export const Home: FC = () => {
         <Route path="/list" exact>
           <CountryTable data={covidData} />
         </Route>
-        <Route path="/" exact>
+        <Route>
           <div style={{ position: 'absolute' }}>
             <StatsCards
               confirmed={confirmed}
@@ -195,18 +175,10 @@ export const Home: FC = () => {
               recovered={recovered}
               className={styles.statsCardsWrap}
             />
-            <Button
-              className={styles.center}
-              variant="contained"
-              onClick={handleModalOpen}
-            >
-              Self Report
-            </Button>
           </div>
           <WorldGraphLocation data={features} />
         </Route>
       </RouteSwitch>
-      <Modal isOpen={open} handleClose={handleModalClose} />
     </>
   );
 };
