@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import {
+  Typography,
+  Link,
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core';
 import MapIcon from '@material-ui/icons/Map';
 import ListIcon from '@material-ui/icons/List';
 import BarChartIcon from '@material-ui/icons/BarChart';
@@ -34,7 +36,8 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-export const MainListItems = () => (
+// The top-level nav btns in sidebar or wherever
+export const ListItems: React.FC = () => (
   <List className={useStyles().list}>
     <ListItem button>
       <Link to="/" component={RouterLink} className={useStyles().navItem}>
