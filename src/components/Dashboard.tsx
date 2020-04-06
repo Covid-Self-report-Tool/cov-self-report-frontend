@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import { useStyles } from './dashboard-styles';
-import MainNavBar from './MainNavBar';
-import { MainListItems } from './listItems';
+import { useStyles } from './dashboard.styles';
+import { MainNavBar, ListItems } from 'components';
 
 type DashboardTypes = {
   children: React.ReactNode | null | undefined;
@@ -19,7 +18,7 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
       <MainNavBar />
       <main className={classes.content}>
         {children}
-        <MainListItems />
+        <ListItems />
       </main>
     </div>
   );

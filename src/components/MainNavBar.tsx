@@ -2,12 +2,9 @@ import React from 'react';
 import { IfFirebaseAuthed, IfFirebaseUnAuthed } from '@react-firebase/auth';
 import { Link as RouteLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
 
-import UserPopoverMenu from './UserPopoverMenu';
+import { UserPopoverMenu } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const MainNavBar = () => {
+export const MainNavBar = () => {
   const classes = useStyles();
 
   return (
@@ -83,5 +80,3 @@ const MainNavBar = () => {
     </AppBar>
   );
 };
-
-export default MainNavBar;
