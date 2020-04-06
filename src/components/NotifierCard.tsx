@@ -1,15 +1,23 @@
 import React, { FC } from 'react';
-import { Card, Typography } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { prettyPrint } from 'utils';
+import Title from './Title';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
-    margin: '20px',
-    borderWidth: '5px',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: theme.spacing(2),
+    overflow: 'auto',
+    padding: theme.spacing(2),
+    width: 200,
   },
-});
+  cardSubText: {
+    flex: 1,
+  },
+}));
 
 type NotifierCard = {
   text: string;
@@ -17,16 +25,17 @@ type NotifierCard = {
 };
 
 export const NotifierCard: FC<NotifierCard> = props => {
-  const styles = useStyles();
+  const classes = useStyles();
 
   return (
-    <Card variant="outlined" raised className={styles.root} elevation={5}>
-      <Typography variant="h4" align="center">
-        {props.text}:
-      </Typography>
-      <Typography variant="h4" align="center">
+    <Paper className={classes.root}>
+      <Title>{props.text}</Title>
+      <Typography component="p" variant="h4">
         {prettyPrint(props.number)}
       </Typography>
-    </Card>
+      <Typography color="textSecondary" className={classes.cardSubText}>
+        date/time here? and/or src link? or just in About?
+      </Typography>
+    </Paper>
   );
 };

@@ -1,7 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const drawerWidth = 240;
-
 export const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -13,26 +11,6 @@ export const useStyles = makeStyles(theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     bottom: 0,
@@ -40,11 +18,11 @@ export const useStyles = makeStyles(theme => ({
     flex: 1,
     flexDirection: 'column',
     flexGrow: 1,
-    left: drawerWidth, // TODO: 0 when sidebar collapsed
+    left: 0,
     overflow: 'auto',
     position: 'absolute',
     right: 0,
-    top: theme.spacing(8),
+    top: 0,
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -58,12 +36,5 @@ export const useStyles = makeStyles(theme => ({
   },
   fixedHeight: {
     height: 240,
-  },
-  navItem: {
-    display: 'flex',
-    alignItems: 'center',
-    a: {
-      color: 'inherit',
-    },
   },
 }));
