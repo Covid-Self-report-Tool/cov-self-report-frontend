@@ -2,12 +2,13 @@ import React from 'react';
 import { FirebaseAuthConsumer } from '@react-firebase/auth';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import {
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemText,
+} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
@@ -15,11 +16,10 @@ import { logOut } from 'utils';
 
 const useStyles = makeStyles(theme => ({
   // Kind of a fight to prevent hover stuff on the non-clickable info
-  userInfo: {
+  noBgChangeOnHover: {
     '* &:hover': {
       cursor: 'default',
-      // NOTE: if we switch to a dark theme this will look like 💩
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: theme.palette.background.paper,
     },
   },
   exitIcon: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function UserPopoverMenu() {
+export function UserPopoverMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const history = useHistory();
 
@@ -54,6 +54,7 @@ export default function UserPopoverMenu() {
         id="customized-menu"
         anchorEl={anchorEl}
         keepMounted
+        disableAutoFocusItem
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
@@ -62,9 +63,9 @@ export default function UserPopoverMenu() {
           sure if this will be the case w/Google auth but if so then need a 
           check to determine if this should be shown.
         */}
-        <MenuItem className={useStyles().userInfo}>
+        <MenuItem className={useStyles().noBgChangeOnHover} divider>
           <ListItemText
-            className={useStyles().userInfo}
+            className={useStyles().noBgChangeOnHover}
             primary={
               <>
                 <Typography
@@ -81,7 +82,6 @@ export default function UserPopoverMenu() {
             }
           />
         </MenuItem>
-        <Divider />
         <MenuItem
           onClick={() => {
             handleClose();
