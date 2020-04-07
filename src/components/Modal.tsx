@@ -20,13 +20,8 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import grey from '@material-ui/core/colors/grey';
-
-type Symptoms = {
-  headache: boolean;
-  fever: boolean;
-  shortnessOfBreath: boolean;
-  cough: boolean;
-};
+import { FirebaseAuthConsumer, IfFirebaseUnAuthed } from '@react-firebase/auth';
+import { SymptomForm, Symptoms } from 'types';
 
 type Location = [number, number];
 
@@ -38,11 +33,18 @@ export const Modal = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
   const [location, setLocation] = useState<Location | null>(null);
-  const [symptoms, setSymptoms] = useState<Symptoms>({
-    headache: false,
-    fever: false,
-    shortnessOfBreath: false,
-    cough: false,
+  const [symptoms, setSymptoms] = useState<SymptomForm>({
+    symptoms: {
+      fever: { isPresent: false },
+      headache: { isPresent: false },
+      shortnessOfBreath: { isPresent: false },
+      lackOfSmell: { isPresent: false },
+      lackOfTaste: { isPresent: false },
+      soreThroat: { isPresent: false },
+      nausea: { isPresent: false },
+      cough: { isPresent: false },
+    },
+    location: null,
   });
   const steps = getSteps();
 
@@ -58,13 +60,27 @@ export const Modal = () => {
     setAddress(newAddress);
   };
 
+  const submitForm = () => {
+    console.log('form submitted');
+  };
+
+  const toggleSymptom = (symptom: Symptoms) => {
+    const newSymptoms = { ...symptoms };
+    console.log('symptom', symptom);
+    console.log('symptoms', symptoms);
+
+    newSymptoms.symptoms[symptom].isPresent = !newSymptoms.symptoms[symptom]
+      .isPresent;
+
+    setSymptoms(newSymptoms);
+  };
+
   const handleSelect = (newAddress: string) => {
     geocodeByAddress(newAddress)
       .then((results: any) => getLatLng(results[0]))
       .then((latLng: any) => {
         setLocation(latLng);
         setAddress(newAddress);
-        console.log('Success', latLng);
       })
       .catch(console.error);
   };
@@ -84,10 +100,8 @@ export const Modal = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={symptoms.cough}
-                          onChange={() =>
-                            setSymptoms({ ...symptoms, cough: !symptoms.cough })
-                          }
+                          checked={symptoms.symptoms.cough.isPresent}
+                          onChange={() => toggleSymptom(Symptoms.cough)}
                           name="cough"
                           color="primary"
                         />
@@ -97,10 +111,8 @@ export const Modal = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={symptoms.fever}
-                          onChange={() =>
-                            setSymptoms({ ...symptoms, fever: !symptoms.fever })
-                          }
+                          checked={symptoms.symptoms.fever.isPresent}
+                          onChange={() => toggleSymptom(Symptoms.fever)}
                           name="fever"
                           color="primary"
                         />
@@ -114,13 +126,8 @@ export const Modal = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={symptoms.headache}
-                          onChange={() =>
-                            setSymptoms({
-                              ...symptoms,
-                              headache: !symptoms.headache,
-                            })
-                          }
+                          checked={symptoms.symptoms.headache.isPresent}
+                          onChange={() => toggleSymptom(Symptoms.headache)}
                           name="headache"
                           color="primary"
                         />
@@ -132,12 +139,11 @@ export const Modal = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={symptoms.shortnessOfBreath}
+                          checked={
+                            symptoms.symptoms.shortnessOfBreath.isPresent
+                          }
                           onChange={() =>
-                            setSymptoms({
-                              ...symptoms,
-                              shortnessOfBreath: !symptoms.shortnessOfBreath,
-                            })
+                            toggleSymptom(Symptoms.shortnessOfBreath)
                           }
                           name="shortnessOfBreath"
                           color="primary"
@@ -204,10 +210,18 @@ export const Modal = () => {
         );
       case 2:
         return (
-          <div>
-            <DialogTitle>Login</DialogTitle>
-            <DialogContent />
-          </div>
+          <IfFirebaseUnAuthed>
+            {() => (
+              <div>
+                <DialogTitle>Login</DialogTitle>
+                <DialogContent>
+                  <FirebaseAuthConsumer>
+                    {({ user }) => user.email}
+                  </FirebaseAuthConsumer>
+                </DialogContent>
+              </div>
+            )}
+          </IfFirebaseUnAuthed>
         );
       default:
         return <div></div>;
@@ -215,39 +229,49 @@ export const Modal = () => {
   };
 
   return (
-    <Dialog
-      open={true}
-      aria-labelledby="form-dialog-title"
-      fullWidth
-      maxWidth="xs"
-    >
-      <Stepper activeStep={activeStep}>
-        {steps.map(label => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: { optional?: React.ReactNode } = {};
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {displayStep(activeStep)}
-      <DialogActions>
-        <Button to="/" component={RouteLink} color="primary">
-          Cancel
-        </Button>
-        <Button
-          onClick={handleBack}
-          color="primary"
-          disabled={activeStep === 0}
+    <FirebaseAuthConsumer>
+      {() => (
+        <Dialog
+          open
+          aria-labelledby="form-dialog-title"
+          fullWidth
+          maxWidth="xs"
         >
-          Back
-        </Button>
-        <Button onClick={handleNext} color="primary">
-          Next
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <Stepper activeStep={activeStep}>
+            {steps.map(label => {
+              const stepProps: { completed?: boolean } = {};
+              const labelProps: { optional?: React.ReactNode } = {};
+              return (
+                <Step key={label} {...stepProps}>
+                  <StepLabel {...labelProps}>{label}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+          {displayStep(activeStep)}
+          <DialogActions>
+            <Button to="/" component={RouteLink} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleBack}
+              color="primary"
+              disabled={activeStep === 0}
+            >
+              Back
+            </Button>
+            {activeStep < 2 ? (
+              <Button onClick={handleNext} color="primary">
+                Next
+              </Button>
+            ) : (
+              <Button onClick={submitForm} color="primary">
+                Submit
+              </Button>
+            )}
+          </DialogActions>
+        </Dialog>
+      )}
+    </FirebaseAuthConsumer>
   );
 };
