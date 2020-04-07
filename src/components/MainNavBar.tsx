@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
     textDecoration: 'none',
     textAlign: 'center',
     flex: '1 1 100%',
+    color: theme.palette.common.white,
   },
   appBar: {
     paddingTop: theme.spacing(2),
@@ -37,7 +38,6 @@ export const MainNavBar = () => {
           to="/"
           component={RouteLink}
           variant="h4"
-          color="inherit"
           noWrap
           className={classes.title}
         >
@@ -65,7 +65,7 @@ export const MainNavBar = () => {
             {() => (
               <Button
                 variant="outlined"
-                color="inherit"
+                color="primary"
                 className={classes.signupBtn}
                 component={RouteLink}
                 to="/login"
