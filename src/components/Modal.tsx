@@ -19,6 +19,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+import grey from '@material-ui/core/colors/grey';
 
 type Symptoms = {
   headache: boolean;
@@ -27,6 +28,8 @@ type Symptoms = {
   cough: boolean;
 };
 
+type Location = [number, number];
+
 const getSteps = () => {
   return ['Symptoms', 'Location', 'Submit'];
 };
@@ -34,6 +37,7 @@ const getSteps = () => {
 export const Modal = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
+  const [location, setLocation] = useState<Location | null>(null);
   const [symptoms, setSymptoms] = useState<Symptoms>({
     headache: false,
     fever: false,
@@ -57,7 +61,11 @@ export const Modal = () => {
   const handleSelect = (newAddress: string) => {
     geocodeByAddress(newAddress)
       .then((results: any) => getLatLng(results[0]))
-      .then((latLng: any) => console.log('Success', latLng))
+      .then((latLng: any) => {
+        setLocation(latLng);
+        setAddress(newAddress);
+        console.log('Success', latLng);
+      })
       .catch(console.error);
   };
 
@@ -174,8 +182,8 @@ export const Modal = () => {
                           : 'suggestion-item';
                         // inline style for demonstration purpose
                         const style = suggestion.active
-                          ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                          : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                          ? { backgroundColor: grey['600'], cursor: 'pointer' }
+                          : { backgroundColor: '#424242', cursor: 'pointer' };
                         return (
                           <div
                             {...getSuggestionItemProps(suggestion, {
@@ -202,7 +210,7 @@ export const Modal = () => {
           </div>
         );
       default:
-        break;
+        return <div></div>;
     }
   };
 
