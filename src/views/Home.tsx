@@ -81,16 +81,12 @@ const flattenLocations = (locations: GeoLocation): CountryTable => {
   return rows;
 };
 
-const StatsCards: FC<StatsCardsTypes> = ({
-  confirmed = 0,
-  deaths = 0,
-  recovered = -1,
-}) => (
+const StatsCards: FC<StatsCardsTypes> = ({ confirmed, deaths, recovered }) => (
   <div className={useStyles().statsCardsWrap}>
-    {!recovered && <NotifierCard text="Recovered" number={-1} />}
-    {confirmed && <NotifierCard text="Confirmed Cases" number={confirmed} />}
+    <NotifierCard text="Recovered" number={recovered || -1} />
+    <NotifierCard text="Confirmed Cases" number={confirmed || -1} />
     <NotifierCard text="Self-reported Cases" number={-1} />
-    {deaths && <NotifierCard text="Deaths" number={deaths} />}
+    <NotifierCard text="Deaths" number={deaths || -1} />
   </div>
 );
 
