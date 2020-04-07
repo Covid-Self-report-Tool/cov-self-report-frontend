@@ -22,16 +22,14 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
   },
   paper: {
+    backgroundColor: theme.palette.common.white,
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(2),
     overflow: 'auto',
     padding: theme.spacing(1),
     position: 'relative',
-    width: 225,
-  },
-  cardSubText: {
-    flex: 1,
+    width: 200,
   },
   popover: {
     width: 250,
@@ -40,6 +38,7 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: 'pre-wrap',
   },
   tickerVal: {
+    color: theme.palette.common.black,
     fontWeight: 'bold',
   },
 }));
@@ -93,8 +92,11 @@ function DefPopoverMenu({
           component="ul"
           className={useStyles().popover}
         >
-          <ListItem className={definitionClassname} divider>
-            {defText}
+          <ListItem className={definitionClassname}>{defText}</ListItem>
+          <ListItem divider>
+            <Typography variant="caption" color="textSecondary">
+              LAST UPDATED: date/time if possible
+            </Typography>
           </ListItem>
           <ListItem component={RouteLink} to="/about" onClick={handleClose}>
             View info
@@ -117,13 +119,6 @@ export const NotifierCard: FC<NotifierCard> = props => {
         </Title>
         <Typography component="p" variant="h4" className={classes.tickerVal}>
           {prettyPrint(props.number)}
-        </Typography>
-        <Typography
-          variant="caption"
-          color="textSecondary"
-          className={classes.cardSubText}
-        >
-          date/time if possible
         </Typography>
       </Paper>
     </Grid>
