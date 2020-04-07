@@ -1,25 +1,33 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Route, Switch as RouteSwitch } from 'react-router-dom';
-import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { WorldGraphLocation, CountryTable, NotifierCard } from 'components';
 import { IGeoJson } from 'types';
 
 const superagent = require('superagent');
+
+// Should be able to switch to topojson for some big perf gains:
+// https://github.com/topojson/world-atlas/
+// https://www.jsdelivr.com/package/npm/world-atlas
 const countryGeoJson = require('utils/countries.json');
 
 const useStyles = makeStyles(theme => ({
   statsCardsWrap: {
     position: 'absolute',
-    top: theme.spacing(4),
     right: theme.spacing(4),
+    top: '15vh',
+    zIndex: 400,
   },
   paper: {
-    position: 'absolute',
-    width: 400,
     backgroundColor: 'white',
     border: '2px solid #000',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+    padding: theme.spacing(2),
+    position: 'absolute',
+    width: 400,
   },
 }));
 
@@ -33,7 +41,6 @@ type StatsCardsTypes = {
   confirmed: number | null;
   deaths: number | null;
   recovered: number | null;
-  className: string;
 };
 
 type ApiResponse = {
@@ -74,23 +81,16 @@ const flattenLocations = (locations: GeoLocation): CountryTable => {
   return rows;
 };
 
-const StatsCards: FC<StatsCardsTypes> = ({ confirmed, deaths, recovered }) => (
-  <div style={{ position: 'absolute' }}>
-    {confirmed !== null && (
-      <Grid item xs={12}>
-        <NotifierCard text="Confirmed" number={confirmed} />
-      </Grid>
-    )}
-    {deaths !== null && (
-      <Grid item xs={12}>
-        <NotifierCard text="Deaths" number={deaths} />
-      </Grid>
-    )}
-    {recovered !== null && recovered !== 0 && (
-      <Grid item xs={12}>
-        <NotifierCard text="Recovered" number={recovered} />
-      </Grid>
-    )}
+const StatsCards: FC<StatsCardsTypes> = ({
+  confirmed = 0,
+  deaths = 0,
+  recovered = -1,
+}) => (
+  <div className={useStyles().statsCardsWrap}>
+    {!recovered && <NotifierCard text="Recovered" number={-1} />}
+    {confirmed && <NotifierCard text="Confirmed Cases" number={confirmed} />}
+    <NotifierCard text="Self-reported Cases" number={-1} />
+    {deaths && <NotifierCard text="Deaths" number={deaths} />}
   </div>
 );
 
@@ -100,7 +100,6 @@ export const Home: FC = () => {
   const [deaths, setDeaths] = useState<number | null>(null);
   const [recovered, setRecovered] = useState<number | null>(null);
   const [features, setFeatures] = useState<IGeoJson[]>([]);
-  const styles = useStyles();
 
   useEffect(() => {
     superagent
@@ -168,15 +167,12 @@ export const Home: FC = () => {
           <CountryTable data={covidData} />
         </Route>
         <Route>
-          <div style={{ position: 'absolute' }}>
-            <StatsCards
-              confirmed={confirmed}
-              deaths={deaths}
-              recovered={recovered}
-              className={styles.statsCardsWrap}
-            />
-          </div>
           <WorldGraphLocation data={features} />
+          <StatsCards
+            confirmed={confirmed}
+            deaths={deaths}
+            recovered={recovered}
+          />
         </Route>
       </RouteSwitch>
     </>
