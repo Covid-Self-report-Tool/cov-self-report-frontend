@@ -93,7 +93,8 @@ export const About: FC = () => {
           Laboratory in the field of Condensed Matter Physics.
         </li>
         <li>
-          <b>Gabriel Abud</b>
+          <b>Gabriel Abud</b> is a software engineer and ex-biologist based in
+          San Francisco
         </li>
         <li>
           <b>Jason Lampel</b> owns and develops at{' '}
