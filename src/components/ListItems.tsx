@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => {
   return {
     list: {
       left: 0,
-      position: 'absolute',
+      position: 'fixed',
       top: theme.spacing(4),
       zIndex: 401,
     },
