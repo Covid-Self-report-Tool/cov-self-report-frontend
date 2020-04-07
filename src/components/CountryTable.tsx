@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
   Container,
@@ -12,11 +11,7 @@ import {
   Paper,
 } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginTop: theme.spacing(12),
-  },
-}));
+import { centeredContStyles } from '../views/About';
 
 type CountryRow = {
   name: string;
@@ -35,10 +30,8 @@ type CountryTableType = {
 };
 
 export const CountryTable: FC<CountryTableType> = ({ data }) => {
-  const classes = useStyles();
-
   return (
-    <Container maxWidth="md" className={classes.root}>
+    <Container maxWidth="md" className={centeredContStyles().root}>
       <Typography variant="h2">Results by Country</Typography>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
