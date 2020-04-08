@@ -79,7 +79,7 @@ const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
 export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
   const styles = useStyles();
   const [submittedFeats, setSubmittedFeats] = useState<PositionType[]>([]);
-  const initMapCenter = { lat: 30, lng: -85 };
+  const initMapCenter = { lat: 10, lng: -15 };
 
   useEffect(() => {
     // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
@@ -102,7 +102,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
   return (
     <Map
       center={initMapCenter}
-      zoom={5}
+      zoom={3}
       className={styles.theMapItself}
       minZoom={2}
       zoomControl={false}
