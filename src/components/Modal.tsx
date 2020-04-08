@@ -164,6 +164,11 @@ export const Modal = () => {
                 value={address}
                 onChange={handleChange}
                 onSelect={handleSelect}
+                // NOTE: actually need the parentheses around 'regions'
+                // https://developers.google.com/places/supported_types#table3
+                searchOptions={{ types: ['(regions)'] }}
+                debounce={300}
+                shouldFetchSuggestions={address.length > 2}
               >
                 {({
                   getInputProps,
