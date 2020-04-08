@@ -38,7 +38,6 @@ const getSteps = () => {
 export const Modal = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
-  const [location, setLocation] = useState<Location | null>(null);
   const [symptoms, setSymptoms] = useState<SymptomForm>({
     symptoms: {
       fever: { isPresent: false },
@@ -102,7 +101,7 @@ export const Modal = () => {
     geocodeByAddress(newAddress)
       .then((results: any) => getLatLng(results[0]))
       .then((latLng: any) => {
-        setLocation(latLng);
+        setSymptoms({ ...symptoms, location: latLng });
         setAddress(newAddress);
       })
       .catch(console.error);
@@ -119,8 +118,8 @@ export const Modal = () => {
             <DialogContent>
               <Grid container>
                 <Grid item xs={6}>
-                  {firstHalfSymptoms.map(symptom => (
-                    <FormGroup>
+                  {firstHalfSymptoms.map((symptom, idx) => (
+                    <FormGroup key={idx}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -136,8 +135,8 @@ export const Modal = () => {
                   ))}
                 </Grid>
                 <Grid item xs={6}>
-                  {lastHalfSymptoms.map(symptom => (
-                    <FormGroup>
+                  {lastHalfSymptoms.map((symptom, idx) => (
+                    <FormGroup key={idx}>
                       <FormControlLabel
                         control={
                           <Checkbox
