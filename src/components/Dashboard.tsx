@@ -5,10 +5,12 @@ import { ThemeProvider } from '@material-ui/styles';
 
 import { useStyles } from './dashboard.styles';
 import { MainNavBar, ListItems } from 'components';
+import grey from '@material-ui/core/colors/grey';
 
 let theme = createMuiTheme({
   palette: {
     type: 'dark',
+    primary: grey,
   },
   typography: {
     fontFamily: [
