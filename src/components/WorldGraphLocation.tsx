@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   Map,
   Popup,
@@ -11,13 +11,13 @@ import {
 } from 'react-leaflet';
 import { makeStyles } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
 import { mapBoxApiKey as accessToken } from 'config';
 
+const superagent = require('superagent');
 require('react-leaflet-markercluster/dist/styles.min.css');
 
 // @ts-ignore: Unreachable code error
@@ -45,6 +45,27 @@ type MapboxType = {
   tilesetId: string;
 };
 
+type PositionType = [number, number];
+
+type SubmittedType = {
+  data: PositionType[];
+};
+
+type ApiResponse = {
+  text: string;
+  body: {
+    features: PositionType[];
+  };
+};
+
+const SubmittedCases: FC<SubmittedType> = ({ data }) => (
+  <MarkerClusterGroup>
+    {data.map((position, i) => (
+      <Marker key={i} position={position} />
+    ))}
+  </MarkerClusterGroup>
+);
+
 const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox';
   const attribution = `Ã‚Â© <a href="https://apps.mapbox.com/feedback/">Mapbox</a>`;
@@ -57,14 +78,31 @@ const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
 
 export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
   const styles = useStyles();
-  const position = { lat: 40.505, lng: -100 };
-  console.log('data', data);
+  const [submittedFeats, setSubmittedFeats] = useState<PositionType[]>([]);
+  const initMapCenter = { lat: 30, lng: -85 };
+
+  useEffect(() => {
+    // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
+    async function getThatData() {
+      await superagent
+        .get(
+          'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
+        )
+        .set('Accept', 'application/json')
+        .then((response: Readonly<ApiResponse>) => {
+          const parsed = JSON.parse(response.text); // GitHub returns as text
+          setSubmittedFeats(parsed.features);
+        })
+        .catch(console.error);
+    }
+
+    getThatData();
+  }, []);
 
   return (
     <Map
-      center={position}
-      zoom={4}
-      length={1}
+      center={initMapCenter}
+      zoom={5}
       className={styles.theMapItself}
       minZoom={2}
       zoomControl={false}
@@ -93,13 +131,9 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
             <Circle center={[51.51, -0.06]} radius={200} />
           </FeatureGroup>
         </LayersControl.Overlay>
-        <LayersControl.Overlay name="Suspected">
+        <LayersControl.Overlay checked name="User-submitted">
           <FeatureGroup>
-            <MarkerClusterGroup>
-              <Marker position={[49.8397, 24.0297]} />
-              <Marker position={[52.2297, 21.0122]} />
-              <Marker position={[51.5074, -0.0901]} />
-            </MarkerClusterGroup>
+            <SubmittedCases data={submittedFeats} />
           </FeatureGroup>
         </LayersControl.Overlay>
       </LayersControl>
