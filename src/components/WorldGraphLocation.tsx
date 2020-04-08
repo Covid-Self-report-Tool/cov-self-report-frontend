@@ -82,16 +82,21 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
   const initMapCenter = { lat: 30, lng: -85 };
 
   useEffect(() => {
-    superagent
-      .get(
-        'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
-      )
-      .set('Accept', 'application/json')
-      .then((response: Readonly<ApiResponse>) => {
-        const parsed = JSON.parse(response.text); // GitHub returns as text
-        setSubmittedFeats(parsed.features);
-      })
-      .catch(console.error);
+    // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
+    async function getThatData() {
+      await superagent
+        .get(
+          'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
+        )
+        .set('Accept', 'application/json')
+        .then((response: Readonly<ApiResponse>) => {
+          const parsed = JSON.parse(response.text); // GitHub returns as text
+          setSubmittedFeats(parsed.features);
+        })
+        .catch(console.error);
+    }
+
+    getThatData();
   }, []);
 
   return (
