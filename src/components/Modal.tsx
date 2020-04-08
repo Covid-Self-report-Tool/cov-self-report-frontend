@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouteLink } from 'react-router-dom';
+import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
   DialogTitle,
@@ -20,8 +20,14 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import grey from '@material-ui/core/colors/grey';
-import { FirebaseAuthConsumer, IfFirebaseUnAuthed } from '@react-firebase/auth';
+import {
+  FirebaseAuthConsumer,
+  IfFirebaseUnAuthed,
+  IfFirebaseAuthed,
+} from '@react-firebase/auth';
 import { SymptomForm, Symptoms } from 'types';
+import { postFormData } from 'utils/api';
+import { camelCaseToLabel } from 'utils/strings';
 
 type Location = [number, number];
 
@@ -46,7 +52,18 @@ export const Modal = () => {
     },
     location: null,
   });
+  const history = useHistory();
+
   const steps = getSteps();
+
+  // This is to create a grid layout, split into two groups
+  const allSymptoms = Object.keys(Symptoms) as Array<keyof typeof Symptoms>;
+  const halfwayThrough = Math.floor(allSymptoms.length / 2);
+  const firstHalfSymptoms: Array<keyof typeof Symptoms> = allSymptoms.splice(
+    0,
+    halfwayThrough
+  );
+  const lastHalfSymptoms: Array<keyof typeof Symptoms> = allSymptoms;
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -61,13 +78,19 @@ export const Modal = () => {
   };
 
   const submitForm = () => {
-    console.log('form submitted');
+    postFormData(symptoms)
+      .then((res: any) => {
+        console.log(`got back ${res}`);
+        history.push('/');
+      })
+      .catch((err: any) => {
+        console.error(err);
+        history.push('/');
+      });
   };
 
   const toggleSymptom = (symptom: Symptoms) => {
     const newSymptoms = { ...symptoms };
-    console.log('symptom', symptom);
-    console.log('symptoms', symptoms);
 
     newSymptoms.symptoms[symptom].isPresent = !newSymptoms.symptoms[symptom]
       .isPresent;
@@ -96,62 +119,38 @@ export const Modal = () => {
             <DialogContent>
               <Grid container>
                 <Grid item xs={6}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={symptoms.symptoms.cough.isPresent}
-                          onChange={() => toggleSymptom(Symptoms.cough)}
-                          name="cough"
-                          color="primary"
-                        />
-                      }
-                      label="Cough"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={symptoms.symptoms.fever.isPresent}
-                          onChange={() => toggleSymptom(Symptoms.fever)}
-                          name="fever"
-                          color="primary"
-                        />
-                      }
-                      label="Fever"
-                    />
-                  </FormGroup>
+                  {firstHalfSymptoms.map(symptom => (
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={symptoms.symptoms[symptom].isPresent}
+                            onChange={() => toggleSymptom(Symptoms[symptom])}
+                            name={Symptoms[symptom]}
+                            color="primary"
+                          />
+                        }
+                        label={camelCaseToLabel(Symptoms[symptom])}
+                      />
+                    </FormGroup>
+                  ))}
                 </Grid>
                 <Grid item xs={6}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={symptoms.symptoms.headache.isPresent}
-                          onChange={() => toggleSymptom(Symptoms.headache)}
-                          name="headache"
-                          color="primary"
-                        />
-                      }
-                      label="Headache"
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={
-                            symptoms.symptoms.shortnessOfBreath.isPresent
-                          }
-                          onChange={() =>
-                            toggleSymptom(Symptoms.shortnessOfBreath)
-                          }
-                          name="shortnessOfBreath"
-                          color="primary"
-                        />
-                      }
-                      label="Shortness of Breath"
-                    />
-                  </FormGroup>
+                  {lastHalfSymptoms.map(symptom => (
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={symptoms.symptoms[symptom].isPresent}
+                            onChange={() => toggleSymptom(Symptoms[symptom])}
+                            name={Symptoms[symptom]}
+                            color="primary"
+                          />
+                        }
+                        label={camelCaseToLabel(Symptoms[symptom])}
+                      />
+                    </FormGroup>
+                  ))}
                 </Grid>
               </Grid>
             </DialogContent>
@@ -210,18 +209,28 @@ export const Modal = () => {
         );
       case 2:
         return (
-          <IfFirebaseUnAuthed>
-            {() => (
-              <div>
-                <DialogTitle>Login</DialogTitle>
-                <DialogContent>
-                  <FirebaseAuthConsumer>
-                    {({ user }) => user.email}
-                  </FirebaseAuthConsumer>
-                </DialogContent>
-              </div>
-            )}
-          </IfFirebaseUnAuthed>
+          <div>
+            <IfFirebaseUnAuthed>
+              {() => (
+                <div>
+                  <DialogTitle>Login</DialogTitle>
+                  <DialogContent></DialogContent>
+                </div>
+              )}
+            </IfFirebaseUnAuthed>
+            <IfFirebaseAuthed>
+              {() => (
+                <div>
+                  <DialogTitle>Login</DialogTitle>
+                  <DialogContent>
+                    <FirebaseAuthConsumer>
+                      {({ user }) => user.email}
+                    </FirebaseAuthConsumer>
+                  </DialogContent>
+                </div>
+              )}
+            </IfFirebaseAuthed>
+          </div>
         );
       default:
         return <div></div>;
