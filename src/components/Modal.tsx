@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouteLink } from 'react-router-dom';
+import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
   DialogTitle,
@@ -20,13 +20,14 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import grey from '@material-ui/core/colors/grey';
-
-type Symptoms = {
-  headache: boolean;
-  fever: boolean;
-  shortnessOfBreath: boolean;
-  cough: boolean;
-};
+import {
+  FirebaseAuthConsumer,
+  IfFirebaseUnAuthed,
+  IfFirebaseAuthed,
+} from '@react-firebase/auth';
+import { SymptomForm, Symptoms } from 'types';
+import { postFormData } from 'utils/api';
+import { camelCaseToLabel } from 'utils/strings';
 
 type Location = [number, number];
 
@@ -37,14 +38,31 @@ const getSteps = () => {
 export const Modal = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
-  const [location, setLocation] = useState<Location | null>(null);
-  const [symptoms, setSymptoms] = useState<Symptoms>({
-    headache: false,
-    fever: false,
-    shortnessOfBreath: false,
-    cough: false,
+  const [symptoms, setSymptoms] = useState<SymptomForm>({
+    symptoms: {
+      fever: { isPresent: false },
+      headache: { isPresent: false },
+      shortnessOfBreath: { isPresent: false },
+      lackOfSmell: { isPresent: false },
+      lackOfTaste: { isPresent: false },
+      soreThroat: { isPresent: false },
+      nausea: { isPresent: false },
+      cough: { isPresent: false },
+    },
+    location: null,
   });
+  const history = useHistory();
+
   const steps = getSteps();
+
+  // This is to create a grid layout, split into two groups
+  const allSymptoms = Object.keys(Symptoms) as Array<keyof typeof Symptoms>;
+  const halfwayThrough = Math.floor(allSymptoms.length / 2);
+  const firstHalfSymptoms: Array<keyof typeof Symptoms> = allSymptoms.splice(
+    0,
+    halfwayThrough
+  );
+  const lastHalfSymptoms: Array<keyof typeof Symptoms> = allSymptoms;
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -58,13 +76,33 @@ export const Modal = () => {
     setAddress(newAddress);
   };
 
+  const submitForm = () => {
+    postFormData(symptoms)
+      .then((res: any) => {
+        console.log(`got back ${res}`);
+        history.push('/');
+      })
+      .catch((err: any) => {
+        console.error(err);
+        history.push('/');
+      });
+  };
+
+  const toggleSymptom = (symptom: Symptoms) => {
+    const newSymptoms = { ...symptoms };
+
+    newSymptoms.symptoms[symptom].isPresent = !newSymptoms.symptoms[symptom]
+      .isPresent;
+
+    setSymptoms(newSymptoms);
+  };
+
   const handleSelect = (newAddress: string) => {
     geocodeByAddress(newAddress)
       .then((results: any) => getLatLng(results[0]))
       .then((latLng: any) => {
-        setLocation(latLng);
+        setSymptoms({ ...symptoms, location: latLng });
         setAddress(newAddress);
-        console.log('Success', latLng);
       })
       .catch(console.error);
   };
@@ -80,72 +118,38 @@ export const Modal = () => {
             <DialogContent>
               <Grid container>
                 <Grid item xs={6}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={symptoms.cough}
-                          onChange={() =>
-                            setSymptoms({ ...symptoms, cough: !symptoms.cough })
-                          }
-                          name="cough"
-                          color="primary"
-                        />
-                      }
-                      label="Cough"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={symptoms.fever}
-                          onChange={() =>
-                            setSymptoms({ ...symptoms, fever: !symptoms.fever })
-                          }
-                          name="fever"
-                          color="primary"
-                        />
-                      }
-                      label="Fever"
-                    />
-                  </FormGroup>
+                  {firstHalfSymptoms.map((symptom, idx) => (
+                    <FormGroup key={idx}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={symptoms.symptoms[symptom].isPresent}
+                            onChange={() => toggleSymptom(Symptoms[symptom])}
+                            name={Symptoms[symptom]}
+                            color="primary"
+                          />
+                        }
+                        label={camelCaseToLabel(Symptoms[symptom])}
+                      />
+                    </FormGroup>
+                  ))}
                 </Grid>
                 <Grid item xs={6}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={symptoms.headache}
-                          onChange={() =>
-                            setSymptoms({
-                              ...symptoms,
-                              headache: !symptoms.headache,
-                            })
-                          }
-                          name="headache"
-                          color="primary"
-                        />
-                      }
-                      label="Headache"
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={symptoms.shortnessOfBreath}
-                          onChange={() =>
-                            setSymptoms({
-                              ...symptoms,
-                              shortnessOfBreath: !symptoms.shortnessOfBreath,
-                            })
-                          }
-                          name="shortnessOfBreath"
-                          color="primary"
-                        />
-                      }
-                      label="Shortness of Breath"
-                    />
-                  </FormGroup>
+                  {lastHalfSymptoms.map((symptom, idx) => (
+                    <FormGroup key={idx}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={symptoms.symptoms[symptom].isPresent}
+                            onChange={() => toggleSymptom(Symptoms[symptom])}
+                            name={Symptoms[symptom]}
+                            color="primary"
+                          />
+                        }
+                        label={camelCaseToLabel(Symptoms[symptom])}
+                      />
+                    </FormGroup>
+                  ))}
                 </Grid>
               </Grid>
             </DialogContent>
@@ -205,8 +209,26 @@ export const Modal = () => {
       case 2:
         return (
           <div>
-            <DialogTitle>Login</DialogTitle>
-            <DialogContent />
+            <IfFirebaseUnAuthed>
+              {() => (
+                <div>
+                  <DialogTitle>Login</DialogTitle>
+                  <DialogContent></DialogContent>
+                </div>
+              )}
+            </IfFirebaseUnAuthed>
+            <IfFirebaseAuthed>
+              {() => (
+                <div>
+                  <DialogTitle>Login</DialogTitle>
+                  <DialogContent>
+                    <FirebaseAuthConsumer>
+                      {({ user }) => user.email}
+                    </FirebaseAuthConsumer>
+                  </DialogContent>
+                </div>
+              )}
+            </IfFirebaseAuthed>
           </div>
         );
       default:
@@ -215,39 +237,49 @@ export const Modal = () => {
   };
 
   return (
-    <Dialog
-      open={true}
-      aria-labelledby="form-dialog-title"
-      fullWidth
-      maxWidth="xs"
-    >
-      <Stepper activeStep={activeStep}>
-        {steps.map(label => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: { optional?: React.ReactNode } = {};
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {displayStep(activeStep)}
-      <DialogActions>
-        <Button to="/" component={RouteLink} color="primary">
-          Cancel
-        </Button>
-        <Button
-          onClick={handleBack}
-          color="primary"
-          disabled={activeStep === 0}
+    <FirebaseAuthConsumer>
+      {() => (
+        <Dialog
+          open
+          aria-labelledby="form-dialog-title"
+          fullWidth
+          maxWidth="xs"
         >
-          Back
-        </Button>
-        <Button onClick={handleNext} color="primary">
-          Next
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <Stepper activeStep={activeStep}>
+            {steps.map(label => {
+              const stepProps: { completed?: boolean } = {};
+              const labelProps: { optional?: React.ReactNode } = {};
+              return (
+                <Step key={label} {...stepProps}>
+                  <StepLabel {...labelProps}>{label}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+          {displayStep(activeStep)}
+          <DialogActions>
+            <Button to="/" component={RouteLink} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleBack}
+              color="primary"
+              disabled={activeStep === 0}
+            >
+              Back
+            </Button>
+            {activeStep < 2 ? (
+              <Button onClick={handleNext} color="primary">
+                Next
+              </Button>
+            ) : (
+              <Button onClick={submitForm} color="primary">
+                Submit
+              </Button>
+            )}
+          </DialogActions>
+        </Dialog>
+      )}
+    </FirebaseAuthConsumer>
   );
 };
