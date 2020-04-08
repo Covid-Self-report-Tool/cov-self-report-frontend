@@ -113,14 +113,22 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
           <Choropleth
             data={data}
             valueProperty={(feature: any) => feature.properties.confirmed}
-            scale={['white', 'red']}
-            steps={7}
+            scale={['#2b83ba', '#abdda4', '#ffffbf', '#fdae61', '#d7191c']}
+            steps={5}
             onEachFeature={(feature: any, layer: any) =>
               layer.bindPopup(
                 `${feature.properties.name} Confirmed: ${feature.properties.confirmed}`
               )
             }
-            mode="e"
+            style={{
+              fillColor: '#F28F3B',
+              weight: 1,
+              opacity: 1,
+              color: 'white',
+              dashArray: '3',
+              fillOpacity: 0.5,
+            }}
+            mode="q"
           />
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Dead">
