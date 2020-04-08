@@ -103,9 +103,11 @@ export const Home: FC = () => {
       .set('Accept', 'application/json')
       .then((response: ApiResponse) => {
         const infectedByCountry: GeoLocation = {};
+
         setConfirmed(response.body.latest.confirmed);
         setDeaths(response.body.latest.deaths);
         setRecovered(response.body.latest.recovered);
+
         response.body.locations.forEach(location => {
           if (
             infectedByCountry[location.country] &&
@@ -124,11 +126,10 @@ export const Home: FC = () => {
             };
           }
         });
+
         setCovidData(flattenLocations(infectedByCountry));
-        console.log('covidData', infectedByCountry);
         const newFeatures: IGeoJson[] = [];
 
-        console.log('countryGeoJson', countryGeoJson);
         countryGeoJson.features.forEach((feature: IGeoJson) => {
           if (feature.properties !== null) {
             const newFeature = { ...feature };
@@ -148,8 +149,6 @@ export const Home: FC = () => {
           type: 'FeatureCollection',
           features: newFeatures,
         };
-
-        console.log(geoJson);
 
         setFeatures(geoJson);
       })
