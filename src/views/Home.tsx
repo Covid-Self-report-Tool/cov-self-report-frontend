@@ -7,10 +7,8 @@ import { IGeoJson } from 'types';
 
 const superagent = require('superagent');
 
-// Should be able to switch to topojson for some big perf gains:
-// https://github.com/topojson/world-atlas/
-// https://www.jsdelivr.com/package/npm/world-atlas
-const countryGeoJson = require('utils/countries.min.json');
+// Should be able to switch to topojson for some big perf gains
+const countryGeoJson = require('utils/countries.min.json'); // TODO: fetch
 
 const useStyles = makeStyles(theme => ({
   statsCardsWrap: {
@@ -30,12 +28,6 @@ const useStyles = makeStyles(theme => ({
     width: 400,
   },
 }));
-
-type Latest = {
-  confirmed: number;
-  deaths: number;
-  recovered: number;
-};
 
 type StatsCardsTypes = {
   confirmed: number | null;
@@ -65,14 +57,6 @@ type ApiResponse = {
         NewRecovered: number;
         TotalRecovered: number;
         Date: string;
-      }
-    ];
-    latest: Latest;
-    locations: [
-      {
-        country: string;
-        latest: Latest;
-        province: string;
       }
     ];
   };
