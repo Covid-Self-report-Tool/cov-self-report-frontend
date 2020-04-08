@@ -16,6 +16,7 @@ import L from 'leaflet';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
 import { mapBoxApiKey as accessToken } from 'config';
+import { createClusterCustomIcon } from 'utils/map';
 
 const superagent = require('superagent');
 require('react-leaflet-markercluster/dist/styles.min.css');
@@ -59,7 +60,7 @@ type ApiResponse = {
 };
 
 const SubmittedCases: FC<SubmittedType> = ({ data }) => (
-  <MarkerClusterGroup>
+  <MarkerClusterGroup iconCreateFunction={createClusterCustomIcon}>
     {data.map((position, i) => (
       <Marker key={i} position={position} />
     ))}
