@@ -10,7 +10,7 @@ const superagent = require('superagent');
 // Should be able to switch to topojson for some big perf gains:
 // https://github.com/topojson/world-atlas/
 // https://www.jsdelivr.com/package/npm/world-atlas
-const countryGeoJson = require('utils/countries.json');
+const countryGeoJson = require('utils/countries.min.json');
 
 const useStyles = makeStyles(theme => ({
   statsCardsWrap: {
@@ -45,6 +45,28 @@ type StatsCardsTypes = {
 
 type ApiResponse = {
   body: {
+    Global: {
+      NewConfirmed: number;
+      TotalConfirmed: number;
+      NewDeaths: number;
+      TotalDeaths: number;
+      NewRecovered: number;
+      TotalRecovered: number;
+    };
+    Countries: [
+      {
+        Country: string;
+        CountryCode: string;
+        Slug: string;
+        NewConfirmed: number;
+        TotalConfirmed: number;
+        NewDeaths: number;
+        TotalDeaths: number;
+        NewRecovered: number;
+        TotalRecovered: number;
+        Date: string;
+      }
+    ];
     latest: Latest;
     locations: [
       {
@@ -69,6 +91,7 @@ type GeoLocation = {
 
 const flattenLocations = (locations: GeoLocation): CountryTable => {
   const rows: CountryTable = [];
+
   Object.keys(locations).forEach(countryName => {
     const newRow = {
       name: countryName,
@@ -95,64 +118,56 @@ export const Home: FC = () => {
   const [confirmed, setConfirmed] = useState<number | null>(null);
   const [deaths, setDeaths] = useState<number | null>(null);
   const [recovered, setRecovered] = useState<number | null>(null);
-  const [features, setFeatures] = useState<IGeoJson[]>([]);
+  const [countryPolygons, setCountryPolygons] = useState<IGeoJson[]>([]);
+  const url = 'https://api.covid19api.com/summary';
 
   useEffect(() => {
-    superagent
-      .get('https://coronavirus-tracker-api.herokuapp.com/v2/locations')
-      .set('Accept', 'application/json')
-      .then((response: ApiResponse) => {
-        const infectedByCountry: GeoLocation = {};
+    async function getCovidData() {
+      await superagent
+        .get(url)
+        .set('Accept', 'application/json')
+        .then((response: ApiResponse) => {
+          const infectedByCountry: GeoLocation = {};
 
-        setConfirmed(response.body.latest.confirmed);
-        setDeaths(response.body.latest.deaths);
-        setRecovered(response.body.latest.recovered);
+          setConfirmed(response.body.Global.TotalConfirmed);
+          setDeaths(response.body.Global.TotalDeaths);
+          setRecovered(response.body.Global.TotalRecovered);
 
-        response.body.locations.forEach(location => {
-          if (
-            infectedByCountry[location.country] &&
-            infectedByCountry[location.country].confirmed !== undefined
-          ) {
-            infectedByCountry[location.country].confirmed +=
-              location.latest.confirmed;
-            infectedByCountry[location.country].dead += location.latest.deaths;
-            infectedByCountry[location.country].recovered +=
-              location.latest.recovered;
-          } else {
-            infectedByCountry[location.country] = {
-              confirmed: location.latest.confirmed,
-              dead: location.latest.deaths,
-              recovered: location.latest.recovered,
+          response.body.Countries.forEach(location => {
+            infectedByCountry[location.CountryCode] = {
+              confirmed: location.TotalConfirmed,
+              dead: location.TotalDeaths,
+              recovered: location.TotalRecovered,
             };
-          }
-        });
+          });
 
-        setCovidData(flattenLocations(infectedByCountry));
-        const newFeatures: IGeoJson[] = [];
+          setCovidData(flattenLocations(infectedByCountry));
+          const newFeatures: IGeoJson[] = countryGeoJson.features.map(
+            (feature: IGeoJson) => {
+              const correspondingRow =
+                infectedByCountry[feature.properties.ISO_A2] || {};
 
-        countryGeoJson.features.forEach((feature: IGeoJson) => {
-          if (feature.properties !== null) {
-            const newFeature = { ...feature };
-
-            if (
-              newFeature.properties !== undefined &&
-              infectedByCountry[feature.properties.name]
-            ) {
-              newFeature.properties.confirmed =
-                infectedByCountry[feature.properties.name].confirmed;
+              return {
+                ...feature,
+                properties: {
+                  ...feature.properties,
+                  confirmed: correspondingRow.confirmed || null,
+                },
+              };
             }
-            newFeatures.push(newFeature);
-          }
-        });
+          );
 
-        const geoJson: any = {
-          type: 'FeatureCollection',
-          features: newFeatures,
-        };
+          const geoJson: any = {
+            type: 'FeatureCollection',
+            features: newFeatures,
+          };
 
-        setFeatures(geoJson);
-      })
-      .catch(console.error);
+          setCountryPolygons(geoJson);
+        })
+        .catch(console.error);
+    }
+
+    getCovidData();
   }, []);
 
   return (
@@ -162,7 +177,7 @@ export const Home: FC = () => {
           <CountryTable data={covidData} />
         </Route>
         <Route>
-          <WorldGraphLocation data={features} />
+          <WorldGraphLocation data={countryPolygons} />
           <StatsCards
             confirmed={confirmed}
             deaths={deaths}
