@@ -15,8 +15,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
-import { mapBoxApiKey as accessToken } from 'config';
-import { createClusterCustomIcon } from 'utils/map';
+import { mapBoxApiKey as accessToken, BACKEND_URL } from 'config';
+import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
 
 const superagent = require('superagent');
 require('react-leaflet-markercluster/dist/styles.min.css');
@@ -55,7 +55,9 @@ type SubmittedType = {
 type ApiResponse = {
   text: string;
   body: {
-    features: PositionType[];
+    data: {
+      locations: PositionType[];
+    };
   };
 };
 
@@ -67,13 +69,7 @@ const SubmittedCases: FC<SubmittedType> = ({ data }) => (
     maxClusterRadius={60}
   >
     {data.map((position, i) => (
-      <Circle
-        key={i}
-        center={position}
-        radius={40}
-        fillColor="orange"
-        color="orange"
-      />
+      <Marker key={i} position={position} icon={indivMarkerIcon} />
     ))}
   </MarkerClusterGroup>
 );
@@ -93,22 +89,28 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
   const [submittedFeats, setSubmittedFeats] = useState<PositionType[]>([]);
   const initMapCenter = { lat: 30, lng: -10 };
 
+  // NOTE: some dummy data w/5k points if needed for clustering style work:
+  // 'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
+  //
+  // Comes back as text and different schema tho, need to parse:
+  //
+  //   const parsed = JSON.parse(response.text);
+  //   setSubmittedFeats(parsed.features);
+  //
+
+  // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
   useEffect(() => {
-    // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
-    async function getThatData() {
+    async function getSubmittedCases() {
       await superagent
-        .get(
-          'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
-        )
+        .get(`${BACKEND_URL}/self_report`)
         .set('Accept', 'application/json')
         .then((response: Readonly<ApiResponse>) => {
-          const parsed = JSON.parse(response.text); // GitHub returns as text
-          setSubmittedFeats(parsed.features);
+          setSubmittedFeats(response.body.data.locations);
         })
         .catch(console.error);
     }
 
-    getThatData();
+    getSubmittedCases();
   }, []);
 
   return (
