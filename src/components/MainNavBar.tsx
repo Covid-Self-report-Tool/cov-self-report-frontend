@@ -32,7 +32,7 @@ export const MainNavBar = () => {
   const classes = useStyles();
 
   return (
-    <AppBar position="absolute" className={useStyles().appBar}>
+    <AppBar position="fixed" className={useStyles().appBar}>
       <Toolbar>
         <Typography
           to="/"
