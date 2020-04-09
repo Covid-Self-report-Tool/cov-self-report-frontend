@@ -52,13 +52,23 @@ type SubmittedType = {
   data: PositionType[];
 };
 
+// TODO: Create generic "APIResponse" type that we subclass or get more specific
 type ApiResponse = {
   text: string;
-  body: {
-    data: {
-      locations: PositionType[];
-    };
-  };
+  body:
+    | {
+        // https://jsonapi.org/format/#errors
+        errors?: {
+          status?: string;
+          title?: string;
+          detail?: string;
+        };
+        meta?: {};
+        data?: {
+          locations: PositionType[];
+        };
+      }
+    | any;
 };
 
 const SubmittedCases: FC<SubmittedType> = ({ data }) => (
@@ -105,7 +115,9 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
         .get(`${BACKEND_URL}/self_report`)
         .set('Accept', 'application/json')
         .then((response: Readonly<ApiResponse>) => {
-          setSubmittedFeats(response.body.data.locations);
+          if (response.body) {
+            setSubmittedFeats(response.body.data.locations);
+          }
         })
         .catch(console.error);
     }
