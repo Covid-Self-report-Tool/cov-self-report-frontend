@@ -123,7 +123,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
     >
       <MapboxTileLayer tilesetId="dark-v9" />
       <LayersControl position="bottomright" collapsed={false}>
-        <LayersControl.Overlay name="Confirmed" checked>
+        <LayersControl.Overlay name="Confirmed">
           <Choropleth
             data={data}
             valueProperty={(feature: any) => feature.properties.confirmed}
