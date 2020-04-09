@@ -51,10 +51,10 @@ export const SignupForm: FC = () => {
 
   const handleSignup = () => {
     resetErrors();
-    if (password.length < 7) {
+    if (password.length < 6) {
       setErrorPassword(true);
       setErrorPasswordMessage('Password must be at least 6 characters long');
-    } else if (password2.length < 7) {
+    } else if (password2.length < 6) {
       setErrorPassword2(true);
       setErrorPasswordMessage2('Password must be at least 6 characters long');
     } else if (password !== password2) {
