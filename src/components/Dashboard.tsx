@@ -8,6 +8,12 @@ import { MainNavBar, ListItems } from 'components';
 import grey from '@material-ui/core/colors/grey';
 
 let theme = createMuiTheme({
+  overrides: {
+    MuiInput: {
+      // Bebas is bad news for <input> since it lacks lowercase
+      root: { fontFamily: "'Roboto', sans-serif" },
+    },
+  },
   palette: {
     type: 'dark',
     primary: grey,
@@ -38,8 +44,8 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <div className={classes.root}>
-        <CssBaseline />
         <MainNavBar />
         <main className={classes.content}>
           {children}
