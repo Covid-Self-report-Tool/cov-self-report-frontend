@@ -25,6 +25,7 @@ import {
   IfFirebaseUnAuthed,
   IfFirebaseAuthed,
 } from '@react-firebase/auth';
+import firebase from 'firebase';
 import { SymptomForm, Symptoms } from 'types';
 import { postFormData } from 'utils/api';
 import { camelCaseToLabel } from 'utils/strings';
@@ -77,15 +78,22 @@ export const Modal = () => {
   };
 
   const submitForm = () => {
-    postFormData(symptoms)
-      .then((res: any) => {
-        console.log(`got back ${res}`);
-        history.push('/');
-      })
-      .catch((err: any) => {
-        console.error(err);
-        history.push('/');
-      });
+    if (firebase.auth().currentUser) {
+      firebase
+        .auth()
+        .currentUser?.getIdToken(true)
+        .then(idToken => {
+          postFormData(symptoms, idToken)
+            .then((res: any) => {
+              console.log(`got back ${res}`);
+              history.push('/');
+            })
+            .catch((err: any) => {
+              console.error(err);
+              history.push('/');
+            });
+        });
+    }
   };
 
   const toggleSymptom = (symptom: Symptoms) => {
