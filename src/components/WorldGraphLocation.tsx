@@ -16,6 +16,7 @@ import L from 'leaflet';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
 import { mapBoxApiKey as accessToken } from 'config';
+import { createClusterCustomIcon } from 'utils/map';
 
 const superagent = require('superagent');
 require('react-leaflet-markercluster/dist/styles.min.css');
@@ -59,9 +60,20 @@ type ApiResponse = {
 };
 
 const SubmittedCases: FC<SubmittedType> = ({ data }) => (
-  <MarkerClusterGroup>
+  <MarkerClusterGroup
+    showCoverageOnHover={false}
+    iconCreateFunction={createClusterCustomIcon}
+    disableClusteringAtZoom={8}
+    maxClusterRadius={60}
+  >
     {data.map((position, i) => (
-      <Marker key={i} position={position} />
+      <Circle
+        key={i}
+        center={position}
+        radius={40}
+        fillColor="orange"
+        color="orange"
+      />
     ))}
   </MarkerClusterGroup>
 );
@@ -79,7 +91,7 @@ const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
 export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
   const styles = useStyles();
   const [submittedFeats, setSubmittedFeats] = useState<PositionType[]>([]);
-  const initMapCenter = { lat: 10, lng: -15 };
+  const initMapCenter = { lat: 30, lng: -10 };
 
   useEffect(() => {
     // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
@@ -113,8 +125,8 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
           <Choropleth
             data={data}
             valueProperty={(feature: any) => feature.properties.confirmed}
-            scale={['#2b83ba', '#abdda4', '#ffffbf', '#fdae61', '#d7191c']}
-            steps={5}
+            scale={['hsl(184, 69%, 60%)', 'hsl(184, 69%, 10%)']}
+            steps={8}
             onEachFeature={(feature: any, layer: any) =>
               layer.bindPopup(
                 `${feature.properties.name} Confirmed: ${feature.properties.confirmed}`
@@ -126,7 +138,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
               opacity: 1,
               color: 'white',
               dashArray: '3',
-              fillOpacity: 0.5,
+              fillOpacity: 0.75,
             }}
             mode="q"
           />
