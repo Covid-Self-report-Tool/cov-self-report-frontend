@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Paper,
   Grid,
@@ -9,9 +9,7 @@ import {
 } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
-import firebase from 'firebase/app';
+import { googleLogin, login } from 'utils/firebase';
 
 const useStyles = makeStyles({
   margin: {},
@@ -22,41 +20,61 @@ const useStyles = makeStyles({
 
 export const LoginForm: FC = () => {
   const classes = useStyles();
-  const history = useHistory();
   const [email, setEmail] = useState<string>('');
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
 
-  const handleSignIn = useCallback(
-    async event => {
-      event.preventDefault();
+  const handleLoginError = (code: string, message: string) => {
+    switch (code) {
+      case 'auth/wrong-password':
+        setPasswordError(true);
+        setPasswordErrorMessage('Invalid password');
+        break;
+      case 'auth/user-not-found':
+        setEmailError(true);
+        setEmailErrorMessage('That username does not exist');
+        break;
+      case 'auth/invalid-email':
+        setEmailError(true);
+        setEmailErrorMessage('Invalid email');
+        break;
+      default:
+        alert(message); // change to flash message
+        break;
+    }
+  };
 
-      try {
-        await firebase
-          .app()
-          .auth()
-          .signInWithEmailAndPassword(email, password);
-        history.push('/');
-      } catch (error) {
-        alert(error);
-      }
-    },
-    [history, email, password]
-  );
+  const resetErrors = () => {
+    setEmailError(false);
+    setPasswordError(false);
+    setEmailErrorMessage('');
+    setPasswordErrorMessage('');
+  };
 
-  const handleGoogleSignIn = useCallback(
-    async event => {
-      event.preventDefault();
+  const handleLogin = (event: React.MouseEvent) => {
+    event.preventDefault();
 
-      try {
-        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-        await firebase.auth().signInWithPopup(googleAuthProvider);
-        history.push('/');
-      } catch (error) {
-        alert(error);
-      }
-    },
-    [history]
-  );
+    resetErrors();
+    if (password.length < 6) {
+      setPasswordError(true);
+      setPasswordErrorMessage('Password must be at least 6 characters long');
+    } else {
+      login(email, password).catch(err => {
+        handleLoginError(err.code, err.message);
+      });
+    }
+  };
+
+  const handleGoogleLogin = async (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    googleLogin().catch(err => {
+      handleLoginError(err.code, err.message); // how to handle Google errors?
+    });
+  };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.currentTarget.value);
@@ -80,6 +98,8 @@ export const LoginForm: FC = () => {
               type="email"
               value={email}
               onChange={handleEmailChange}
+              error={emailError}
+              helperText={emailErrorMessage}
               fullWidth
               autoFocus
               required
@@ -97,6 +117,8 @@ export const LoginForm: FC = () => {
               type="password"
               value={password}
               onChange={handlePasswordChange}
+              error={passwordError}
+              helperText={passwordErrorMessage}
               fullWidth
               required
             />
@@ -122,20 +144,11 @@ export const LoginForm: FC = () => {
           </Grid>
         </Grid>
         <Grid container justify="center" style={{ marginTop: '10px' }}>
-          <Link to="/signup">
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{ textTransform: 'none', marginRight: '20px' }}
-            >
-              Sign Up
-            </Button>
-          </Link>
           <Button
             variant="outlined"
             color="primary"
             style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={e => handleSignIn(e)}
+            onClick={handleLogin}
           >
             Login
           </Button>
@@ -143,7 +156,7 @@ export const LoginForm: FC = () => {
             variant="outlined"
             color="primary"
             style={{ textTransform: 'none' }}
-            onClick={e => handleGoogleSignIn(e)}
+            onClick={handleGoogleLogin}
           >
             Login with Google
           </Button>
