@@ -2,15 +2,17 @@ import React, { FC } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { Container, withStyles } from '@material-ui/core';
+import grey from '@material-ui/core/colors/grey';
 
 import { useStyles } from './dashboard.styles';
 import { MainNavBar, ListItems } from 'components';
-import grey from '@material-ui/core/colors/grey';
 
 let theme = createMuiTheme({
   overrides: {
     MuiInput: {
-      // Bebas is bad news for <input> since it lacks lowercase
+      // Bebas is bad news for <input> since it lacks lowercase. Will also apply
+      // Roboto to textful pages like <About>.
       root: { fontFamily: "'Roboto', sans-serif" },
     },
   },
@@ -38,6 +40,15 @@ type DashboardTypes = {
   children: React.ReactNode | null | undefined;
 };
 
+const GlobalCss = withStyles({
+  // @global is handled by jss-plugin-global.
+  '@global': {
+    '.simpler-font': {
+      fontFamily: "'Roboto', sans-serif",
+    },
+  },
+})(() => null);
+
 // CRED: https://material-ui.com/getting-started/templates/dashboard/
 export const Dashboard: FC<DashboardTypes> = ({ children }) => {
   const classes = useStyles();
@@ -45,12 +56,13 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <GlobalCss />
       <div className={classes.root}>
         <MainNavBar />
-        <main className={classes.content}>
+        <Container component="main" className={classes.content}>
           {children}
           <ListItems />
-        </main>
+        </Container>
       </div>
     </ThemeProvider>
   );

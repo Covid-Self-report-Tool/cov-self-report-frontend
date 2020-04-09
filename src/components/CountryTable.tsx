@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import {
   Typography,
-  Container,
   Table,
   TableContainer,
   TableHead,
@@ -10,8 +9,6 @@ import {
   TableBody,
   Paper,
 } from '@material-ui/core';
-
-import { centeredContStyles } from '../views/About';
 
 type CountryRow = {
   name: string;
@@ -31,7 +28,7 @@ type CountryTableType = {
 
 export const CountryTable: FC<CountryTableType> = ({ data }) => {
   return (
-    <Container maxWidth="md" className={centeredContStyles().root}>
+    <>
       <Typography variant="h2">Results by Country</Typography>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
@@ -67,6 +64,6 @@ export const CountryTable: FC<CountryTableType> = ({ data }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Container>
+    </>
   );
 };
