@@ -20,7 +20,7 @@ export const createClusterCustomIcon = function(
     html: `<div style="
       height: ${diameter}px;
       width: ${diameter}px;
-      background: #9370db;
+      background: orange;
       border: 3px solid #ededed;
       border-radius: 100%;
       text-align: center;
