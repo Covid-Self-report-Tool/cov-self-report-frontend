@@ -16,6 +16,11 @@ export type Symptom = {
   endDate?: Date;
 };
 
+export type UserContext = {
+  userToken: string;
+  hasSubmitted: boolean;
+};
+
 export enum Symptoms {
   headache = 'headache',
   fever = 'fever',
