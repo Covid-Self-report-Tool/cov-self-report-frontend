@@ -2,9 +2,20 @@ import React from 'react';
 import { IfFirebaseAuthed, IfFirebaseUnAuthed } from '@react-firebase/auth';
 import { Link as RouteLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  useScrollTrigger,
+  Slide,
+} from '@material-ui/core';
 
 import { UserPopoverMenu } from 'components';
+
+interface NavBarTypes {
+  isHome: boolean;
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,9 +28,8 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.common.white,
   },
   appBar: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    backgroundColor: 'transparent',
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
     zIndex: theme.zIndex.drawer + 1,
     boxShadow: 'none',
   },
@@ -28,55 +38,63 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const MainNavBar = () => {
+export const MainNavBar = (props: NavBarTypes) => {
+  const { isHome } = props;
   const classes = useStyles();
+  const trigger = useScrollTrigger();
 
   return (
-    <AppBar position="fixed" className={useStyles().appBar}>
-      <Toolbar>
-        <Typography
-          to="/"
-          component={RouteLink}
-          variant="h4"
-          noWrap
-          className={classes.title}
-        >
-          Covid-19 True Data Tracker
-          <Typography component="p" variant="subtitle1" noWrap>
-            A tool that tracks self-reported and confirmed infections
-          </Typography>
-        </Typography>
-        <div
-          style={{
-            flex: '1 50%',
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <Button
-            variant="contained"
-            color="secondary"
-            to="/self-report"
+    <Slide appear={false} direction="down" in={!trigger}>
+      <AppBar
+        position="fixed"
+        color={isHome ? 'transparent' : 'primary'}
+        className={classes.appBar}
+      >
+        <Toolbar>
+          <Typography
+            to="/"
             component={RouteLink}
+            variant="h4"
+            noWrap
+            className={classes.title}
           >
-            Add Symptoms
-          </Button>
-          <IfFirebaseUnAuthed>
-            {() => (
-              <Button
-                variant="outlined"
-                color="primary"
-                className={classes.signupBtn}
-                component={RouteLink}
-                to="/login"
-              >
-                Login / Signup
-              </Button>
-            )}
-          </IfFirebaseUnAuthed>
-          <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
-        </div>
-      </Toolbar>
-    </AppBar>
+            Covid-19 True Data Tracker
+            <Typography component="p" variant="subtitle1" noWrap>
+              A tool that tracks self-reported and confirmed infections
+            </Typography>
+          </Typography>
+          <div
+            style={{
+              flex: '1 50%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              to="/self-report"
+              component={RouteLink}
+            >
+              Add Symptoms
+            </Button>
+            <IfFirebaseUnAuthed>
+              {() => (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.signupBtn}
+                  component={RouteLink}
+                  to="/login"
+                >
+                  Login / Signup
+                </Button>
+              )}
+            </IfFirebaseUnAuthed>
+            <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </Slide>
   );
 };

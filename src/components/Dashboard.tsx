@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -53,12 +53,13 @@ const GlobalCss = withStyles({
 // CRED: https://material-ui.com/getting-started/templates/dashboard/
 export const Dashboard: FC<DashboardTypes> = ({ children }) => {
   const classes = useStyles();
+  const isHome = useLocation().pathname === '/';
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalCss />
-      <MainNavBar />
+      <MainNavBar isHome={isHome} />
       <Switch>
         <Route path="/" exact>
           {children}
