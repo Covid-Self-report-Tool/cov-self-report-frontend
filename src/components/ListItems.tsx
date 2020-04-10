@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => {
       position: 'fixed',
       top: theme.spacing(4),
       zIndex: 401,
+      [theme.breakpoints.up('sm')]: {
+        top: 105, // past top bar (except on tweeners like iPhone landscape)
+      },
     },
     navItem: {
       alignItems: 'center',
