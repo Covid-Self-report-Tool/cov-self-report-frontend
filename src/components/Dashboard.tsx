@@ -7,7 +7,7 @@ import { Container, withStyles } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 
 import { useStyles } from './dashboard.styles';
-import { MainNavBar, ListItems } from 'components';
+import { MainNavBar, ListItems, BackToTopBtn } from 'components';
 
 let theme = createMuiTheme({
   overrides: {
@@ -65,9 +65,13 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
           {children}
         </Route>
         <Route>
-          <Container component="main" className={classes.content}>
-            {children}
-          </Container>
+          <>
+            <div id="back-to-top-anchor" />
+            <Container component="main" className={classes.content}>
+              {children}
+              <BackToTopBtn />
+            </Container>
+          </>
         </Route>
       </Switch>
       <ListItems />
