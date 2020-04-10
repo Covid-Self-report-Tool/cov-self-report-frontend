@@ -14,6 +14,7 @@ import {
   Step,
   StepLabel,
   TextField,
+  Link,
 } from '@material-ui/core';
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -29,6 +30,9 @@ import firebase from 'firebase';
 import { SymptomForm, Symptoms } from 'types';
 import { postFormData } from 'utils/api';
 import { camelCaseToLabel } from 'utils/strings';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { SignupForm } from './SignupForm';
+import { LoginForm } from './LoginForm';
 
 type Location = [number, number];
 
@@ -37,8 +41,10 @@ const getSteps = () => {
 };
 
 export const Modal = () => {
+  const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
+  const [register, setRegister] = useState<boolean>(true);
   const [symptoms, setSymptoms] = useState<SymptomForm>({
     symptoms: {
       fever: { isPresent: false },
@@ -78,21 +84,18 @@ export const Modal = () => {
   };
 
   const submitForm = () => {
-    if (firebase.auth().currentUser) {
-      firebase
-        .auth()
-        .currentUser?.getIdToken(true)
-        .then(idToken => {
-          postFormData(symptoms, idToken)
-            .then((res: any) => {
-              console.log(`got back ${res}`);
-              history.push('/');
-            })
-            .catch((err: any) => {
-              console.error(err);
-              history.push('/');
-            });
-        });
+    if (user) {
+      user.getIdToken(true).then(idToken => {
+        postFormData(symptoms, idToken)
+          .then((res: any) => {
+            console.log(`got back ${res}`);
+            history.push('/');
+          })
+          .catch((err: any) => {
+            console.error(err);
+            history.push('/');
+          });
+      });
     }
   };
 
@@ -112,7 +115,7 @@ export const Modal = () => {
         setSymptoms({ ...symptoms, location: latLng });
         setAddress(newAddress);
       })
-      .catch(console.error);
+      .catch(alert); // better than console error for now
   };
 
   const displayStep = (step: number) => {
@@ -225,19 +228,47 @@ export const Modal = () => {
             <IfFirebaseUnAuthed>
               {() => (
                 <div>
-                  <DialogTitle>Login</DialogTitle>
-                  <DialogContent></DialogContent>
+                  {register ? (
+                    <div>
+                      <DialogTitle>Register</DialogTitle>
+                      <DialogContent>
+                        <SignupForm />
+                        <Link href="#" onClick={() => setRegister(!register)}>
+                          Already a User?
+                        </Link>
+                      </DialogContent>
+                    </div>
+                  ) : (
+                    <div>
+                      <DialogTitle>Login</DialogTitle>
+                      <DialogContent>
+                        <LoginForm />
+                        <Link href="#" onClick={() => setRegister(!register)}>
+                          Need to Register?
+                        </Link>
+                      </DialogContent>
+                    </div>
+                  )}
                 </div>
               )}
             </IfFirebaseUnAuthed>
             <IfFirebaseAuthed>
               {() => (
                 <div>
-                  <DialogTitle>Login</DialogTitle>
+                  <DialogTitle>Terms</DialogTitle>
                   <DialogContent>
                     <FirebaseAuthConsumer>
-                      {({ user }) => user.email}
+                      {({ user }) => <span>Logged in as {user.email}</span>}
                     </FirebaseAuthConsumer>
+                    <FormControlLabel
+                      control={<Checkbox name="checkedB" color="primary" />}
+                      label={
+                        <span>
+                          I Agree to the{' '}
+                          <Link href="#">Terms and Conditions</Link>
+                        </span>
+                      }
+                    />
                   </DialogContent>
                 </div>
               )}
@@ -286,7 +317,7 @@ export const Modal = () => {
                 Next
               </Button>
             ) : (
-              <Button onClick={submitForm} color="primary">
+              <Button onClick={submitForm} color="primary" disabled={!user}>
                 Submit
               </Button>
             )}
