@@ -41,11 +41,23 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.common.black,
     fontWeight: 'bold',
   },
+  tickerCardsWrap: {
+    position: 'absolute',
+    right: theme.spacing(2),
+    top: '15vh',
+    zIndex: 400,
+  },
 }));
 
-type NotifierCard = {
+type TickerCard = {
   text: string;
   number: number;
+};
+
+type TickerCardsTypes = {
+  confirmed: number | null;
+  deaths: number | null;
+  recovered: number | null;
 };
 
 // A popover menu and toggle button to show a term and its definition. For now
@@ -107,7 +119,7 @@ function DefPopoverMenu({
   );
 }
 
-export const NotifierCard: FC<NotifierCard> = props => {
+const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
 
   return (
@@ -124,3 +136,16 @@ export const NotifierCard: FC<NotifierCard> = props => {
     </Grid>
   );
 };
+
+export const TickerCards: FC<TickerCardsTypes> = ({
+  confirmed,
+  deaths,
+  recovered,
+}) => (
+  <div className={useStyles().tickerCardsWrap}>
+    <NotifierCard text="Recovered" number={recovered || -1} />
+    <NotifierCard text="Confirmed Cases" number={confirmed || -1} />
+    <NotifierCard text="Self-reported Cases" number={-1} />
+    <NotifierCard text="Deaths" number={deaths || -1} />
+  </div>
+);
