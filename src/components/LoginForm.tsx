@@ -9,18 +9,17 @@ import {
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Face, Fingerprint } from '@material-ui/icons';
-import { grey } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { googleLogin, login } from 'utils/firebase';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   link: {
-    color: grey['500'], // can't use theme here?
+    color: theme.palette.grey['500'], // can't use theme here?
   },
   padding: {
     padding: '20px',
   },
-});
+}));
 
 export const LoginForm: FC = () => {
   const classes = useStyles();
