@@ -1,39 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Route, Switch as RouteSwitch } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 
-import { WorldGraphLocation, CountryTable, NotifierCard } from 'components';
+import { WorldGraphLocation, CountryTable, TickerCards } from 'components';
 import { IGeoJson } from 'types';
 
 const superagent = require('superagent');
 
 // Should be able to switch to topojson for some big perf gains
 const countryGeoJson = require('utils/countries.min.json'); // TODO: fetch
-
-const useStyles = makeStyles(theme => ({
-  statsCardsWrap: {
-    position: 'absolute',
-    right: theme.spacing(2),
-    top: '15vh',
-    zIndex: 400,
-  },
-  paper: {
-    backgroundColor: 'white',
-    border: '2px solid #000',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'auto',
-    padding: theme.spacing(2),
-    position: 'absolute',
-    width: 400,
-  },
-}));
-
-type StatsCardsTypes = {
-  confirmed: number | null;
-  deaths: number | null;
-  recovered: number | null;
-};
 
 type ApiResponse = {
   body: {
@@ -87,15 +61,6 @@ const flattenLocations = (locations: GeoLocation): CountryTable => {
 
   return rows;
 };
-
-const StatsCards: FC<StatsCardsTypes> = ({ confirmed, deaths, recovered }) => (
-  <div className={useStyles().statsCardsWrap}>
-    <NotifierCard text="Recovered" number={recovered || -1} />
-    <NotifierCard text="Confirmed Cases" number={confirmed || -1} />
-    <NotifierCard text="Self-reported Cases" number={-1} />
-    <NotifierCard text="Deaths" number={deaths || -1} />
-  </div>
-);
 
 export const Home: FC = () => {
   const [covidData, setCovidData] = useState<CountryTable>([]);
@@ -162,7 +127,7 @@ export const Home: FC = () => {
         </Route>
         <Route>
           <WorldGraphLocation data={countryPolygons} />
-          <StatsCards
+          <TickerCards
             confirmed={confirmed}
             deaths={deaths}
             recovered={recovered}
