@@ -1,13 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import { Container, withStyles } from '@material-ui/core';
+import { CssBaseline, Container, withStyles } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 
 import { useStyles } from './dashboard.styles';
-import { MainNavBar, ListItems, BackToTopBtn } from 'components';
+import {
+  MainNavBar,
+  ListItems,
+  BackToTopBtn,
+  MobileOffCanvasNav,
+} from 'components';
 
 let theme = createMuiTheme({
   overrides: {
@@ -54,12 +58,17 @@ const GlobalCss = withStyles({
 export const Dashboard: FC<DashboardTypes> = ({ children }) => {
   const classes = useStyles();
   const isHome = useLocation().pathname === '/';
+  const [drawerOpen, toggleDrawerOpen] = useState<boolean>(false);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalCss />
-      <MainNavBar isHome={isHome} />
+      <MainNavBar
+        isHome={isHome}
+        drawerOpen={drawerOpen}
+        toggleDrawerOpen={toggleDrawerOpen}
+      />
       <Switch>
         <Route path="/" exact>
           {children}
@@ -74,7 +83,12 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
           </>
         </Route>
       </Switch>
-      <ListItems />
+      <MobileOffCanvasNav
+        drawerOpen={drawerOpen}
+        toggleDrawerOpen={toggleDrawerOpen}
+      >
+        <ListItems />
+      </MobileOffCanvasNav>
     </ThemeProvider>
   );
 };

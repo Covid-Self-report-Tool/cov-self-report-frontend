@@ -4,6 +4,7 @@ export * from 'components/Dashboard';
 export * from 'components/ListItems';
 export * from 'components/LoginForm';
 export * from 'components/MainNavBar';
+export * from 'components/MobileOffCanvasNav';
 export * from 'components/Modal';
 export * from 'components/NotifierCard';
 export * from 'components/SignupForm';
