@@ -9,17 +9,24 @@ import {
   Typography,
   useScrollTrigger,
   Slide,
+  IconButton,
 } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import { UserPopoverMenu } from 'components';
 
 interface NavBarTypes {
   isHome: boolean;
+  drawerOpen: boolean;
+  toggleDrawerOpen: (active: boolean) => void;
 }
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    zIndex: theme.zIndex.drawer + 1,
+    boxShadow: 'none',
   },
   title: {
     textDecoration: 'none',
@@ -27,19 +34,20 @@ const useStyles = makeStyles(theme => ({
     flex: '1 1 100%',
     color: theme.palette.common.white,
   },
-  appBar: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    zIndex: theme.zIndex.drawer + 1,
-    boxShadow: 'none',
-  },
   signupBtn: {
     marginLeft: theme.spacing(2),
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    color: 'inherit',
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
   },
 }));
 
 export const MainNavBar = (props: NavBarTypes) => {
-  const { isHome } = props;
+  const { isHome, toggleDrawerOpen, drawerOpen } = props;
   const classes = useStyles();
   const trigger = useScrollTrigger();
 
@@ -48,9 +56,17 @@ export const MainNavBar = (props: NavBarTypes) => {
       <AppBar
         position="fixed"
         color={isHome ? 'transparent' : 'primary'}
-        className={classes.appBar}
+        className={classes.root}
       >
         <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            aria-label="menu"
+            onClick={() => toggleDrawerOpen(!drawerOpen)}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography
             to="/"
             component={RouteLink}
