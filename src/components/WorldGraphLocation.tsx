@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   theMapItself: {
     width: '100%',
     height: '100%',
-    flex: 1,
+    position: 'absolute',
   },
 });
 
@@ -134,7 +134,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
       zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
-      <LayersControl position="bottomright" collapsed={false}>
+      <LayersControl position="bottomleft" collapsed={true}>
         <LayersControl.Overlay name="Confirmed">
           <Choropleth
             data={data}
@@ -170,7 +170,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
           </FeatureGroup>
         </LayersControl.Overlay>
       </LayersControl>
-      <ZoomControl position="bottomright" />
+      <ZoomControl position="bottomleft" />
     </Map>
   );
 };
