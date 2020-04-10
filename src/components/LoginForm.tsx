@@ -7,12 +7,16 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { Face, Fingerprint } from '@material-ui/icons';
+import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { googleLogin, login } from 'utils/firebase';
 
 const useStyles = makeStyles({
-  margin: {},
+  link: {
+    color: grey['500'], // can't use theme here?
+  },
   padding: {
     padding: '20px',
   },
@@ -86,7 +90,7 @@ export const LoginForm: FC = () => {
 
   return (
     <Paper className={classes.padding}>
-      <div className={classes.margin}>
+      <div>
         <Grid container spacing={8} alignItems="flex-end">
           <Grid item>
             <Face />
@@ -132,15 +136,9 @@ export const LoginForm: FC = () => {
             />
           </Grid>
           <Grid item>
-            <Button
-              disableFocusRipple
-              disableRipple
-              style={{ textTransform: 'none' }}
-              variant="text"
-              color="primary"
-            >
+            <Link to="/verify_email" className={classes.link}>
               Forgot password ?
-            </Button>
+            </Link>
           </Grid>
         </Grid>
         <Grid container justify="center" style={{ marginTop: '10px' }}>
