@@ -13,7 +13,7 @@ const countryGeoJson = require('utils/countries.min.json'); // TODO: fetch
 const useStyles = makeStyles(theme => ({
   statsCardsWrap: {
     position: 'absolute',
-    right: theme.spacing(4),
+    right: theme.spacing(2),
     top: '15vh',
     zIndex: 400,
   },
