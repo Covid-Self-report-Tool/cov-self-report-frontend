@@ -7,6 +7,7 @@ import { FirebaseAuthProvider } from '@react-firebase/auth';
 import { Dashboard, Modal } from 'components';
 import { Home, Login, Signup, About, Models, Logout } from 'views';
 import { firebaseConfig } from 'config';
+import { VerifyEmail } from 'views/VerifyEmail';
 
 const Routes: FC = () => {
   return (
@@ -29,6 +30,9 @@ const Routes: FC = () => {
             </Route>
             <Route path="/signup">
               <Signup />
+            </Route>
+            <Route path="/verify_email">
+              <VerifyEmail />
             </Route>
             <Route>
               <Home />
