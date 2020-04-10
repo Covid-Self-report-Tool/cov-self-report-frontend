@@ -140,7 +140,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
             data={data}
             valueProperty={(feature: any) => feature.properties.confirmed}
             scale={['hsl(184, 69%, 60%)', 'hsl(184, 69%, 10%)']}
-            steps={8}
+            steps={100}
             onEachFeature={(feature: any, layer: any) =>
               layer.bindPopup(
                 `${feature.properties.name} Confirmed: ${feature.properties.confirmed}`
@@ -148,10 +148,9 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
             }
             style={{
               fillColor: '#F28F3B',
-              weight: 1,
+              weight: 0.5,
               opacity: 1,
-              color: 'white',
-              dashArray: '3',
+              color: 'hsl(0, 0%, 10%)',
               fillOpacity: 0.75,
             }}
             mode="q"
