@@ -58,6 +58,7 @@ export const Modal = () => {
     },
     location: null,
   });
+  const [agreedToTAC, setAgreedToTAC] = useState<boolean>(false);
   const history = useHistory();
 
   const steps = getSteps();
@@ -261,7 +262,14 @@ export const Modal = () => {
                       {({ user }) => <span>Logged in as {user.email}</span>}
                     </FirebaseAuthConsumer>
                     <FormControlLabel
-                      control={<Checkbox name="checkedB" color="primary" />}
+                      control={
+                        <Checkbox
+                          name="checkedB"
+                          color="primary"
+                          value={agreedToTAC}
+                          onChange={() => setAgreedToTAC(!agreedToTAC)}
+                        />
+                      }
                       label={
                         <span>
                           I Agree to the{' '}
@@ -321,7 +329,11 @@ export const Modal = () => {
                 Next
               </Button>
             ) : (
-              <Button onClick={submitForm} color="primary" disabled={!user}>
+              <Button
+                onClick={submitForm}
+                color="primary"
+                disabled={!user || !agreedToTAC}
+              >
                 Submit
               </Button>
             )}
