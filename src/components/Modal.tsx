@@ -45,7 +45,7 @@ export const Modal = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
   const [register, setRegister] = useState<boolean>(true);
-  const [symptoms, setSymptoms] = useState<SymptomForm>({
+  const [userData, setUserData] = useState<SymptomForm>({
     symptoms: {
       fever: { isPresent: false },
       headache: { isPresent: false },
@@ -86,7 +86,7 @@ export const Modal = () => {
   const submitForm = () => {
     if (user) {
       user.getIdToken(true).then(idToken => {
-        postFormData(symptoms, idToken)
+        postFormData(userData, idToken)
           .then((res: any) => {
             console.log(`got back ${res}`);
             history.push('/');
@@ -100,19 +100,19 @@ export const Modal = () => {
   };
 
   const toggleSymptom = (symptom: Symptoms) => {
-    const newSymptoms = { ...symptoms };
+    const newUserData = { ...userData };
 
-    newSymptoms.symptoms[symptom].isPresent = !newSymptoms.symptoms[symptom]
+    newUserData.symptoms[symptom].isPresent = !newUserData.symptoms[symptom]
       .isPresent;
 
-    setSymptoms(newSymptoms);
+    setUserData(newUserData);
   };
 
   const handleSelect = (newAddress: string) => {
     geocodeByAddress(newAddress)
       .then((results: any) => getLatLng(results[0]))
       .then((latLng: any) => {
-        setSymptoms({ ...symptoms, location: latLng });
+        setUserData({ ...userData, location: latLng });
         setAddress(newAddress);
       })
       .catch(alert); // better than console error for now
@@ -134,7 +134,7 @@ export const Modal = () => {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={symptoms.symptoms[symptom].isPresent}
+                            checked={userData.symptoms[symptom].isPresent}
                             onChange={() => toggleSymptom(Symptoms[symptom])}
                             name={Symptoms[symptom]}
                             color="primary"
@@ -151,7 +151,7 @@ export const Modal = () => {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={symptoms.symptoms[symptom].isPresent}
+                            checked={userData.symptoms[symptom].isPresent}
                             onChange={() => toggleSymptom(Symptoms[symptom])}
                             name={Symptoms[symptom]}
                             color="primary"
@@ -313,7 +313,11 @@ export const Modal = () => {
               Back
             </Button>
             {activeStep < 2 ? (
-              <Button onClick={handleNext} color="primary">
+              <Button
+                onClick={handleNext}
+                color="primary"
+                disabled={activeStep == 1 && !userData.location}
+              >
                 Next
               </Button>
             ) : (
