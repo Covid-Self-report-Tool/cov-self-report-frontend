@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -57,13 +58,18 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalCss />
-      <div className={classes.root}>
-        <MainNavBar />
-        <Container component="main" className={classes.content}>
+      <MainNavBar />
+      <Switch>
+        <Route path="/" exact>
           {children}
-          <ListItems />
-        </Container>
-      </div>
+        </Route>
+        <Route>
+          <Container component="main" className={classes.content}>
+            {children}
+          </Container>
+        </Route>
+      </Switch>
+      <ListItems />
     </ThemeProvider>
   );
 };

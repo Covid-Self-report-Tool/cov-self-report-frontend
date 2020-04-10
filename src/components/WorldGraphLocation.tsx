@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   theMapItself: {
     width: '100%',
     height: '100%',
-    flex: 1,
+    position: 'absolute',
   },
 });
 
