@@ -31,12 +31,11 @@ export const TestingStep: FC<TestingStepType> = ({
 }) => {
   const classes = useStyles();
 
-  // reset everything if you change tested
-  useEffect(() => {
-    if (formState.tested === false) {
-      // dispatchForm({ type: 'RESET_VALUE', payload: 'seenPhysician' });
-    }
-  }, [formState.tested]);
+  const handlePhysicianDiagnosis = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatchForm({ type: 'SET_DOCTOR_DIAGNOSIS', payload: event.target.value });
+  };
 
   return (
     <>
@@ -124,24 +123,19 @@ export const TestingStep: FC<TestingStepType> = ({
             <FormControl>
               <FormLabel>What did your physician say?</FormLabel>
               <RadioGroup
-                value={String(formState.doctorSuspects)}
-                onChange={event => {
-                  dispatchForm({
-                    type: 'SET_SEEN_PHYSICIAN',
-                    payload: event.target.value === 'true',
-                  });
-                }}
+                value={String(formState.doctorDiagnosis)}
+                onChange={handlePhysicianDiagnosis}
               >
                 <FormControlLabel
-                  control={<Radio value="true" />}
+                  control={<Radio value="suspected" />}
                   label="Suspected CoVID-19"
                 />
                 <FormControlLabel
-                  control={<Radio value="false" />}
+                  control={<Radio value="inconclusive" />}
                   label="Inconclusive"
                 />
                 <FormControlLabel
-                  control={<Radio value="false" />}
+                  control={<Radio value="negative" />}
                   label="Definitely not CoVID-19"
                 />
               </RadioGroup>

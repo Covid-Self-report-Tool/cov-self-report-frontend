@@ -54,8 +54,7 @@ const initialFormState: SymptomForm = {
   numTimesTested: null,
   testedPositive: undefined,
   seenPhysician: undefined,
-  doctorSuspects: undefined,
-  doctorInconclusive: undefined,
+  doctorDiagnosis: undefined,
   hasAgreedToTerms: false,
 };
 
@@ -86,6 +85,15 @@ const reducer = (
       return { ...state, testedPositive: action.payload };
     case 'SET_SEEN_PHYSICIAN':
       return { ...state, seenPhysician: action.payload };
+    case 'SET_DOCTOR_DIAGNOSIS':
+      if (
+        action.payload === 'suspected' ||
+        action.payload === 'inconclusive' ||
+        action.payload === 'negative'
+      ) {
+        return { ...state, doctorDiagnosis: action.payload };
+      }
+      return newForm;
     case 'TOGGLE_AGREED':
       return { ...state, hasAgreedToTerms: !state.hasAgreedToTerms };
     default:
