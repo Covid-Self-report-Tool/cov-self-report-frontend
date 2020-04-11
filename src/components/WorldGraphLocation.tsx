@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Map,
   Popup,
@@ -15,10 +15,9 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
-import { mapBoxApiKey as accessToken, BACKEND_URL } from 'config';
+import { mapBoxApiKey as accessToken } from 'config';
 import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
 
-const superagent = require('superagent');
 require('react-leaflet-markercluster/dist/styles.min.css');
 
 // @ts-ignore: Unreachable code error
@@ -38,37 +37,19 @@ const useStyles = makeStyles({
   },
 });
 
-type WorldGraphProps = {
-  data: any[];
-};
-
 type MapboxType = {
   tilesetId: string;
 };
 
 type PositionType = [number, number];
 
-type SubmittedType = {
-  data: PositionType[];
+type WorldGraphProps = {
+  data: any[]; // TODO: type this
+  submittedFeats: PositionType[];
 };
 
-// TODO: Create generic "APIResponse" type that we subclass or get more specific
-type ApiResponse = {
-  text: string;
-  body:
-    | {
-        // https://jsonapi.org/format/#errors
-        errors?: {
-          status?: string;
-          title?: string;
-          detail?: string;
-        };
-        meta?: {};
-        data?: {
-          locations: PositionType[];
-        };
-      }
-    | any;
+type SubmittedType = {
+  data: PositionType[];
 };
 
 const SubmittedCases: FC<SubmittedType> = ({ data }) => (
@@ -94,36 +75,12 @@ const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
   return <TileLayer {...{ url, attribution, tileSize: 512, zoomOffset: -1 }} />;
 };
 
-export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
+export const WorldGraphLocation: FC<WorldGraphProps> = ({
+  data,
+  submittedFeats,
+}) => {
   const styles = useStyles();
-  const [submittedFeats, setSubmittedFeats] = useState<PositionType[]>([]);
   const initMapCenter = { lat: 30, lng: -10 };
-
-  // NOTE: some dummy data w/5k points if needed for clustering style work:
-  // 'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
-  //
-  // Comes back as text and different schema tho, need to parse:
-  //
-  //   const parsed = JSON.parse(response.text);
-  //   setSubmittedFeats(parsed.features);
-  //
-
-  // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
-  useEffect(() => {
-    async function getSubmittedCases() {
-      await superagent
-        .get(`${BACKEND_URL}/self_report`)
-        .set('Accept', 'application/json')
-        .then((response: Readonly<ApiResponse>) => {
-          if (response.body) {
-            setSubmittedFeats(response.body.data.locations);
-          }
-        })
-        .catch(console.error);
-    }
-
-    getSubmittedCases();
-  }, []);
 
   return (
     <Map
@@ -134,8 +91,8 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
       zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
-      <LayersControl position="bottomleft" collapsed={true}>
-        <LayersControl.Overlay name="Confirmed">
+      <LayersControl position="bottomright" collapsed={true}>
+        <LayersControl.Overlay name="Confirmed" checked>
           <Choropleth
             data={data}
             valueProperty={(feature: any) => feature.properties.confirmed}
@@ -170,7 +127,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
           </FeatureGroup>
         </LayersControl.Overlay>
       </LayersControl>
-      <ZoomControl position="bottomleft" />
+      <ZoomControl position="bottomright" />
     </Map>
   );
 };

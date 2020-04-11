@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import clsx from 'clsx';
 import { Link as RouteLink } from 'react-router-dom';
 import {
   ListSubheader,
@@ -25,11 +24,15 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.common.white,
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
     overflow: 'auto',
-    padding: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingTop: theme.spacing(2),
     position: 'relative',
-    width: 200,
+    width: 110,
+    [theme.breakpoints.up('md')]: {
+      width: 135,
+    },
   },
   popover: {
     width: 250,
@@ -39,13 +42,39 @@ const useStyles = makeStyles(theme => ({
   },
   tickerVal: {
     color: theme.palette.common.black,
-    fontWeight: 'bold',
+    fontSize: '1.9rem',
+    [theme.breakpoints.up('md')]: {
+      fontSize: '2.3rem',
+    },
+  },
+  tickerCardsWrap: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: 105, // past top bar (except on tweeners like iPhone landscape)
+    zIndex: 400,
+    [theme.breakpoints.up('md')]: {
+      right: theme.spacing(2),
+    },
+  },
+  infoBtn: {
+    padding: 0,
+    position: 'absolute',
+    top: 3,
+    right: 3,
+    fontSize: '1rem',
   },
 }));
 
-type NotifierCard = {
+type TickerCard = {
   text: string;
-  number: number;
+  number: number | null;
+};
+
+type TickerCardsTypes = {
+  confirmed: number | null;
+  deaths: number | null;
+  recovered: number | null;
+  submitted: number | null;
 };
 
 // A popover menu and toggle button to show a term and its definition. For now
@@ -59,7 +88,7 @@ function DefPopoverMenu({
   defTerm?: string;
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const definitionClassname = clsx(useStyles().definitionText);
+  const classes = useStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -70,12 +99,13 @@ function DefPopoverMenu({
   };
 
   return (
-    <div>
+    <>
       <IconButton
         aria-controls="ticker-info-menu"
         aria-haspopup="true"
         onClick={handleClick}
         size="small"
+        className={classes.infoBtn}
       >
         <InfoIcon color="primary" fontSize="inherit" />
       </IconButton>
@@ -85,14 +115,14 @@ function DefPopoverMenu({
         onClose={handleClose}
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        classes={{ paper: useStyles().popover }}
+        classes={{ paper: classes.popover }}
       >
         <List
           subheader={<ListSubheader>{defTerm}</ListSubheader>}
           component="ul"
-          className={useStyles().popover}
+          className={classes.popover}
         >
-          <ListItem className={definitionClassname}>{defText}</ListItem>
+          <ListItem className={classes.definitionText}>{defText}</ListItem>
           <ListItem divider>
             <Typography variant="caption" color="textSecondary">
               LAST UPDATED: date/time if possible
@@ -103,24 +133,36 @@ function DefPopoverMenu({
           </ListItem>
         </List>
       </Popover>
-    </div>
+    </>
   );
 }
 
-export const NotifierCard: FC<NotifierCard> = props => {
+const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
 
   return (
     <Grid item xs={12} className={classes.root}>
       <Paper className={classes.paper}>
-        <Title>
-          {props.text}
-          <DefPopoverMenu />
-        </Title>
+        <Title>{props.text}</Title>
         <Typography component="p" variant="h4" className={classes.tickerVal}>
-          {prettyPrint(props.number)}
+          {props.number ? prettyPrint(props.number) : ''}
         </Typography>
+        <DefPopoverMenu />
       </Paper>
     </Grid>
   );
 };
+
+export const TickerCards: FC<TickerCardsTypes> = ({
+  confirmed,
+  deaths,
+  recovered,
+  submitted,
+}) => (
+  <div className={useStyles().tickerCardsWrap}>
+    <NotifierCard text="Recovered" number={recovered || null} />
+    <NotifierCard text="Confirmed" number={confirmed || null} />
+    <NotifierCard text="Self-reported" number={submitted || null} />
+    <NotifierCard text="Deaths" number={deaths || null} />
+  </div>
+);
