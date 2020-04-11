@@ -5,9 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    lineHeight: 1,
+    fontSize: '1rem',
   },
 }));
 
@@ -16,7 +15,7 @@ export default function Title(props: { children?: React.ReactNode }) {
   return (
     <Typography
       component="h2"
-      variant="subtitle1"
+      variant="subtitle2"
       color="primary"
       className={useStyles().root}
     >
