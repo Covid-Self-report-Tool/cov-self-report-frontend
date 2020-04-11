@@ -3,7 +3,7 @@ import { Route, Switch as RouteSwitch } from 'react-router-dom';
 
 import { WorldGraphLocation, CountryTable, TickerCards } from 'components';
 import { IGeoJson } from 'types';
-import { mapBoxApiKey as accessToken, BACKEND_URL } from 'config';
+import { BACKEND_URL } from 'config';
 
 const superagent = require('superagent');
 
