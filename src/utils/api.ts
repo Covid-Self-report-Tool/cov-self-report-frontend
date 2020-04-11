@@ -1,5 +1,5 @@
 import { BACKEND_URL } from 'config';
-import { SymptomForm } from 'types';
+import { SymptomForm } from 'types/submission';
 
 const superagent = require('superagent');
 
