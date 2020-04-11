@@ -50,10 +50,15 @@ export type SymptomForm = {
   tested: boolean | undefined;
   seenPhysician: boolean | undefined;
   testedPositive: boolean | undefined;
-  doctorSuspects: boolean | undefined;
-  doctorInconclusive: boolean | undefined;
+  doctorDiagnosis: DoctorDiagnosis;
   hasAgreedToTerms: boolean;
 };
+
+export type DoctorDiagnosis =
+  | 'suspected'
+  | 'inconclusive'
+  | 'negative'
+  | undefined;
 
 export type DispatchFormType = React.Dispatch<SubmissionFormAction>;
 
@@ -68,5 +73,6 @@ export type SubmissionFormAction =
   | { type: 'SET_ADDRESS'; payload: string }
   | { type: 'SET_SEEN_PHYSICIAN'; payload: boolean }
   | { type: 'SET_TESTED_POSITIVE'; payload: boolean }
+  | { type: 'SET_DOCTOR_DIAGNOSIS'; payload: string }
   | { type: 'RESET_VALUE'; payload: keyof SymptomForm }
   | { type: 'SET_LOCATION'; payload: Location };
