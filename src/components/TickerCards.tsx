@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
 
 type TickerCard = {
   text: string;
-  number: number;
+  number: number | null;
 };
 
 type TickerCardsTypes = {
@@ -145,7 +145,7 @@ const NotifierCard: FC<TickerCard> = props => {
       <Paper className={classes.paper}>
         <Title>{props.text}</Title>
         <Typography component="p" variant="h4" className={classes.tickerVal}>
-          {prettyPrint(props.number)}
+          {props.number ? prettyPrint(props.number) : ''}
         </Typography>
         <DefPopoverMenu />
       </Paper>
@@ -160,9 +160,9 @@ export const TickerCards: FC<TickerCardsTypes> = ({
   submitted,
 }) => (
   <div className={useStyles().tickerCardsWrap}>
-    <NotifierCard text="Recovered" number={recovered || -1} />
-    <NotifierCard text="Confirmed" number={confirmed || -1} />
-    <NotifierCard text="Self-reported" number={submitted || -1} />
-    <NotifierCard text="Deaths" number={deaths || -1} />
+    <NotifierCard text="Recovered" number={recovered || null} />
+    <NotifierCard text="Confirmed" number={confirmed || null} />
+    <NotifierCard text="Self-reported" number={submitted || null} />
+    <NotifierCard text="Deaths" number={deaths || null} />
   </div>
 );
