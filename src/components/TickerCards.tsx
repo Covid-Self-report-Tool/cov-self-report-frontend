@@ -74,6 +74,7 @@ type TickerCardsTypes = {
   confirmed: number | null;
   deaths: number | null;
   recovered: number | null;
+  submitted: number | null;
 };
 
 // A popover menu and toggle button to show a term and its definition. For now
@@ -156,11 +157,12 @@ export const TickerCards: FC<TickerCardsTypes> = ({
   confirmed,
   deaths,
   recovered,
+  submitted,
 }) => (
   <div className={useStyles().tickerCardsWrap}>
     <NotifierCard text="Recovered" number={recovered || -1} />
     <NotifierCard text="Confirmed" number={confirmed || -1} />
-    <NotifierCard text="Self-reported" number={-1} />
+    <NotifierCard text="Self-reported" number={submitted || -1} />
     <NotifierCard text="Deaths" number={deaths || -1} />
   </div>
 );
