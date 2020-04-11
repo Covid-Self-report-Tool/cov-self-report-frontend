@@ -46,3 +46,24 @@ export type SymptomForm = {
     lng: number;
   } | null;
 };
+
+export type PositionType = [number, number];
+
+// TODO: Create generic "APIResponse" type that we subclass or get more specific
+export type OurApiResponse = {
+  text: string;
+  body:
+    | {
+        // https://jsonapi.org/format/#errors
+        errors?: {
+          status?: string;
+          title?: string;
+          detail?: string;
+        };
+        meta?: {};
+        data?: {
+          locations: PositionType[];
+        };
+      }
+    | any;
+};

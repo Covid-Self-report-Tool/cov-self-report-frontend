@@ -44,7 +44,7 @@ type MapboxType = {
 type PositionType = [number, number];
 
 type WorldGraphProps = {
-  data: any[];
+  data: any[]; // TODO: type this
   submittedFeats: PositionType[];
 };
 

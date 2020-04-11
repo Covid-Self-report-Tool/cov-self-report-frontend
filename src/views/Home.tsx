@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Route, Switch as RouteSwitch } from 'react-router-dom';
 
 import { WorldGraphLocation, CountryTable, TickerCards } from 'components';
-import { IGeoJson } from 'types';
+import { IGeoJson, OurApiResponse, PositionType } from 'types';
 import { BACKEND_URL } from 'config';
 
 const superagent = require('superagent');
@@ -48,30 +48,9 @@ type GeoLocation = {
   };
 };
 
-// TODO: Create generic "APIResponse" type that we subclass or get more specific
-type OurApiResponse = {
-  text: string;
-  body:
-    | {
-        // https://jsonapi.org/format/#errors
-        errors?: {
-          status?: string;
-          title?: string;
-          detail?: string;
-        };
-        meta?: {};
-        data?: {
-          locations: PositionType[];
-        };
-      }
-    | any;
-};
-
 type MapboxType = {
   tilesetId: string;
 };
-
-type PositionType = [number, number];
 
 type SubmittedType = {
   data: PositionType[];
