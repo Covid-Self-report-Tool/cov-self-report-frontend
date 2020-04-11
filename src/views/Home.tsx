@@ -3,6 +3,7 @@ import { Route, Switch as RouteSwitch } from 'react-router-dom';
 
 import { WorldGraphLocation, CountryTable, TickerCards } from 'components';
 import { IGeoJson } from 'types';
+import { mapBoxApiKey as accessToken, BACKEND_URL } from 'config';
 
 const superagent = require('superagent');
 
@@ -47,6 +48,35 @@ type GeoLocation = {
   };
 };
 
+// TODO: Create generic "APIResponse" type that we subclass or get more specific
+type OurApiResponse = {
+  text: string;
+  body:
+    | {
+        // https://jsonapi.org/format/#errors
+        errors?: {
+          status?: string;
+          title?: string;
+          detail?: string;
+        };
+        meta?: {};
+        data?: {
+          locations: PositionType[];
+        };
+      }
+    | any;
+};
+
+type MapboxType = {
+  tilesetId: string;
+};
+
+type PositionType = [number, number];
+
+type SubmittedType = {
+  data: PositionType[];
+};
+
 const flattenLocations = (locations: GeoLocation): CountryTable => {
   const rows: CountryTable = [];
 
@@ -67,13 +97,42 @@ export const Home: FC = () => {
   const [confirmed, setConfirmed] = useState<number | null>(null);
   const [deaths, setDeaths] = useState<number | null>(null);
   const [recovered, setRecovered] = useState<number | null>(null);
+  const [submitted, setSubmitted] = useState<number | null>(null);
   const [countryPolygons, setCountryPolygons] = useState<IGeoJson[]>([]);
-  const url = 'https://api.covid19api.com/summary';
+  const [submittedFeats, setSubmittedFeats] = useState<PositionType[]>([]);
+  const jhuApiUrl = 'https://api.covid19api.com/summary';
+
+  // NOTE: some dummy data w/5k points if needed for clustering style work:
+  // 'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
+  //
+  // Comes back as text and different schema tho, need to parse:
+  //
+  //   const parsed = JSON.parse(response.text);
+  //   setSubmittedFeats(parsed.features);
+  //
+
+  // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
+  useEffect(() => {
+    async function getSubmittedCases() {
+      await superagent
+        .get(`${BACKEND_URL}/self_report`)
+        .set('Accept', 'application/json')
+        .then((response: Readonly<OurApiResponse>) => {
+          if (response.body) {
+            setSubmittedFeats(response.body.data.locations);
+            setSubmitted(response.body.data.locations.length);
+          }
+        })
+        .catch(console.error);
+    }
+
+    getSubmittedCases();
+  }, []);
 
   useEffect(() => {
     async function getCovidData() {
       await superagent
-        .get(url)
+        .get(jhuApiUrl)
         .set('Accept', 'application/json')
         .then((response: ApiResponse) => {
           const infectedByCountry: GeoLocation = {};
@@ -126,11 +185,15 @@ export const Home: FC = () => {
           <CountryTable data={covidData} />
         </Route>
         <Route>
-          <WorldGraphLocation data={countryPolygons} />
+          <WorldGraphLocation
+            data={countryPolygons}
+            submittedFeats={submittedFeats}
+          />
           <TickerCards
             confirmed={confirmed}
             deaths={deaths}
             recovered={recovered}
+            submitted={submitted}
           />
         </Route>
       </RouteSwitch>
