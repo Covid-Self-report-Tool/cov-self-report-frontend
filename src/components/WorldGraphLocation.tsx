@@ -134,7 +134,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
       zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
-      <LayersControl position="bottomleft" collapsed={true}>
+      <LayersControl position="bottomright" collapsed={true}>
         <LayersControl.Overlay name="Confirmed">
           <Choropleth
             data={data}
@@ -170,7 +170,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({ data }) => {
           </FeatureGroup>
         </LayersControl.Overlay>
       </LayersControl>
-      <ZoomControl position="bottomleft" />
+      <ZoomControl position="bottomright" />
     </Map>
   );
 };
