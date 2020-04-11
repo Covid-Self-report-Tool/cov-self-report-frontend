@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
@@ -27,38 +27,87 @@ import {
   IfFirebaseAuthed,
 } from '@react-firebase/auth';
 import firebase from 'firebase';
-import { SymptomForm, Symptoms } from 'types';
+import { SymptomForm, Symptoms, Location } from 'types';
 import { postFormData } from 'utils/api';
 import { camelCaseToLabel } from 'utils/strings';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { SignupForm } from './SignupForm';
 import { LoginForm } from './LoginForm';
 
-type Location = [number, number];
-
 const getSteps = () => {
   return ['Symptoms', 'Location', 'Submit'];
+};
+
+const initialFormState: SymptomForm = {
+  symptoms: {
+    fever: { isPresent: false },
+    headache: { isPresent: false },
+    shortnessOfBreath: { isPresent: false },
+    reducedSenseOfSmell: { isPresent: false },
+    reducedSenseOfTaste: { isPresent: false },
+    runnyNose: { isPresent: false },
+    wheezing: { isPresent: false },
+    chestPain: { isPresent: false },
+    dizziness: { isPresent: false },
+    bodyAche: { isPresent: false },
+    lightHeadedness: { isPresent: false },
+    confusion: { isPresent: false },
+    fatigue: { isPresent: false },
+    exhaustion: { isPresent: false },
+    soreThroat: { isPresent: false },
+    nausea: { isPresent: false },
+    dryCough: { isPresent: false },
+    wetCough: { isPresent: false },
+  },
+  location: null,
+  email: null,
+  birthMonth: null,
+  birthYear: null,
+  address: undefined,
+  phoneNumber: null,
+  numTimesTested: null,
+  testedPositive: null,
+  seenADoctor: null,
+  doctorSuspects: null,
+  doctorInconclusive: null,
+};
+
+type Action =
+  | { type: 'TOGGLE_SYMPTOM'; payload: Symptoms }
+  | { type: 'SET_VALUE' }
+  | { type: 'SET_SYMPTOM_START_DATE' }
+  | { type: 'SET_SYMPTOM_END_DATE' }
+  | { type: 'SET_ADDRESS'; payload: string }
+  | { type: 'SET_LOCATION'; payload: Location };
+
+const reducer = (state: SymptomForm, action: Action): SymptomForm => {
+  switch (action.type) {
+    case 'TOGGLE_SYMPTOM':
+      const newForm = { ...state };
+      newForm.symptoms[action.payload].isPresent = !state.symptoms[
+        action.payload
+      ].isPresent;
+      return newForm;
+    case 'SET_SYMPTOM_START_DATE':
+      return { ...state };
+    case 'SET_SYMPTOM_END_DATE':
+      return { ...state };
+    case 'SET_LOCATION':
+      return { ...state, location: action.payload };
+    case 'SET_ADDRESS':
+      return { ...state, address: action.payload };
+    default:
+      return state;
+  }
 };
 
 export const Modal = () => {
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [address, setAddress] = useState<string>('');
   const [register, setRegister] = useState<boolean>(true);
-  const [userData, setUserData] = useState<SymptomForm>({
-    symptoms: {
-      fever: { isPresent: false },
-      headache: { isPresent: false },
-      shortnessOfBreath: { isPresent: false },
-      lackOfSmell: { isPresent: false },
-      lackOfTaste: { isPresent: false },
-      soreThroat: { isPresent: false },
-      nausea: { isPresent: false },
-      cough: { isPresent: false },
-    },
-    location: null,
-  });
-  const [agreedToTAC, setAgreedToTAC] = useState<boolean>(false);
+
+  const [formState, dispatchForm] = useReducer(reducer, initialFormState);
+
   const history = useHistory();
 
   const steps = getSteps();
@@ -80,14 +129,10 @@ export const Modal = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
 
-  const handleChange = (newAddress: string) => {
-    setAddress(newAddress);
-  };
-
   const submitForm = () => {
     if (user) {
       user.getIdToken(true).then(idToken => {
-        postFormData(userData, idToken)
+        postFormData(formState, idToken)
           .then((res: any) => {
             console.log(`got back ${res}`);
             history.push('/');
@@ -100,21 +145,12 @@ export const Modal = () => {
     }
   };
 
-  const toggleSymptom = (symptom: Symptoms) => {
-    const newUserData = { ...userData };
-
-    newUserData.symptoms[symptom].isPresent = !newUserData.symptoms[symptom]
-      .isPresent;
-
-    setUserData(newUserData);
-  };
-
-  const handleSelect = (newAddress: string) => {
+  const handleSelectAddress = (newAddress: string) => {
     geocodeByAddress(newAddress)
       .then((results: any) => getLatLng(results[0]))
-      .then((latLng: any) => {
-        setUserData({ ...userData, location: latLng });
-        setAddress(newAddress);
+      .then((latLng: Location) => {
+        dispatchForm({ type: 'SET_ADDRESS', payload: newAddress });
+        dispatchForm({ type: 'SET_LOCATION', payload: latLng });
       })
       .catch(alert); // better than console error for now
   };
@@ -135,8 +171,13 @@ export const Modal = () => {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={userData.symptoms[symptom].isPresent}
-                            onChange={() => toggleSymptom(Symptoms[symptom])}
+                            checked={formState.symptoms[symptom].isPresent}
+                            onChange={() =>
+                              dispatchForm({
+                                type: 'TOGGLE_SYMPTOM',
+                                payload: Symptoms[symptom],
+                              })
+                            }
                             name={Symptoms[symptom]}
                             color="primary"
                           />
@@ -152,8 +193,13 @@ export const Modal = () => {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={userData.symptoms[symptom].isPresent}
-                            onChange={() => toggleSymptom(Symptoms[symptom])}
+                            checked={formState.symptoms[symptom].isPresent}
+                            onChange={() =>
+                              dispatchForm({
+                                type: 'TOGGLE_SYMPTOM',
+                                payload: Symptoms[symptom],
+                              })
+                            }
                             name={Symptoms[symptom]}
                             color="primary"
                           />
@@ -173,14 +219,21 @@ export const Modal = () => {
             <DialogTitle>Where do you live?</DialogTitle>
             <DialogContent>
               <PlacesAutocomplete
-                value={address}
-                onChange={handleChange}
-                onSelect={handleSelect}
+                value={formState.address}
+                onChange={value =>
+                  dispatchForm({
+                    type: 'SET_ADDRESS',
+                    payload: value,
+                  })
+                }
+                onSelect={handleSelectAddress}
                 // NOTE: actually need the parentheses around 'regions'
                 // https://developers.google.com/places/supported_types#table3
                 searchOptions={{ types: ['(regions)'] }}
                 debounce={300}
-                shouldFetchSuggestions={address.length > 2}
+                shouldFetchSuggestions={
+                  !!formState.address && formState.address.length > 2
+                }
               >
                 {({
                   getInputProps,
@@ -262,14 +315,7 @@ export const Modal = () => {
                       {({ user }) => <span>Logged in as {user.email}</span>}
                     </FirebaseAuthConsumer>
                     <FormControlLabel
-                      control={
-                        <Checkbox
-                          name="checkedB"
-                          color="primary"
-                          value={agreedToTAC}
-                          onChange={() => setAgreedToTAC(!agreedToTAC)}
-                        />
-                      }
+                      control={<Checkbox name="checkedB" color="primary" />}
                       label={
                         <span>
                           I Agree to the{' '}
@@ -324,16 +370,12 @@ export const Modal = () => {
               <Button
                 onClick={handleNext}
                 color="primary"
-                disabled={activeStep == 1 && !userData.location}
+                disabled={activeStep === 1 && !formState.location}
               >
                 Next
               </Button>
             ) : (
-              <Button
-                onClick={submitForm}
-                color="primary"
-                disabled={!user || !agreedToTAC}
-              >
+              <Button onClick={submitForm} color="primary" disabled={!user}>
                 Submit
               </Button>
             )}
