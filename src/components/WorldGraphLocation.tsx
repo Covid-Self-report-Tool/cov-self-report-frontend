@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Map,
   Popup,
@@ -15,10 +15,9 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 // @ts-ignore
 import Choropleth from 'react-leaflet-choropleth';
-import { mapBoxApiKey as accessToken, BACKEND_URL } from 'config';
+import { mapBoxApiKey as accessToken } from 'config';
 import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
 
-const superagent = require('superagent');
 require('react-leaflet-markercluster/dist/styles.min.css');
 
 // @ts-ignore: Unreachable code error
