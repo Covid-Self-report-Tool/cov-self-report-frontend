@@ -4,7 +4,8 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { FirebaseAuthProvider } from '@react-firebase/auth';
 
-import { Dashboard, Modal } from 'components';
+import { Dashboard } from 'components';
+import { Modal } from 'components/submission';
 import { Home, Login, Signup, About, Models, Logout } from 'views';
 import { firebaseConfig } from 'config';
 import { VerifyEmail } from 'views/VerifyEmail';

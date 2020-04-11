@@ -4,14 +4,14 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline, Container, withStyles } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
-
-import { useStyles } from './dashboard.styles';
 import {
   MainNavBar,
   ListItems,
   BackToTopBtn,
   MobileOffCanvasNav,
 } from 'components';
+
+import { useStyles } from './dashboard.styles';
 
 let theme = createMuiTheme({
   overrides: {
