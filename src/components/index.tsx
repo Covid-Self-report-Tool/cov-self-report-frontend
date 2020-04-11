@@ -5,7 +5,6 @@ export * from 'components/ListItems';
 export * from 'components/LoginForm';
 export * from 'components/MainNavBar';
 export * from 'components/MobileOffCanvasNav';
-export * from 'components/Modal';
 export * from 'components/SignupForm';
 export * from 'components/TickerCards';
 export * from 'components/UserPopoverMenu';
