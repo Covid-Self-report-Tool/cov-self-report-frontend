@@ -119,7 +119,7 @@ export const TestingStep: FC<TestingStepType> = ({
               </RadioGroup>
             </FormControl>
           )}
-          {formState.seenPhysician === false && (
+          {formState.seenPhysician === true && (
             <FormControl>
               <FormLabel>What did your physician say?</FormLabel>
               <RadioGroup
