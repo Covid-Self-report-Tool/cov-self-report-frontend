@@ -111,27 +111,29 @@ export const TestingStep: FC<TestingStepType> = ({
             </>
           )}
           {formState.tested === false && (
-            <FormControl>
-              <FormLabel>Have you seen a physician?</FormLabel>
-              <RadioGroup
-                value={String(formState.seenPhysician)}
-                onChange={event => {
-                  dispatchForm({
-                    type: 'SET_SEEN_PHYSICIAN',
-                    payload: event.target.value === 'true',
-                  });
-                }}
-              >
-                <FormControlLabel
-                  control={<Radio value="true" />}
-                  label="Yes"
-                />
-                <FormControlLabel
-                  control={<Radio value="false" />}
-                  label="No"
-                />
-              </RadioGroup>
-            </FormControl>
+            <Grid item xs={12}>
+              <FormControl>
+                <FormLabel>Have you seen a physician?</FormLabel>
+                <RadioGroup
+                  value={String(formState.seenPhysician)}
+                  onChange={event => {
+                    dispatchForm({
+                      type: 'SET_SEEN_PHYSICIAN',
+                      payload: event.target.value === 'true',
+                    });
+                  }}
+                >
+                  <FormControlLabel
+                    control={<Radio value="true" />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    control={<Radio value="false" />}
+                    label="No"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
           )}
           {formState.seenPhysician === true && (
             <FormControl>
