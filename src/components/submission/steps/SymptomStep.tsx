@@ -29,7 +29,7 @@ export const SymptomStep: FC<SymptomStepType> = ({
   const lastHalfSymptoms: Array<keyof typeof Symptoms> = allSymptoms;
 
   return (
-    <div>
+    <>
       <DialogTitle id="form-dialog-title">What are your symptoms?</DialogTitle>
       <DialogContent>
         <Grid container>
@@ -79,6 +79,6 @@ export const SymptomStep: FC<SymptomStepType> = ({
           </Grid>
         </Grid>
       </DialogContent>
-    </div>
+    </>
   );
 };

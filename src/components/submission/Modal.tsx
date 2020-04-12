@@ -14,12 +14,13 @@ import { postFormData } from 'utils/api';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import {
   SymptomStep,
+  TestingStep,
   LocationDetailsStep,
   RegistrationStep,
 } from 'components/submission/steps';
 
 const getSteps = () => {
-  return ['Symptoms', 'Location', 'Submit'];
+  return ['Symptoms', 'Testing', 'Location', 'Submit'];
 };
 
 const initialFormState: SymptomForm = {
@@ -49,11 +50,11 @@ const initialFormState: SymptomForm = {
   birthYear: null,
   address: undefined,
   phoneNumber: null,
+  tested: undefined,
   numTimesTested: null,
-  testedPositive: null,
-  seenADoctor: null,
-  doctorSuspects: null,
-  doctorInconclusive: null,
+  testedPositive: undefined,
+  seenPhysician: undefined,
+  doctorDiagnosis: undefined,
   hasAgreedToTerms: false,
 };
 
@@ -72,10 +73,36 @@ const reducer = (
       return newForm;
     case 'SET_SYMPTOM_END_DATE':
       return newForm;
+    case 'SET_NUM_TIMES_TESTED':
+      return { ...state, numTimesTested: action.payload };
     case 'SET_LOCATION':
       return { ...state, location: action.payload };
     case 'SET_ADDRESS':
       return { ...state, address: action.payload };
+    case 'SET_TESTED':
+      if (action.payload === false) {
+        return { ...state, testedPositive: undefined, tested: action.payload };
+      }
+      return {
+        ...state,
+        tested: action.payload,
+        numTimesTested: null,
+        seenPhysician: undefined,
+        doctorDiagnosis: undefined,
+      };
+    case 'SET_TESTED_POSITIVE':
+      return { ...state, testedPositive: action.payload };
+    case 'SET_SEEN_PHYSICIAN':
+      return { ...state, seenPhysician: action.payload };
+    case 'SET_DOCTOR_DIAGNOSIS':
+      if (
+        action.payload === 'suspected' ||
+        action.payload === 'inconclusive' ||
+        action.payload === 'negative'
+      ) {
+        return { ...state, doctorDiagnosis: action.payload };
+      }
+      return newForm;
     case 'TOGGLE_AGREED':
       return { ...state, hasAgreedToTerms: !state.hasAgreedToTerms };
     default:
@@ -99,6 +126,27 @@ export const Modal = () => {
 
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
+  };
+
+  // logic for handling when you can click next, depending on the step
+  const isNextDisabled = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        // All the last steps of this form
+        if (
+          formState.seenPhysician === false ||
+          formState.testedPositive !== undefined ||
+          formState.doctorDiagnosis !== undefined
+        ) {
+          return false;
+        }
+
+        return true;
+      case 2:
+        return !formState.location;
+      default:
+        return false;
+    }
   };
 
   const submitForm = () => {
@@ -125,12 +173,16 @@ export const Modal = () => {
         );
       case 1:
         return (
+          <TestingStep formState={formState} dispatchForm={dispatchForm} />
+        );
+      case 2:
+        return (
           <LocationDetailsStep
             formState={formState}
             dispatchForm={dispatchForm}
           />
         );
-      case 2:
+      case 3:
         return (
           <RegistrationStep formState={formState} dispatchForm={dispatchForm} />
         );
@@ -164,11 +216,11 @@ export const Modal = () => {
         >
           Back
         </Button>
-        {activeStep < 2 ? (
+        {activeStep < steps.length - 1 ? (
           <Button
             onClick={handleNext}
             color="primary"
-            disabled={activeStep === 1 && !formState.location}
+            disabled={isNextDisabled(activeStep)}
           >
             Next
           </Button>

@@ -47,12 +47,18 @@ export type SymptomForm = {
   birthYear: number | null;
   phoneNumber: string | null;
   numTimesTested: number | null;
-  testedPositive: boolean | null;
-  seenADoctor: boolean | null;
-  doctorSuspects: boolean | null;
-  doctorInconclusive: boolean | null;
+  tested: boolean | undefined;
+  seenPhysician: boolean | undefined;
+  testedPositive: boolean | undefined;
+  doctorDiagnosis: DoctorDiagnosis;
   hasAgreedToTerms: boolean;
 };
+
+export type DoctorDiagnosis =
+  | 'suspected'
+  | 'inconclusive'
+  | 'negative'
+  | undefined;
 
 export type DispatchFormType = React.Dispatch<SubmissionFormAction>;
 
@@ -61,6 +67,12 @@ export type SubmissionFormAction =
   | { type: 'SET_VALUE' }
   | { type: 'SET_SYMPTOM_START_DATE' }
   | { type: 'SET_SYMPTOM_END_DATE' }
+  | { type: 'SET_NUM_TIMES_TESTED'; payload: number }
   | { type: 'TOGGLE_AGREED' }
+  | { type: 'SET_TESTED'; payload: boolean }
   | { type: 'SET_ADDRESS'; payload: string }
+  | { type: 'SET_SEEN_PHYSICIAN'; payload: boolean }
+  | { type: 'SET_TESTED_POSITIVE'; payload: boolean }
+  | { type: 'SET_DOCTOR_DIAGNOSIS'; payload: string }
+  | { type: 'RESET_VALUE'; payload: keyof SymptomForm }
   | { type: 'SET_LOCATION'; payload: Location };
