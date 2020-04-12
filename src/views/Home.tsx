@@ -5,7 +5,7 @@ import {
   IGeoJson,
   OurApiResponse,
   PositionType,
-  ApiResponse,
+  JhuApiResponse,
   GeoLocation,
   CountryTable,
 } from 'types';
@@ -58,7 +58,7 @@ export const Home: FC = () => {
       await superagent
         .get(jhuApiUrl)
         .set('Accept', 'application/json')
-        .then((response: ApiResponse) => {
+        .then((response: JhuApiResponse) => {
           const infectedByCountry: GeoLocation = {};
 
           setConfirmed(response.body.Global.TotalConfirmed);

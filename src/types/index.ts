@@ -36,16 +36,18 @@ export type OurApiResponse = {
     | any;
 };
 
-export type ApiResponse = {
+export type GlobalType = {
+  NewConfirmed: number;
+  TotalConfirmed: number;
+  NewDeaths: number;
+  TotalDeaths: number;
+  NewRecovered: number;
+  TotalRecovered: number;
+};
+
+export type JhuApiResponse = {
   body: {
-    Global: {
-      NewConfirmed: number;
-      TotalConfirmed: number;
-      NewDeaths: number;
-      TotalDeaths: number;
-      NewRecovered: number;
-      TotalRecovered: number;
-    };
+    Global: GlobalType;
     Countries: [
       {
         Country: string;
