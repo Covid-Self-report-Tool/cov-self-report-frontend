@@ -1,22 +1,26 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { SymptomForm, DispatchFormType } from 'types/submission';
 import {
   FormControlLabel,
   DialogTitle,
   DialogContent,
   Grid,
-  TextField,
   Radio,
   RadioGroup,
   FormControl,
   FormLabel,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({
-  textField: {
-    marginTop: 0,
-    marginBottom: 20,
+  dropdown: {
+    marginTop: 10,
+  },
+  selector: {
+    marginBottom: 10,
   },
 });
 
@@ -59,20 +63,32 @@ export const TestingStep: FC<TestingStepType> = ({
           </FormControl>
           {formState.tested && (
             <>
-              <TextField
-                label="Number of times tested"
-                type="number"
-                className={classes.textField}
-                fullWidth
-                inputProps={{ min: '0', max: '10', step: '1' }}
-                value={formState.numTimesTested}
-                onChange={event =>
-                  dispatchForm({
-                    type: 'SET_NUM_TIMES_TESTED',
-                    payload: parseInt(event.target.value, 10),
-                  })
-                }
-              />
+              <Grid item xs={12}>
+                <InputLabel
+                  id="demo-simple-select-label"
+                  className={classes.dropdown}
+                >
+                  How many times?
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={formState.numTimesTested}
+                  className={classes.selector}
+                  onChange={event =>
+                    dispatchForm({
+                      type: 'SET_NUM_TIMES_TESTED',
+                      payload: event.target.value as number,
+                    })
+                  }
+                >
+                  <MenuItem value={1}>One</MenuItem>
+                  <MenuItem value={2}>Two</MenuItem>
+                  <MenuItem value={3}>Three</MenuItem>
+                  <MenuItem value={4}>Three</MenuItem>
+                  <MenuItem value={5}>Three</MenuItem>
+                </Select>
+              </Grid>
               <FormControl>
                 <FormLabel>Did you test positive?</FormLabel>
                 <RadioGroup
