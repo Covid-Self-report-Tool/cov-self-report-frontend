@@ -87,7 +87,7 @@ export const SymptomStep: FC<SymptomStepType> = ({
     dispatchForm({
       type: 'SET_SYMPTOM_END_DATE',
       // @ts-ignore
-      payload: { symptom: symptom, startDate: date },
+      payload: { symptom: symptom, endDate: date },
     });
   };
 
