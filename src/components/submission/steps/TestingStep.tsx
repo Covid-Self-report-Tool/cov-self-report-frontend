@@ -85,8 +85,6 @@ export const TestingStep: FC<TestingStepType> = ({
                   <MenuItem value={1}>One</MenuItem>
                   <MenuItem value={2}>Two</MenuItem>
                   <MenuItem value={3}>Three</MenuItem>
-                  <MenuItem value={4}>Three</MenuItem>
-                  <MenuItem value={5}>Three</MenuItem>
                 </Select>
               </Grid>
               <FormControl>
