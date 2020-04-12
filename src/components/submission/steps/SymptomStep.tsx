@@ -62,6 +62,7 @@ export const SymptomStep: FC<SymptomStepType> = ({
     console.log(formState);
   }, [formState]);
 
+  // this should not return an array of string
   const getSymptoms = () => {
     return Object.keys(formState.symptoms).filter(
       // @ts-ignore
@@ -153,7 +154,9 @@ export const SymptomStep: FC<SymptomStepType> = ({
           <DialogContent>
             <Grid container>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                {getSymptoms().map(symptom => (
+                {getSymptoms().map((
+                  symptom: any // TODO: fix type any
+                ) => (
                   <>
                     <Grid item xs={4}>
                       <Typography className={classes.center}>
@@ -187,6 +190,8 @@ export const SymptomStep: FC<SymptomStepType> = ({
                         format="MM/dd/yyyy"
                         margin="normal"
                         label="End Date"
+                        // @ts-ignore
+                        minDate={formState.symptoms[symptom].startDate}
                         maxDate={new Date()}
                         // @ts-ignore
                         value={formState.symptoms[symptom].endDate}
