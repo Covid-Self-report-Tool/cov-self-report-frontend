@@ -35,3 +35,65 @@ export type OurApiResponse = {
       }
     | any;
 };
+
+export type ApiResponse = {
+  body: {
+    Global: {
+      NewConfirmed: number;
+      TotalConfirmed: number;
+      NewDeaths: number;
+      TotalDeaths: number;
+      NewRecovered: number;
+      TotalRecovered: number;
+    };
+    Countries: [
+      {
+        Country: string;
+        CountryCode: string;
+        Slug: string;
+        NewConfirmed: number;
+        TotalConfirmed: number;
+        NewDeaths: number;
+        TotalDeaths: number;
+        NewRecovered: number;
+        TotalRecovered: number;
+        Date: string;
+      }
+    ];
+  };
+};
+
+export type GeoLocation = {
+  [key: string]: {
+    confirmed: number;
+    dead: number;
+    recovered: number;
+    confirmed_day_change?: number;
+    dead_day_change?: number;
+    recovered_day_change?: number;
+  };
+};
+
+export type MapboxType = {
+  tilesetId: string;
+};
+
+export type SubmittedType = {
+  data: PositionType[];
+};
+
+export type CountryRow = {
+  name: string;
+  confirmed: number;
+  dead: number;
+  recovered: number;
+  confirmed_day_change?: number;
+  dead_day_change?: number;
+  recovered_day_change?: number;
+};
+
+export type CountryTable = CountryRow[];
+
+export type CountryTableType = {
+  data: CountryTable;
+};

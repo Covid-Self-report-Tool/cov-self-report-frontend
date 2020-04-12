@@ -1,5 +1,6 @@
 import L from 'leaflet';
 
+import { GeoLocation, CountryTable } from 'types';
 const indivMarkerDiameter = 15;
 
 // https://github.com/Leaflet/Leaflet.markercluster#customising-the-clustered-markers
@@ -44,3 +45,18 @@ export const indivMarkerIcon = L.divIcon({
       border-radius: 100%;
     "></div>`,
 });
+
+export const flattenLocations = (locations: GeoLocation): CountryTable => {
+  const rows: CountryTable = [];
+
+  Object.keys(locations).forEach(countryName => {
+    const newRow = {
+      name: countryName,
+      ...locations[countryName],
+    };
+
+    rows.push(newRow);
+  });
+
+  return rows;
+};

@@ -1,75 +1,20 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Route, Switch as RouteSwitch } from 'react-router-dom';
 
-import { WorldGraphLocation, CountryTable, TickerCards } from 'components';
-import { IGeoJson, OurApiResponse, PositionType } from 'types';
+import { WorldGraphLocation, TickerCards } from 'components';
+import {
+  IGeoJson,
+  OurApiResponse,
+  PositionType,
+  ApiResponse,
+  GeoLocation,
+  CountryTable,
+} from 'types';
 import { BACKEND_URL } from 'config';
-
+import { flattenLocations } from 'utils/map';
 const superagent = require('superagent');
 
 // Should be able to switch to topojson for some big perf gains
 const countryGeoJson = require('utils/countries.min.json'); // TODO: fetch
-
-type ApiResponse = {
-  body: {
-    Global: {
-      NewConfirmed: number;
-      TotalConfirmed: number;
-      NewDeaths: number;
-      TotalDeaths: number;
-      NewRecovered: number;
-      TotalRecovered: number;
-    };
-    Countries: [
-      {
-        Country: string;
-        CountryCode: string;
-        Slug: string;
-        NewConfirmed: number;
-        TotalConfirmed: number;
-        NewDeaths: number;
-        TotalDeaths: number;
-        NewRecovered: number;
-        TotalRecovered: number;
-        Date: string;
-      }
-    ];
-  };
-};
-
-type GeoLocation = {
-  [key: string]: {
-    confirmed: number;
-    dead: number;
-    recovered: number;
-    confirmed_day_change?: number;
-    dead_day_change?: number;
-    recovered_day_change?: number;
-  };
-};
-
-type MapboxType = {
-  tilesetId: string;
-};
-
-type SubmittedType = {
-  data: PositionType[];
-};
-
-const flattenLocations = (locations: GeoLocation): CountryTable => {
-  const rows: CountryTable = [];
-
-  Object.keys(locations).forEach(countryName => {
-    const newRow = {
-      name: countryName,
-      ...locations[countryName],
-    };
-
-    rows.push(newRow);
-  });
-
-  return rows;
-};
 
 export const Home: FC = () => {
   const [covidData, setCovidData] = useState<CountryTable>([]);
@@ -159,23 +104,16 @@ export const Home: FC = () => {
 
   return (
     <>
-      <RouteSwitch>
-        <Route path="/list" exact>
-          <CountryTable data={covidData} />
-        </Route>
-        <Route>
-          <WorldGraphLocation
-            data={countryPolygons}
-            submittedFeats={submittedFeats}
-          />
-          <TickerCards
-            confirmed={confirmed}
-            deaths={deaths}
-            recovered={recovered}
-            submitted={submitted}
-          />
-        </Route>
-      </RouteSwitch>
+      <WorldGraphLocation
+        data={countryPolygons}
+        submittedFeats={submittedFeats}
+      />
+      <TickerCards
+        confirmed={confirmed}
+        deaths={deaths}
+        recovered={recovered}
+        submitted={submitted}
+      />
     </>
   );
 };
