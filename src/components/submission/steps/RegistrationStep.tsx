@@ -5,6 +5,7 @@ import {
   Checkbox,
   FormControlLabel,
   Link,
+  Grid,
 } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
@@ -59,21 +60,23 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
               <IfFirebaseAuthed>
                 {({ user }) => <span>Logged in as {user.email}</span>}
               </IfFirebaseAuthed>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="checkedB"
-                    color="primary"
-                    value={formState.hasAgreedToTerms}
-                    onChange={() => dispatchForm({ type: 'TOGGLE_AGREED' })}
-                  />
-                }
-                label={
-                  <span>
-                    I Agree to the <Link href="#">Terms and Conditions</Link>
-                  </span>
-                }
-              />
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="checkedB"
+                      color="primary"
+                      value={formState.hasAgreedToTerms}
+                      onChange={() => dispatchForm({ type: 'TOGGLE_AGREED' })}
+                    />
+                  }
+                  label={
+                    <span>
+                      I Agree to the <Link href="#">Terms and Conditions</Link>
+                    </span>
+                  }
+                />
+              </Grid>
             </DialogContent>
           </div>
         )}

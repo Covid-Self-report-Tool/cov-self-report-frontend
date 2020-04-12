@@ -20,29 +20,29 @@ import {
 } from 'components/submission/steps';
 
 const getSteps = () => {
-  return ['Symptoms', 'Testing', 'Location', 'Submit'];
+  return ['Symptoms', 'Tests', 'Location', 'Submit'];
 };
 
 const initialFormState: SymptomForm = {
   symptoms: {
-    fever: { isPresent: false },
-    headache: { isPresent: false },
-    shortnessOfBreath: { isPresent: false },
-    reducedSmell: { isPresent: false },
-    reducedTaste: { isPresent: false },
-    runnyNose: { isPresent: false },
-    wheezing: { isPresent: false },
-    chestPain: { isPresent: false },
-    bodyAche: { isPresent: false },
-    lightHeadedness: { isPresent: false },
-    confusion: { isPresent: false },
-    fatigue: { isPresent: false },
-    soreThroat: { isPresent: false },
-    nausea: { isPresent: false },
-    dryCough: { isPresent: false },
-    wetCough: { isPresent: false },
-    diarrhea: { isPresent: false },
-    abdominalPain: { isPresent: false },
+    fever: { isPresent: false, startDate: null, endDate: null },
+    headache: { isPresent: false, startDate: null, endDate: null },
+    shortnessOfBreath: { isPresent: false, startDate: null, endDate: null },
+    reducedSmell: { isPresent: false, startDate: null, endDate: null },
+    reducedTaste: { isPresent: false, startDate: null, endDate: null },
+    runnyNose: { isPresent: false, startDate: null, endDate: null },
+    wheezing: { isPresent: false, startDate: null, endDate: null },
+    chestPain: { isPresent: false, startDate: null, endDate: null },
+    bodyAche: { isPresent: false, startDate: null, endDate: null },
+    lightHeadedness: { isPresent: false, startDate: null, endDate: null },
+    confusion: { isPresent: false, startDate: null, endDate: null },
+    fatigue: { isPresent: false, startDate: null, endDate: null },
+    soreThroat: { isPresent: false, startDate: null, endDate: null },
+    nausea: { isPresent: false, startDate: null, endDate: null },
+    dryCough: { isPresent: false, startDate: null, endDate: null },
+    wetCough: { isPresent: false, startDate: null, endDate: null },
+    diarrhea: { isPresent: false, startDate: null, endDate: null },
+    abdominalPain: { isPresent: false, startDate: null, endDate: null },
   },
   location: null,
   email: null,
@@ -70,8 +70,11 @@ const reducer = (
       ].isPresent;
       return newForm;
     case 'SET_SYMPTOM_START_DATE':
+      newForm.symptoms[action.payload.symptom].startDate =
+        action.payload.startDate;
       return newForm;
     case 'SET_SYMPTOM_END_DATE':
+      newForm.symptoms[action.payload.symptom].endDate = action.payload.endDate;
       return newForm;
     case 'SET_NUM_TIMES_TESTED':
       return { ...state, numTimesTested: action.payload };
@@ -192,7 +195,7 @@ export const Modal = () => {
   };
 
   return (
-    <Dialog open aria-labelledby="form-dialog-title" fullWidth maxWidth="xs">
+    <Dialog open aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
       <Stepper activeStep={activeStep}>
         {steps.map(label => {
           const stepProps: { completed?: boolean } = {};
