@@ -80,7 +80,16 @@ const reducer = (
     case 'SET_ADDRESS':
       return { ...state, address: action.payload };
     case 'SET_TESTED':
-      return { ...state, tested: action.payload };
+      if (action.payload === false) {
+        return { ...state, testedPositive: undefined, tested: action.payload };
+      }
+      return {
+        ...state,
+        tested: action.payload,
+        numTimesTested: null,
+        seenPhysician: undefined,
+        doctorDiagnosis: undefined,
+      };
     case 'SET_TESTED_POSITIVE':
       return { ...state, testedPositive: action.payload };
     case 'SET_SEEN_PHYSICIAN':
