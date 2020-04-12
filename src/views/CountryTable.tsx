@@ -9,22 +9,7 @@ import {
   TableBody,
   Paper,
 } from '@material-ui/core';
-
-type CountryRow = {
-  name: string;
-  confirmed: number;
-  dead: number;
-  recovered: number;
-  confirmed_day_change?: number;
-  dead_day_change?: number;
-  recovered_day_change?: number;
-};
-
-export type CountryTable = CountryRow[];
-
-type CountryTableType = {
-  data: CountryTable;
-};
+import { CountryTableType } from 'types';
 
 export const CountryTable: FC<CountryTableType> = ({ data }) => {
   return (
