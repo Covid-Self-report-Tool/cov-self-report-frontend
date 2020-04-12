@@ -15,6 +15,8 @@ npm start
 - [AWS Amplify console](https://console.aws.amazon.com/amplify/home?region=us-east-1)
 - [Amplify prod deploy](https://master.d27kqd75u1q0ac.amplifyapp.com/) (will obvi be legit domain eventually)
 - [Jira project](https://cmu-covid.atlassian.net/browse/COV)
+- [Production deploy](https://master.d3detajy1g4axn.amplifyapp.com/) (as of 4/12/20)
+- [JHU GitHub data](https://github.com/CSSEGISandData/COVID-19) (CSVs)
 
 ## Fixes
 
