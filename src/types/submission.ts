@@ -5,8 +5,8 @@ export type Location = {
 
 export type Symptom = {
   isPresent: boolean;
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date | null;
+  endDate: Date | null;
 };
 
 export enum Symptoms {
@@ -32,8 +32,8 @@ export enum Symptoms {
 
 export type SymptomFever = {
   isPresent: boolean;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | null;
+  endDate?: Date | null;
   temperature?: number;
   severity?: number;
 };
@@ -65,8 +65,14 @@ export type DispatchFormType = React.Dispatch<SubmissionFormAction>;
 export type SubmissionFormAction =
   | { type: 'TOGGLE_SYMPTOM'; payload: Symptoms }
   | { type: 'SET_VALUE' }
-  | { type: 'SET_SYMPTOM_START_DATE' }
-  | { type: 'SET_SYMPTOM_END_DATE' }
+  | {
+      type: 'SET_SYMPTOM_START_DATE';
+      payload: { symptom: Symptoms; startDate: Date | null };
+    }
+  | {
+      type: 'SET_SYMPTOM_END_DATE';
+      payload: { symptom: Symptoms; endDate: Date | null };
+    }
   | { type: 'SET_NUM_TIMES_TESTED'; payload: number }
   | { type: 'TOGGLE_AGREED' }
   | { type: 'SET_TESTED'; payload: boolean }
