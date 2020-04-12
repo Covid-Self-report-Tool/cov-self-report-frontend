@@ -132,7 +132,16 @@ export const Modal = () => {
   const isNextDisabled = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!formState.birthMonth || !!formState.birthYear;
+        // All the last steps of this form
+        if (
+          formState.seenPhysician === false ||
+          formState.testedPositive !== undefined ||
+          formState.doctorDiagnosis !== undefined
+        ) {
+          return false;
+        }
+
+        return true;
       case 2:
         return !formState.location;
       default:
