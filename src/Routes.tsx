@@ -1,51 +1,69 @@
 import React, { FC } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/styles';
+import { CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { FirebaseAuthProvider } from '@react-firebase/auth';
 
-import { Dashboard } from 'components';
+import { theme, GlobalCss } from './theme';
+import { Dashboard, LoginForm, StoreProvider } from 'components';
 import { Modal } from 'components/submission';
-import { Home, Login, Signup, About, Models, Logout } from 'views';
+import { SimpleModal } from 'components/reusable';
+import { Home, Signup, About, Models, Logout, CountryTable } from 'views';
 import { firebaseConfig } from 'config';
 import { VerifyEmail } from 'views/VerifyEmail';
 
-const Routes: FC = () => {
-  return (
-    // @ts-ignore
-    <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
-      <Router>
-        <Dashboard>
-          <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/logout">
-              <Logout />
-            </Route>
+const Routes: FC = () => (
+  // @ts-ignore
+  <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
+    <StoreProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <GlobalCss />
+        <Router>
+          <Dashboard>
             <Route path="/models">
               <Models />
             </Route>
             <Route path="/about">
               <About />
             </Route>
-            <Route path="/signup">
-              <Signup />
+            <Route path="/list">
+              <CountryTable />
             </Route>
-            <Route path="/verify_email">
-              <VerifyEmail />
-            </Route>
-            <Route>
+            <Route path="/" exact>
               <Home />
             </Route>
-          </Switch>
+          </Dashboard>
+          {/* None of the modals need to be inside Dashboard */}
+          <Route path="/login">
+            <SimpleModal title="Login">
+              <LoginForm />
+            </SimpleModal>
+          </Route>
+          <Route path="/logout">
+            <SimpleModal title="Logout">
+              <Logout />
+            </SimpleModal>
+          </Route>
+          <Route path="/verify_email">
+            <SimpleModal title="Forgot password">
+              <VerifyEmail />
+            </SimpleModal>
+          </Route>
           <Route path="/self-report">
             <Modal />
           </Route>
-        </Dashboard>
-      </Router>
-    </FirebaseAuthProvider>
-  );
-};
+          <Route path="/signup">
+            <SimpleModal title="Sign up">
+              <Signup />
+            </SimpleModal>
+          </Route>
+        </Router>
+      </ThemeProvider>
+    </StoreProvider>
+  </FirebaseAuthProvider>
+);
 
 export default Routes;

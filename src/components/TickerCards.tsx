@@ -13,6 +13,7 @@ import {
 import InfoIcon from '@material-ui/icons/Info';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { CurrentTotalsTypes } from 'types/context';
 import { prettyPrint } from 'utils';
 import Title from './Title';
 
@@ -67,14 +68,7 @@ const useStyles = makeStyles(theme => ({
 
 type TickerCard = {
   text: string;
-  number: number | null;
-};
-
-type TickerCardsTypes = {
-  confirmed: number | null;
-  deaths: number | null;
-  recovered: number | null;
-  submitted: number | null;
+  number: number;
 };
 
 // A popover menu and toggle button to show a term and its definition. For now
@@ -145,7 +139,7 @@ const NotifierCard: FC<TickerCard> = props => {
       <Paper className={classes.paper}>
         <Title>{props.text}</Title>
         <Typography component="p" variant="h4" className={classes.tickerVal}>
-          {props.number ? prettyPrint(props.number) : ''}
+          {prettyPrint(props.number)}
         </Typography>
         <DefPopoverMenu />
       </Paper>
@@ -153,16 +147,16 @@ const NotifierCard: FC<TickerCard> = props => {
   );
 };
 
-export const TickerCards: FC<TickerCardsTypes> = ({
+export const TickerCards: FC<CurrentTotalsTypes> = ({
   confirmed,
   deaths,
   recovered,
-  submitted,
+  selfReported,
 }) => (
   <div className={useStyles().tickerCardsWrap}>
-    <NotifierCard text="Recovered" number={recovered || null} />
-    <NotifierCard text="Confirmed" number={confirmed || null} />
-    <NotifierCard text="Self-reported" number={submitted || null} />
-    <NotifierCard text="Deaths" number={deaths || null} />
+    <NotifierCard text="Recovered" number={recovered} />
+    <NotifierCard text="Confirmed" number={confirmed} />
+    <NotifierCard text="Self-reported" number={selfReported} />
+    <NotifierCard text="Deaths" number={deaths} />
   </div>
 );
