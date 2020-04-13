@@ -3,6 +3,7 @@ import { SymptomForm } from 'types/submission';
 
 const superagent = require('superagent');
 
+// CRED: for permalink: https://gist.github.com/atenni/5604615
 // Using Jason's gist until we have an endpoint in our own API. Tried GitLab raw
 // file but CORS ruined the party. Worth noting, this actually worked:
 // https://raw.githack.com/

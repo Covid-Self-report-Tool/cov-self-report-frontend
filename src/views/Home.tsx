@@ -4,19 +4,19 @@ import { WorldGraphLocation, TickerCards, useStore } from 'components';
 
 export const Home: FC = () => {
   const store = useStore();
-  const { confirmed, dead, recovered, submitted } = store.currentTotals;
+  const { confirmed, deaths, recovered, selfReported } = store.currentTotals;
 
   return (
     <>
       <WorldGraphLocation
         data={store.countries}
-        submittedFeats={store.allSelfSubmittedPoints}
+        submittedFeats={store.allSelfReportedPoints}
       />
       <TickerCards
         confirmed={confirmed}
-        deaths={dead}
+        deaths={deaths}
         recovered={recovered}
-        submitted={submitted}
+        selfReported={selfReported}
       />
     </>
   );

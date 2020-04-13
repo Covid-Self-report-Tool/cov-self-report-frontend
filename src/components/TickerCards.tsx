@@ -13,6 +13,7 @@ import {
 import InfoIcon from '@material-ui/icons/Info';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { CurrentTotalsTypes } from 'types/context';
 import { prettyPrint } from 'utils';
 import Title from './Title';
 
@@ -68,13 +69,6 @@ const useStyles = makeStyles(theme => ({
 type TickerCard = {
   text: string;
   number: number;
-};
-
-type TickerCardsTypes = {
-  confirmed: number;
-  deaths: number;
-  recovered: number;
-  submitted: number;
 };
 
 // A popover menu and toggle button to show a term and its definition. For now
@@ -153,16 +147,16 @@ const NotifierCard: FC<TickerCard> = props => {
   );
 };
 
-export const TickerCards: FC<TickerCardsTypes> = ({
+export const TickerCards: FC<CurrentTotalsTypes> = ({
   confirmed,
   deaths,
   recovered,
-  submitted,
+  selfReported,
 }) => (
   <div className={useStyles().tickerCardsWrap}>
     <NotifierCard text="Recovered" number={recovered} />
     <NotifierCard text="Confirmed" number={confirmed} />
-    <NotifierCard text="Self-reported" number={submitted} />
+    <NotifierCard text="Self-reported" number={selfReported} />
     <NotifierCard text="Deaths" number={deaths} />
   </div>
 );
