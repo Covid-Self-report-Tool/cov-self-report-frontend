@@ -2,7 +2,12 @@ import { BACKEND_URL } from 'config';
 import { SymptomForm } from 'types/submission';
 
 const superagent = require('superagent');
-const countriesUrl = '/countries.min.json';
+
+// Using Jason's gist until we have an endpoint in our own API. Tried GitLab raw
+// file but CORS ruined the party. Worth noting, this actually worked:
+// https://raw.githack.com/
+const countriesUrl =
+  'https://gist.githubusercontent.com/abettermap/aa507bbf8edcaff1d3137b976efede4b/raw/countries.json';
 
 export const postFormData = (formData: SymptomForm, authorization: string) => {
   return superagent
@@ -12,8 +17,7 @@ export const postFormData = (formData: SymptomForm, authorization: string) => {
 };
 
 // NOTE: should be able to switch to topojson for some big perf gains
-export const getCountryData = async () =>
-  await superagent.get(countriesUrl).set('Accept', 'application/json');
+export const getCountryData = async () => await superagent.get(countriesUrl);
 
 export const getSubmittedCases = async () =>
   await superagent
