@@ -33,7 +33,11 @@ const useStyles = makeStyles({
   theMapItself: {
     width: '100%',
     height: '100%',
-    position: 'absolute',
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });
 
@@ -80,7 +84,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   submittedFeats,
 }) => {
   const styles = useStyles();
-  const initMapCenter = { lat: 30, lng: -10 };
+  const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
 
   return (
     <Map
@@ -94,7 +98,10 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
       <LayersControl position="bottomright" collapsed={true}>
         <LayersControl.Overlay name="Confirmed" checked>
           <Choropleth
-            data={data}
+            data={{
+              type: 'FeatureCollection',
+              features: data,
+            }}
             valueProperty={(feature: any) => feature.properties.confirmed}
             scale={['hsl(184, 69%, 60%)', 'hsl(184, 69%, 10%)']}
             steps={100}
@@ -112,14 +119,6 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
             }}
             mode="q"
           />
-        </LayersControl.Overlay>
-        <LayersControl.Overlay name="Dead">
-          <FeatureGroup color="purple">
-            <Popup>
-              <span>Popup in FeatureGroup</span>
-            </Popup>
-            <Circle center={[51.51, -0.06]} radius={200} />
-          </FeatureGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay checked name="User-submitted">
           <FeatureGroup>

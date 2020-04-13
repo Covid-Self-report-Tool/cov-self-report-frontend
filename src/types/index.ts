@@ -6,8 +6,8 @@ export type IGeometry = {
 export type IGeoJson = {
   type: string;
   geometry: IGeometry;
+  properties: CountryRow; // TODO: make this flexible for non-country GeoJSON
   bbox?: number[];
-  properties?: any;
 };
 
 export type UserContext = {
@@ -35,3 +35,52 @@ export type OurApiResponse = {
       }
     | any;
 };
+
+export type MapboxType = {
+  tilesetId: string;
+};
+
+export type SubmittedType = {
+  data: PositionType[];
+};
+
+export type CountryRow = {
+  name: string;
+  confirmed: number;
+  deaths: number;
+  recovered: number;
+  confirmed_day_change?: number;
+  dead_day_change?: number;
+  recovered_day_change?: number;
+};
+
+// TODO: rm when fully migrated away from JHU API
+// export type GlobalType = {
+//   NewConfirmed: number;
+//   TotalConfirmed: number;
+//   NewDeaths: number;
+//   TotalDeaths: number;
+//   NewRecovered: number;
+//   TotalRecovered: number;
+// };
+
+// TODO: rm when fully migrated away from JHU API
+// export type JhuApiResponse = {
+//   body: {
+//     Global: GlobalType;
+//     Countries: [
+//       {
+//         Country: string;
+//         CountryCode: string;
+//         Slug: string;
+//         NewConfirmed: number;
+//         TotalConfirmed: number;
+//         NewDeaths: number;
+//         TotalDeaths: number;
+//         NewRecovered: number;
+//         TotalRecovered: number;
+//         Date: string;
+//       }
+//     ];
+//   };
+// };
