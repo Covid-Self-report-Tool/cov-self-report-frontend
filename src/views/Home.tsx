@@ -1,116 +1,20 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 
-import { WorldGraphLocation, TickerCards } from 'components';
-import {
-  IGeoJson,
-  OurApiResponse,
-  PositionType,
-  JhuApiResponse,
-  GeoLocation,
-  CountryTable,
-} from 'types';
-import { BACKEND_URL } from 'config';
-import { flattenLocations } from 'utils/map';
-const superagent = require('superagent');
-
-// Should be able to switch to topojson for some big perf gains
-const countryGeoJson = require('utils/countries.min.json'); // TODO: fetch
+import { WorldGraphLocation, TickerCards, useStore } from 'components';
 
 export const Home: FC = () => {
-  const [covidData, setCovidData] = useState<CountryTable>([]);
-  const [confirmed, setConfirmed] = useState<number | null>(null);
-  const [deaths, setDeaths] = useState<number | null>(null);
-  const [recovered, setRecovered] = useState<number | null>(null);
-  const [submitted, setSubmitted] = useState<number | null>(null);
-  const [countryPolygons, setCountryPolygons] = useState<IGeoJson[]>([]);
-  const [submittedFeats, setSubmittedFeats] = useState<PositionType[]>([]);
-  const jhuApiUrl = 'https://api.covid19api.com/summary';
-
-  // NOTE: some dummy data w/5k points if needed for clustering style work:
-  // 'https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json'
-  //
-  // Comes back as text and different schema tho, need to parse:
-  //
-  //   const parsed = JSON.parse(response.text);
-  //   setSubmittedFeats(parsed.features);
-  //
-
-  // CRED: https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435#30a3
-  useEffect(() => {
-    async function getSubmittedCases() {
-      await superagent
-        .get(`${BACKEND_URL}/self_report`)
-        .set('Accept', 'application/json')
-        .then((response: Readonly<OurApiResponse>) => {
-          if (response.body) {
-            setSubmittedFeats(response.body.data.locations);
-            setSubmitted(response.body.data.locations.length);
-          }
-        })
-        .catch(console.error);
-    }
-
-    getSubmittedCases();
-  }, []);
-
-  useEffect(() => {
-    async function getCovidData() {
-      await superagent
-        .get(jhuApiUrl)
-        .set('Accept', 'application/json')
-        .then((response: JhuApiResponse) => {
-          const infectedByCountry: GeoLocation = {};
-
-          setConfirmed(response.body.Global.TotalConfirmed);
-          setDeaths(response.body.Global.TotalDeaths);
-          setRecovered(response.body.Global.TotalRecovered);
-
-          response.body.Countries.forEach(location => {
-            infectedByCountry[location.CountryCode] = {
-              confirmed: location.TotalConfirmed,
-              dead: location.TotalDeaths,
-              recovered: location.TotalRecovered,
-            };
-          });
-
-          setCovidData(flattenLocations(infectedByCountry));
-          const newFeatures: IGeoJson[] = countryGeoJson.features.map(
-            (feature: IGeoJson) => {
-              const correspondingRow =
-                infectedByCountry[feature.properties.ISO_A2] || {};
-
-              return {
-                ...feature,
-                properties: {
-                  ...feature.properties,
-                  confirmed: correspondingRow.confirmed || null,
-                },
-              };
-            }
-          );
-
-          const geoJson: any = {
-            type: 'FeatureCollection',
-            features: newFeatures,
-          };
-
-          setCountryPolygons(geoJson);
-        })
-        .catch(console.error);
-    }
-
-    getCovidData();
-  }, []);
+  const store = useStore();
+  const { confirmed, dead, recovered, submitted } = store.currentTotals;
 
   return (
     <>
       <WorldGraphLocation
-        data={countryPolygons}
-        submittedFeats={submittedFeats}
+        data={store.countries}
+        submittedFeats={store.allSelfSubmittedPoints}
       />
       <TickerCards
         confirmed={confirmed}
-        deaths={deaths}
+        deaths={dead}
         recovered={recovered}
         submitted={submitted}
       />

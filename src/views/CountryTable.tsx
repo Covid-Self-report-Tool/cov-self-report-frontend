@@ -9,9 +9,14 @@ import {
   TableBody,
   Paper,
 } from '@material-ui/core';
-import { CountryTableType } from 'types';
 
-export const CountryTable: FC<CountryTableType> = ({ data }) => {
+import { useStore } from 'components';
+import { IGeoJson } from 'types';
+
+export const CountryTable: FC = () => {
+  const store = useStore();
+  const data = store.countries;
+
   return (
     <>
       <Typography variant="h2">Results by Country</Typography>
@@ -29,23 +34,31 @@ export const CountryTable: FC<CountryTableType> = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(country => (
-              <TableRow key={country.name}>
-                <TableCell component="th" scope="row">
-                  {country.name}
-                </TableCell>
-                <TableCell align="right">{country.confirmed}</TableCell>
-                <TableCell align="right">
-                  {country.confirmed_day_change}
-                </TableCell>
-                <TableCell align="right">{country.dead}</TableCell>
-                <TableCell align="right">{country.dead_day_change}</TableCell>
-                <TableCell align="right">{country.recovered}</TableCell>
-                <TableCell align="right">
-                  {country.recovered_day_change}
-                </TableCell>
-              </TableRow>
-            ))}
+            {data.map((country: IGeoJson) => {
+              const {
+                name,
+                dead,
+                confirmed,
+                recovered,
+                confirmed_day_change,
+                dead_day_change,
+                recovered_day_change,
+              } = country.properties;
+
+              return (
+                <TableRow key={name}>
+                  <TableCell component="th" scope="row">
+                    {name}
+                  </TableCell>
+                  <TableCell align="right">{confirmed}</TableCell>
+                  <TableCell align="right">{confirmed_day_change}</TableCell>
+                  <TableCell align="right">{dead}</TableCell>
+                  <TableCell align="right">{dead_day_change}</TableCell>
+                  <TableCell align="right">{recovered}</TableCell>
+                  <TableCell align="right">{recovered_day_change}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

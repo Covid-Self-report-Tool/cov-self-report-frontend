@@ -25,6 +25,15 @@ npm start
 
 ## Data
 
+### Dummy data
+
+Some [dummy data w/5k points](https://gist.githubusercontent.com/abettermap/099c2d469314cf90fcea0cc3c61643f5/raw/2df05ec61ca435a27a2dddbc1b624ad54a957613/fake-covid-pts.json) if needed for clustering style work. Comes back as text and different schema tho, need to parse:
+
+```js
+const parsed = JSON.parse(response.text);
+setSubmittedFeats(parsed.features);
+```
+
 ### User-submitted data
 
 #### Notes on spatial precision

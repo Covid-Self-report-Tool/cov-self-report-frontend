@@ -1,71 +1,21 @@
-import React, { useReducer, useContext, createContext } from 'react';
+import React, { useEffect, useReducer, useContext, createContext } from 'react';
 
-import { OurApiResponse, JhuApiResponse } from 'types';
+import { getCountryData, getSubmittedCases } from 'utils/api';
+import { ActionType, InitialStateType, StoreProviderType } from 'types/context';
 
-type InitialCountryStateType = JhuApiResponse;
-
-type InitialSelfSubmitStateType = {
-  countries: [];
-};
-
-type ContextType = {};
-
-type ActionType = {
-  type:
-    | 'SET_COUNTRY_DATA'
-    | 'SET_SELF_SUBMITTED_DATA'
-    | 'SET_USER_SPECIFIC_DATA';
-};
-
-type InitialStateType = {
-  currentTotals: {
-    confirmed: number;
-    dead: number;
-    recovered: number;
-  }; // just the JHU stats (for the tickers)
-  countries: []; // JHU countries data
-  allSelfSubmittedPoints: []; // self-submitted points (our body.data.locations)
-  userSpecificSelfSubmitted: {}; // stuff for pre-populating symptoms form
-};
-
-type StoreProviderType = {
-  children: React.ReactNode;
-};
-
-// A) Like this
-export const initialStateSimple = {
+export const initialState = {
   currentTotals: {
     confirmed: 0,
     dead: 0,
     recovered: 0,
+    submitted: 0,
   }, // just the JHU stats (for the tickers)
   countries: [], // JHU countries data
   allSelfSubmittedPoints: [], // self-submitted points (our body.data.locations)
   userSpecificSelfSubmitted: {}, // stuff for pre-populating symptoms form
 };
 
-// B) ...or this?
-export const initialStateFullsies = {
-  countriesResponse: {}, // the full JHU response, including `body`
-  selfSubmittedResponse: {}, // the full response from our API, including `body`
-  userSpecificSelfSubmitted: {}, // same as option A above
-};
-
-export type DispatchFormType = React.Dispatch<ActionType>;
-
-type daFuq = {
-  email: string;
-};
-
-const initialState = {
-  email: '',
-};
-
-const reducer = (state: daFuq, action: DispatchFormType) => {
-  return state;
-};
-
-const reducerOrig = (
+const reducer = (
   state: InitialStateType,
   action: ActionType
 ): InitialStateType => {
@@ -73,13 +23,15 @@ const reducerOrig = (
     case 'SET_COUNTRY_DATA':
       return {
         ...state,
+        countries: action.payload,
+        // totals: // TODO: action.payload.reduce
       };
     case 'SET_SELF_SUBMITTED_DATA':
       return {
         ...state,
+        allSelfSubmittedPoints: action.payload,
       };
-    // e.g. pre-populating symptoms form
-    case 'SET_USER_SPECIFIC_DATA':
+    case 'SET_USER_SPECIFIC_DATA': // e.g. pre-populating symptoms form
       return {
         ...state,
       };
@@ -88,16 +40,40 @@ const reducerOrig = (
   }
 };
 
-// export type DispatchFormType = React.Dispatch<SubmissionFormAction>;
-
 // Good article on setting all this up:
 // https://www.simplethread.com/cant-replace-redux-with-hooks/
-export const DispatchContext = createContext({});
+export const DispatchContext = createContext(null);
 export const StoreContext = createContext(initialState);
 
 export function StoreProvider(props: StoreProviderType) {
+  // @ts-ignore
   const [state, dispatch] = useReducer(reducer, initialState);
   const { children } = props;
+
+  useEffect(() => {
+    getSubmittedCases()
+      .then(response => {
+        // @ts-ignore
+        dispatch({
+          type: 'SET_SELF_SUBMITTED_DATA',
+          payload: response.body.data.locations,
+        });
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    getCountryData()
+      // @ts-ignore
+      .then(response => {
+        // @ts-ignore
+        dispatch({
+          type: 'SET_COUNTRY_DATA',
+          payload: response.body.features,
+        });
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <DispatchContext.Provider value={dispatch}>

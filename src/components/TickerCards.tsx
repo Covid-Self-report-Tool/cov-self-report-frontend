@@ -67,14 +67,14 @@ const useStyles = makeStyles(theme => ({
 
 type TickerCard = {
   text: string;
-  number: number | null;
+  number: number;
 };
 
 type TickerCardsTypes = {
-  confirmed: number | null;
-  deaths: number | null;
-  recovered: number | null;
-  submitted: number | null;
+  confirmed: number;
+  deaths: number;
+  recovered: number;
+  submitted: number;
 };
 
 // A popover menu and toggle button to show a term and its definition. For now
@@ -145,7 +145,7 @@ const NotifierCard: FC<TickerCard> = props => {
       <Paper className={classes.paper}>
         <Title>{props.text}</Title>
         <Typography component="p" variant="h4" className={classes.tickerVal}>
-          {props.number ? prettyPrint(props.number) : ''}
+          {prettyPrint(props.number)}
         </Typography>
         <DefPopoverMenu />
       </Paper>
@@ -160,9 +160,9 @@ export const TickerCards: FC<TickerCardsTypes> = ({
   submitted,
 }) => (
   <div className={useStyles().tickerCardsWrap}>
-    <NotifierCard text="Recovered" number={recovered || null} />
-    <NotifierCard text="Confirmed" number={confirmed || null} />
-    <NotifierCard text="Self-reported" number={submitted || null} />
-    <NotifierCard text="Deaths" number={deaths || null} />
+    <NotifierCard text="Recovered" number={recovered} />
+    <NotifierCard text="Confirmed" number={confirmed} />
+    <NotifierCard text="Self-reported" number={submitted} />
+    <NotifierCard text="Deaths" number={deaths} />
   </div>
 );

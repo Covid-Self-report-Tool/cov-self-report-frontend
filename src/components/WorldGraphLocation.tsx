@@ -80,7 +80,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   submittedFeats,
 }) => {
   const styles = useStyles();
-  const initMapCenter = { lat: 30, lng: -10 };
+  const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
 
   return (
     <Map
@@ -94,7 +94,10 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
       <LayersControl position="bottomright" collapsed={true}>
         <LayersControl.Overlay name="Confirmed" checked>
           <Choropleth
-            data={data}
+            data={{
+              type: 'FeatureCollection',
+              features: data,
+            }}
             valueProperty={(feature: any) => feature.properties.confirmed}
             scale={['hsl(184, 69%, 60%)', 'hsl(184, 69%, 10%)']}
             steps={100}
