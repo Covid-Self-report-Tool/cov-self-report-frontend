@@ -1,18 +1,20 @@
 import React, { useEffect, useReducer, useContext, createContext } from 'react';
 
+import { calculateTotals } from 'utils';
 import { getCountryData, getSubmittedCases } from 'utils/api';
 import { ActionType, InitialStateType, StoreProviderType } from 'types/context';
 
 export const initialState = {
   currentTotals: {
     confirmed: 0,
-    dead: 0,
+    deaths: 0,
     recovered: 0,
-    submitted: 0,
+    selfReported: 0,
+    suspected: 0,
   }, // just the JHU stats (for the tickers)
   countries: [], // JHU countries data
-  allSelfSubmittedPoints: [], // self-submitted points (our body.data.locations)
-  userSpecificSelfSubmitted: {}, // stuff for pre-populating symptoms form
+  allSelfReportedPoints: [], // self-submitted points (our body.data.locations)
+  userSpecificSelfReported: {}, // stuff for pre-populating symptoms form
 };
 
 const reducer = (
@@ -24,12 +26,19 @@ const reducer = (
       return {
         ...state,
         countries: action.payload,
-        // totals: // TODO: action.payload.reduce
+      };
+    case 'SET_TOTALS':
+      return {
+        ...state,
+        currentTotals: {
+          ...state.currentTotals,
+          ...action.totals,
+        },
       };
     case 'SET_SELF_SUBMITTED_DATA':
       return {
         ...state,
-        allSelfSubmittedPoints: action.payload,
+        allSelfReportedPoints: action.payload,
       };
     case 'SET_USER_SPECIFIC_DATA': // e.g. pre-populating symptoms form
       return {
@@ -58,6 +67,14 @@ export function StoreProvider(props: StoreProviderType) {
           type: 'SET_SELF_SUBMITTED_DATA',
           payload: response.body.data.locations,
         });
+
+        // @ts-ignore
+        dispatch({
+          type: 'SET_TOTALS',
+          totals: {
+            selfReported: response.body.data.locations.length,
+          },
+        });
       })
       .catch(err => console.error(err));
   }, []);
@@ -66,10 +83,24 @@ export function StoreProvider(props: StoreProviderType) {
     getCountryData()
       // @ts-ignore
       .then(response => {
+        // gist returns text
+        const features = JSON.parse(response.text).features;
+        const totals = calculateTotals(features, {
+          confirmed: 0,
+          deaths: 0,
+          recovered: 0,
+        });
+
         // @ts-ignore
         dispatch({
           type: 'SET_COUNTRY_DATA',
-          payload: JSON.parse(response.text).features, // gist returns text
+          payload: features,
+        });
+
+        // @ts-ignore
+        dispatch({
+          type: 'SET_TOTALS',
+          totals,
         });
       })
       .catch(err => console.error(err));

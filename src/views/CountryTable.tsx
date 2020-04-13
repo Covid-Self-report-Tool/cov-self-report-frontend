@@ -27,8 +27,8 @@ export const CountryTable: FC = () => {
               <TableCell>Country</TableCell>
               <TableCell align="right">Confirmed</TableCell>
               <TableCell align="right">Confirmed (Day Change)</TableCell>
-              <TableCell align="right">Dead</TableCell>
-              <TableCell align="right">Dead (Day Change)</TableCell>
+              <TableCell align="right">Deaths</TableCell>
+              <TableCell align="right">Deaths (Day Change)</TableCell>
               <TableCell align="right">Recovered</TableCell>
               <TableCell align="right">Recovered (Day Change)</TableCell>
             </TableRow>
@@ -37,7 +37,7 @@ export const CountryTable: FC = () => {
             {data.map((country: IGeoJson) => {
               const {
                 name,
-                dead,
+                deaths,
                 confirmed,
                 recovered,
                 confirmed_day_change,
@@ -52,7 +52,7 @@ export const CountryTable: FC = () => {
                   </TableCell>
                   <TableCell align="right">{confirmed}</TableCell>
                   <TableCell align="right">{confirmed_day_change}</TableCell>
-                  <TableCell align="right">{dead}</TableCell>
+                  <TableCell align="right">{deaths}</TableCell>
                   <TableCell align="right">{dead_day_change}</TableCell>
                   <TableCell align="right">{recovered}</TableCell>
                   <TableCell align="right">{recovered_day_change}</TableCell>
