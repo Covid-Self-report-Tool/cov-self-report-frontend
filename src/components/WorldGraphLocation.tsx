@@ -120,14 +120,6 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
             mode="q"
           />
         </LayersControl.Overlay>
-        <LayersControl.Overlay name="Dead">
-          <FeatureGroup color="purple">
-            <Popup>
-              <span>Popup in FeatureGroup</span>
-            </Popup>
-            <Circle center={[51.51, -0.06]} radius={200} />
-          </FeatureGroup>
-        </LayersControl.Overlay>
         <LayersControl.Overlay checked name="User-submitted">
           <FeatureGroup>
             <SubmittedCases data={submittedFeats} />
