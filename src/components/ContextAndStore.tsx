@@ -59,7 +59,7 @@ export function StoreProvider(props: StoreProviderType) {
           payload: response.body.data.locations,
         });
       })
-      .catch(console.error);
+      .catch(err => console.error(err));
   }, []);
 
   useEffect(() => {
@@ -69,10 +69,10 @@ export function StoreProvider(props: StoreProviderType) {
         // @ts-ignore
         dispatch({
           type: 'SET_COUNTRY_DATA',
-          payload: response.body.features,
+          payload: JSON.parse(response.text).features, // gist returns text
         });
       })
-      .catch(console.error);
+      .catch(err => console.error(err));
   }, []);
 
   return (
