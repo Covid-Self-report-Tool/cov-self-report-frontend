@@ -6,8 +6,8 @@ export type IGeometry = {
 export type IGeoJson = {
   type: string;
   geometry: IGeometry;
+  properties: CountryRow; // TODO: make this flexible for non-country GeoJSON
   bbox?: number[];
-  properties?: any;
 };
 
 export type UserContext = {
@@ -36,46 +36,6 @@ export type OurApiResponse = {
     | any;
 };
 
-export type GlobalType = {
-  NewConfirmed: number;
-  TotalConfirmed: number;
-  NewDeaths: number;
-  TotalDeaths: number;
-  NewRecovered: number;
-  TotalRecovered: number;
-};
-
-export type JhuApiResponse = {
-  body: {
-    Global: GlobalType;
-    Countries: [
-      {
-        Country: string;
-        CountryCode: string;
-        Slug: string;
-        NewConfirmed: number;
-        TotalConfirmed: number;
-        NewDeaths: number;
-        TotalDeaths: number;
-        NewRecovered: number;
-        TotalRecovered: number;
-        Date: string;
-      }
-    ];
-  };
-};
-
-export type GeoLocation = {
-  [key: string]: {
-    confirmed: number;
-    dead: number;
-    recovered: number;
-    confirmed_day_change?: number;
-    dead_day_change?: number;
-    recovered_day_change?: number;
-  };
-};
-
 export type MapboxType = {
   tilesetId: string;
 };
@@ -94,8 +54,33 @@ export type CountryRow = {
   recovered_day_change?: number;
 };
 
-export type CountryTable = CountryRow[];
+// TODO: rm when fully migrated away from JHU API
+// export type GlobalType = {
+//   NewConfirmed: number;
+//   TotalConfirmed: number;
+//   NewDeaths: number;
+//   TotalDeaths: number;
+//   NewRecovered: number;
+//   TotalRecovered: number;
+// };
 
-export type CountryTableType = {
-  data: CountryTable;
-};
+// TODO: rm when fully migrated away from JHU API
+// export type JhuApiResponse = {
+//   body: {
+//     Global: GlobalType;
+//     Countries: [
+//       {
+//         Country: string;
+//         CountryCode: string;
+//         Slug: string;
+//         NewConfirmed: number;
+//         TotalConfirmed: number;
+//         NewDeaths: number;
+//         TotalDeaths: number;
+//         NewRecovered: number;
+//         TotalRecovered: number;
+//         Date: string;
+//       }
+//     ];
+//   };
+// };
