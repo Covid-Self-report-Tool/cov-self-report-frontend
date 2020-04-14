@@ -17,6 +17,12 @@ npm start
 - [Jira project](https://cmu-covid.atlassian.net/browse/COV)
 - [Production deploy](https://master.d3detajy1g4axn.amplifyapp.com/) (as of 4/12/20)
 - [JHU GitHub data](https://github.com/CSSEGISandData/COVID-19) (CSVs)
+- [JHU Postman API docs](https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest) (currently scraping the `/summary` route and adding to DynamoDB daily, the joining on the fly to countries geojson client-side)
+
+### Our API endpoints
+
+- [Countries prod](https://s0vnmyj6fg.execute-api.us-east-1.amazonaws.com/prod/countries)
+- [Countries dev](https://f1t0v67ydj.execute-api.us-east-1.amazonaws.com/dev/countries)
 
 ## Fixes
 
