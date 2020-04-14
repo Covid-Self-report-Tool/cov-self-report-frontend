@@ -13,9 +13,9 @@ import {
   StoreProvider,
   CustomSnackbar,
   CustomSnackbarBasics,
+  SimpleModal,
 } from 'components';
 import { Modal } from 'components/submission';
-import { SimpleModal } from 'components/reusable';
 import { Home, Signup, About, Models, Logout, List } from 'views';
 import { firebaseConfig } from 'config';
 import { VerifyEmail } from 'views/VerifyEmail';

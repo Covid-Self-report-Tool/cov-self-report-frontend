@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import {
-  Typography,
   Table,
   TableContainer,
   TableHead,
@@ -34,25 +33,25 @@ export const CountryTable: FC = () => {
         <TableBody>
           {data.map((country: IGeoJson) => {
             const {
-              name,
-              deaths,
-              confirmed,
-              recovered,
+              country_code,
+              total_deaths,
+              total_confirmed,
+              total_recovered,
               confirmed_day_change,
               dead_day_change,
               recovered_day_change,
             } = country.properties;
 
             return (
-              <TableRow key={name}>
+              <TableRow key={country_code}>
                 <TableCell component="th" scope="row">
-                  {name}
+                  {country_code}
                 </TableCell>
-                <TableCell align="right">{confirmed}</TableCell>
+                <TableCell align="right">{total_confirmed}</TableCell>
                 <TableCell align="right">{confirmed_day_change}</TableCell>
-                <TableCell align="right">{deaths}</TableCell>
+                <TableCell align="right">{total_deaths}</TableCell>
                 <TableCell align="right">{dead_day_change}</TableCell>
-                <TableCell align="right">{recovered}</TableCell>
+                <TableCell align="right">{total_recovered}</TableCell>
                 <TableCell align="right">{recovered_day_change}</TableCell>
               </TableRow>
             );

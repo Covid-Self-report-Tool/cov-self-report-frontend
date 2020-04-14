@@ -3,18 +3,19 @@ import React from 'react';
 import { IGeoJson } from 'types';
 
 export type CountriesFieldsForTotals = {
-  confirmed: number;
-  deaths: number;
-  recovered: number;
+  total_confirmed: number;
+  total_deaths: number;
+  total_recovered: number;
 };
 
-export type ActionType =
+export type StoreActionType =
   | { type: 'SET_COUNTRY_DATA'; payload: [] }
   | { type: 'SET_SELF_SUBMITTED_DATA'; payload: [] }
   | { type: 'SET_USER_SPECIFIC_DATA'; payload: {} }
+  | { type: 'SET_SELF_SUBMITTED_TOTALS'; payload: number }
   | {
       type: 'SET_TOTALS';
-      totals: CountriesFieldsForTotals;
+      payload: CountriesFieldsForTotals;
     };
 
 export type CurrentTotalsTypes = {
@@ -38,4 +39,4 @@ export type StoreProviderType = {
 };
 
 // TODO: restore usage in global dispatch provider
-export type ContextDispatchType = React.Dispatch<ActionType>;
+export type ContextDispatchType = React.Dispatch<StoreActionType>;
