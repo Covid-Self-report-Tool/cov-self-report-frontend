@@ -45,13 +45,15 @@ export type SubmittedType = {
 };
 
 export type CountryRow = {
-  name: string;
-  confirmed: number;
-  deaths: number;
-  recovered: number;
+  country_code: string;
+  country_name: string;
+  total_confirmed: number;
+  total_deaths: number;
+  total_recovered: number;
   confirmed_day_change?: number;
   dead_day_change?: number;
   recovered_day_change?: number;
+  ISO_AW2?: number;
 };
 
 // TODO: rm when fully migrated away from JHU API

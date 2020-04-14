@@ -1,15 +1,11 @@
-import React, { FC, useState, useReducer } from 'react';
-import { Link as RouteLink, useHistory } from 'react-router-dom';
+import React, { FC, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Button,
-  Grid,
-  Stepper,
-  Step,
-  StepLabel,
 } from '@material-ui/core';
 
 type SimpleModalTypes = {

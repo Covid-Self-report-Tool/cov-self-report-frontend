@@ -1,14 +1,20 @@
 import React, { useEffect, useReducer, useContext, createContext } from 'react';
 
+// import { calculateTotals } from 'utils';
+import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
+import {
+  StoreActionType,
+  InitialStateType,
+  StoreProviderType,
+} from 'types/context';
+import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
-import { getCountryData, getSubmittedCases } from 'utils/api';
-import { ActionType, InitialStateType, StoreProviderType } from 'types/context';
 
 export const initialState = {
   currentTotals: {
-    confirmed: 0,
-    deaths: 0,
-    recovered: 0,
+    total_confirmed: 0,
+    total_deaths: 0,
+    total_recovered: 0,
     selfReported: 0,
     suspected: 0,
   }, // just the JHU stats (for the tickers)
@@ -19,7 +25,7 @@ export const initialState = {
 
 const reducer = (
   state: InitialStateType,
-  action: ActionType
+  action: StoreActionType
 ): InitialStateType => {
   switch (action.type) {
     case 'SET_COUNTRY_DATA':
@@ -27,12 +33,21 @@ const reducer = (
         ...state,
         countries: action.payload,
       };
+    case 'SET_SELF_SUBMITTED_TOTALS':
+      debugger;
+      return {
+        ...state,
+        currentTotals: {
+          ...state.currentTotals,
+          selfReported: action.payload,
+        },
+      };
     case 'SET_TOTALS':
       return {
         ...state,
         currentTotals: {
           ...state.currentTotals,
-          ...action.totals,
+          ...action.payload,
         },
       };
     case 'SET_SELF_SUBMITTED_DATA':
@@ -62,48 +77,37 @@ export function StoreProvider(props: StoreProviderType) {
   useEffect(() => {
     getSubmittedCases()
       .then(response => {
-        // @ts-ignore
         dispatch({
           type: 'SET_SELF_SUBMITTED_DATA',
           payload: response.body.data.locations,
         });
 
-        // @ts-ignore
         dispatch({
-          type: 'SET_TOTALS',
-          totals: {
-            selfReported: response.body.data.locations.length,
-          },
+          type: 'SET_SELF_SUBMITTED_TOTALS',
+          payload: response.body.data.locations.length,
         });
       })
       .catch(err => console.error(err));
   }, []);
 
   useEffect(() => {
-    getCountryData()
-      // @ts-ignore
-      .then(response => {
-        // gist returns text
-        const features = JSON.parse(response.text).features;
-        const totals = calculateTotals(features, {
-          confirmed: 0,
-          deaths: 0,
-          recovered: 0,
-        });
+    getCountryGeoJSONData().then((geoJSON: GeoJSONData) => {
+      dispatch({
+        type: 'SET_COUNTRY_DATA',
+        payload: geoJSON,
+      });
 
-        // @ts-ignore
-        dispatch({
-          type: 'SET_COUNTRY_DATA',
-          payload: features,
-        });
+      const totals = calculateTotals(geoJSON, {
+        total_confirmed: 0,
+        total_deaths: 0,
+        total_recovered: 0,
+      });
 
-        // @ts-ignore
-        dispatch({
-          type: 'SET_TOTALS',
-          totals,
-        });
-      })
-      .catch(err => console.error(err));
+      dispatch({
+        type: 'SET_TOTALS',
+        payload: totals,
+      });
+    });
   }, []);
 
   return (

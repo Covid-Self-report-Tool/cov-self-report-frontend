@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
 import {
   Map,
-  Popup,
   TileLayer,
   Marker,
   LayersControl,
   FeatureGroup,
-  Circle,
   ZoomControl,
 } from 'react-leaflet';
 import { makeStyles } from '@material-ui/core';
@@ -102,16 +100,26 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
               type: 'FeatureCollection',
               features: data,
             }}
-            valueProperty={(feature: any) => feature.properties.confirmed}
-            scale={['hsl(184, 69%, 60%)', 'hsl(184, 69%, 10%)']}
+            valueProperty={(feature: any) => {
+              if (
+                !feature.properties ||
+                !feature.properties.hasOwnProperty('total_confirmed')
+              ) {
+                return 0; // this means something went wrong on our end
+              }
+              return feature.properties.total_confirmed;
+            }}
+            scale={['hsl(184, 69%, 10%)', 'hsl(184, 69%, 60%)']}
             steps={100}
             onEachFeature={(feature: any, layer: any) =>
               layer.bindPopup(
-                `${feature.properties.name} Confirmed: ${feature.properties.confirmed}`
+                feature.properties.country_name
+                  ? `${feature.properties.country_name} Confirmed: ${feature.properties.total_confirmed}`
+                  : 'No Data'
               )
             }
             style={{
-              fillColor: '#F28F3B',
+              fillColor: 'hsl(184, 69%, 10%)',
               weight: 0.5,
               opacity: 1,
               color: 'hsl(0, 0%, 10%)',
