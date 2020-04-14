@@ -16,7 +16,7 @@ import {
 } from 'components';
 import { Modal } from 'components/submission';
 import { SimpleModal } from 'components/reusable';
-import { Home, Signup, About, Models, Logout, CountryTable } from 'views';
+import { Home, Signup, About, Models, Logout, List } from 'views';
 import { firebaseConfig } from 'config';
 import { VerifyEmail } from 'views/VerifyEmail';
 
@@ -74,6 +74,9 @@ const Routes: FC = () => {
             </Route>
             <Route path="/self-report">
               <Modal setSnackbarOpen={setSnackbarOpen} />
+            </Route>
+            <Route path="/list">
+              <List />
             </Route>
             <Route path="/signup">
               <SimpleModal title="Sign up">
