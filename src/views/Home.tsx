@@ -4,7 +4,12 @@ import { WorldGraphLocation, TickerCards, useStore } from 'components';
 
 export const Home: FC = () => {
   const store = useStore();
-  const { confirmed, deaths, recovered, selfReported } = store.currentTotals;
+  const {
+    total_confirmed,
+    total_deaths,
+    total_recovered,
+    selfReported,
+  } = store.currentTotals;
 
   return (
     <>
@@ -13,9 +18,9 @@ export const Home: FC = () => {
         submittedFeats={store.allSelfReportedPoints}
       />
       <TickerCards
-        confirmed={confirmed}
-        deaths={deaths}
-        recovered={recovered}
+        confirmed={total_confirmed}
+        deaths={total_deaths}
+        recovered={total_recovered}
         selfReported={selfReported}
       />
     </>

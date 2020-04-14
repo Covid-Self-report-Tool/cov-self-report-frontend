@@ -46,9 +46,9 @@ export type SubmittedType = {
 
 export type CountryRow = {
   country_code: string;
-  confirmed: number;
-  deaths: number;
-  recovered: number;
+  total_confirmed: number;
+  total_deaths: number;
+  total_recovered: number;
   confirmed_day_change?: number;
   dead_day_change?: number;
   recovered_day_change?: number;
