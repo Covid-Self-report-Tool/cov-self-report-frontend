@@ -45,7 +45,7 @@ const Routes: FC = () => {
                 <About />
               </Route>
               <Route path="/list">
-                <CountryTable />
+                <List />
               </Route>
               <Route path="/" exact>
                 <Home />
