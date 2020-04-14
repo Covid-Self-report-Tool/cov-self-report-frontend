@@ -1,5 +1,6 @@
 export * from 'components/BackToTopBtn';
 export * from 'components/ContextAndStore';
+export * from 'components/CountryTable';
 export * from 'components/Dashboard';
 export * from 'components/ListItems';
 export * from 'components/LoginForm';

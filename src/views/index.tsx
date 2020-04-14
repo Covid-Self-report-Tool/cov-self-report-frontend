@@ -4,4 +4,4 @@ export * from 'views/Models';
 export * from 'views/Login';
 export * from 'views/Signup';
 export * from 'views/Logout';
-export * from 'views/CountryTable';
+export * from 'views/List';
