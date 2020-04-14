@@ -33,19 +33,19 @@ export const CountryTable: FC = () => {
         <TableBody>
           {data.map((country: IGeoJson) => {
             const {
-              country_code,
               total_deaths,
               total_confirmed,
               total_recovered,
               confirmed_day_change,
               dead_day_change,
               recovered_day_change,
+              country_name,
             } = country.properties;
 
             return (
-              <TableRow key={country_code}>
+              <TableRow key={country_name}>
                 <TableCell component="th" scope="row">
-                  {country_code}
+                  {country_name}
                 </TableCell>
                 <TableCell align="right">{total_confirmed}</TableCell>
                 <TableCell align="right">{confirmed_day_change}</TableCell>
