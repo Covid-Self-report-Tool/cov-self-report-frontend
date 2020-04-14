@@ -1,12 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   Map,
-  Popup,
   TileLayer,
   Marker,
   LayersControl,
   FeatureGroup,
-  Circle,
   ZoomControl,
 } from 'react-leaflet';
 import { makeStyles } from '@material-ui/core';
@@ -17,6 +15,7 @@ import L from 'leaflet';
 import Choropleth from 'react-leaflet-choropleth';
 import { mapBoxApiKey as accessToken } from 'config';
 import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
+import { getCountryData, getCountryGeoJSONData } from 'utils/api';
 
 require('react-leaflet-markercluster/dist/styles.min.css');
 
@@ -83,6 +82,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   data,
   submittedFeats,
 }) => {
+  console.log('data', data);
   const styles = useStyles();
   const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
 
@@ -102,12 +102,17 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
               type: 'FeatureCollection',
               features: data,
             }}
-            valueProperty={(feature: any) => feature.properties.confirmed}
+            valueProperty={(feature: any) => {
+              if (!feature.properties) {
+                debugger;
+              }
+              return feature.properties.total_confirmed;
+            }}
             scale={['hsl(184, 69%, 60%)', 'hsl(184, 69%, 10%)']}
             steps={100}
             onEachFeature={(feature: any, layer: any) =>
               layer.bindPopup(
-                `${feature.properties.name} Confirmed: ${feature.properties.confirmed}`
+                `${feature.properties.name} Confirmed: ${feature.properties.total_confirmed}`
               )
             }
             style={{
