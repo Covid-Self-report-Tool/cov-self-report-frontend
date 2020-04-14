@@ -113,7 +113,12 @@ const reducer = (
   }
 };
 
-export const Modal = () => {
+interface ModalTypes {
+  setSnackbarOpen: React.Dispatch<boolean>;
+}
+
+export const Modal = (props: ModalTypes) => {
+  const { setSnackbarOpen } = props;
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
 
@@ -159,6 +164,7 @@ export const Modal = () => {
           .then((res: any) => {
             console.log(`got back ${res}`);
             history.push('/');
+            setSnackbarOpen(true);
           })
           .catch((err: any) => {
             console.error(err);
