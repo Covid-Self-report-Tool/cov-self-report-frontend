@@ -23,18 +23,18 @@ export const logOut = async (history: History) => {
 };
 
 // For the ticker card totals...
-export const calculateTotals = (
-  data: [],
-  initial: CountriesFieldsForTotals
-) => {
-  return data.reduce((sums, thisOne: IGeoJson) => {
-    const { properties } = thisOne;
-    const { confirmed, deaths, recovered } = properties;
+// export const calculateTotals = (
+//   data: [],
+//   initial: CountriesFieldsForTotals
+// ) => {
+//   return data.reduce((sums, thisOne: IGeoJson) => {
+//     const { properties } = thisOne;
+//     const { confirmed, deaths, recovered } = properties;
 
-    return {
-      confirmed: sums.confirmed + (confirmed || 0),
-      deaths: sums.deaths + (deaths || 0),
-      recovered: sums.recovered + (recovered || 0),
-    };
-  }, initial);
-};
+//     return {
+//       confirmed: sums.confirmed + (confirmed || 0),
+//       deaths: sums.deaths + (deaths || 0),
+//       recovered: sums.recovered + (recovered || 0),
+//     };
+//   }, initial);
+// };

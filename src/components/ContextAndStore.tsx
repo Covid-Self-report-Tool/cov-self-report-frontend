@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useContext, createContext } from 'react';
 
-import { calculateTotals } from 'utils';
-import { getCountryData, getSubmittedCases } from 'utils/api';
+// import { calculateTotals } from 'utils';
+import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
 import { ActionType, InitialStateType, StoreProviderType } from 'types/context';
 
 export const initialState = {
@@ -80,30 +80,33 @@ export function StoreProvider(props: StoreProviderType) {
   }, []);
 
   useEffect(() => {
-    getCountryData()
-      // @ts-ignore
-      .then(response => {
-        // gist returns text
-        const features = JSON.parse(response.text).features;
-        const totals = calculateTotals(features, {
-          confirmed: 0,
-          deaths: 0,
-          recovered: 0,
-        });
-
-        // @ts-ignore
-        dispatch({
-          type: 'SET_COUNTRY_DATA',
-          payload: features,
-        });
-
-        // @ts-ignore
-        dispatch({
-          type: 'SET_TOTALS',
-          totals,
-        });
-      })
-      .catch(err => console.error(err));
+    getCountryGeoJSONData().then(geoJSON => {
+      dispatch({
+        type: 'SET_COUNTRY_DATA',
+        payload: geoJSON,
+      });
+    });
+    // getCountryData()
+    //   .then(response => {
+    //     // gist returns text
+    //     const features = JSON.parse(response.text).data;
+    //     const totals = calculateTotals(features, {
+    //       confirmed: 0,
+    //       deaths: 0,
+    //       recovered: 0,
+    //     });
+    //     // @ts-ignore
+    //     dispatch({
+    //       type: 'SET_COUNTRY_DATA',
+    //       payload: features,
+    //     });
+    //     // @ts-ignore
+    //     dispatch({
+    //       type: 'SET_TOTALS',
+    //       totals,
+    //     });
+    //   })
+    //   .catch(err => console.error(err));
   }, []);
 
   return (
