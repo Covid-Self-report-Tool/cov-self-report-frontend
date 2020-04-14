@@ -75,9 +75,6 @@ const Routes: FC = () => {
             <Route path="/self-report">
               <Modal setSnackbarOpen={setSnackbarOpen} />
             </Route>
-            <Route path="/list">
-              <List />
-            </Route>
             <Route path="/signup">
               <SimpleModal title="Sign up">
                 <Signup />
