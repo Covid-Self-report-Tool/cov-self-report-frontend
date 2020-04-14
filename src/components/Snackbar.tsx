@@ -1,32 +1,44 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Snackbar, { SnackbarProps } from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-interface CustomSnackbarTypes extends AlertProps {
+export interface CustomSnackbarBasics {
+  severity: Color;
   message: string;
 }
 
-export function CustomSnackbar(props: CustomSnackbarTypes) {
-  const { severity, message } = props;
-  const [open, setOpen] = React.useState(true);
+export interface CustomSnackbarTypes {
+  snackbarConfig: CustomSnackbarBasics;
+  snackbarOpen: boolean;
+  setSnackbarOpen: React.Dispatch<boolean>;
+}
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+export function CustomSnackbar(props: CustomSnackbarTypes) {
+  const { snackbarConfig, setSnackbarOpen, snackbarOpen } = props;
+  const { severity, message } = snackbarConfig;
+
+  const handleCloseInternal = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen(false);
+    setSnackbarOpen(false);
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
-      <Alert onClose={handleClose} severity={severity}>
+    <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={4500}
+      onClose={handleCloseInternal}
+    >
+      <Alert onClose={handleCloseInternal} severity={severity}>
         {message}
       </Alert>
     </Snackbar>
