@@ -7,6 +7,7 @@ export * from 'components/LoginForm';
 export * from 'components/MainNavBar';
 export * from 'components/MobileOffCanvasNav';
 export * from 'components/ShareButtons';
+export * from 'components/SharingPopoutMenu';
 export * from 'components/SignupForm';
 export * from 'components/Snackbar';
 export * from 'components/SuccessConfModal';
