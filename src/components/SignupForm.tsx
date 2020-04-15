@@ -3,10 +3,15 @@ import { Paper, Grid, TextField, Button } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
 import { signUp, googleLogin } from 'utils/firebase';
+import { RECAPTCHA_KEY } from 'config';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const useStyles = makeStyles({
   padding: {
     padding: '20px',
+  },
+  marginTop: {
+    marginTop: 20,
   },
 });
 
@@ -23,6 +28,7 @@ export const SignupForm: FC = () => {
     ''
   );
   const [errorPassword2, setErrorPassword2] = useState<boolean>(false);
+  const [captchaToken, setCaptchaToken] = useState<string>('');
 
   const resetErrors = () => {
     setEmailError(false);
@@ -37,7 +43,7 @@ export const SignupForm: FC = () => {
     switch (code) {
       case 'auth/email-already-in-use':
         setEmailError(true);
-        setEmailErrorMessage('That username is already in use');
+        setEmailErrorMessage('That email is already in use');
         break;
       case 'auth/invalid-email':
         setEmailError(true);
@@ -61,7 +67,8 @@ export const SignupForm: FC = () => {
       setErrorPassword2(true);
       setErrorPasswordMessage2('Passwords do not match');
     } else {
-      signUp(email, password).catch(err => {
+      // TODO: verify captcha on backend
+      signUp(email, password, captchaToken).catch(err => {
         handleSignupError(err.code, err.message);
       });
     }
@@ -89,6 +96,13 @@ export const SignupForm: FC = () => {
     setPassword2(event.currentTarget.value);
   };
 
+  // specifying verify callback function
+  const verifyCallback = (token: string | null) => {
+    if (token) {
+      setCaptchaToken(token);
+    }
+  };
+
   return (
     <Paper className={classes.padding}>
       <div>
@@ -98,8 +112,8 @@ export const SignupForm: FC = () => {
           </Grid>
           <Grid item md sm xs>
             <TextField
-              id="username"
-              label="Username"
+              id="email"
+              label="Email"
               type="email"
               value={email}
               onChange={handleEmailChange}
@@ -153,6 +167,7 @@ export const SignupForm: FC = () => {
             color="primary"
             style={{ textTransform: 'none', marginRight: '20px' }}
             onClick={handleSignup}
+            disabled={!Boolean(captchaToken)}
           >
             Sign Up
           </Button>
@@ -165,6 +180,12 @@ export const SignupForm: FC = () => {
             Login with Google
           </Button>
         </Grid>
+        <div className={classes.marginTop}>
+          <ReCAPTCHA
+            sitekey={RECAPTCHA_KEY as string}
+            onChange={verifyCallback}
+          />
+        </div>
       </div>
     </Paper>
   );
