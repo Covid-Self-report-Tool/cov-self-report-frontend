@@ -1,6 +1,11 @@
 import firebase from 'firebase/app';
 
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (
+  email: string,
+  password: string,
+  captcha: string
+) => {
+  // TODO verify captcha on backend
   await firebase
     .app()
     .auth()
