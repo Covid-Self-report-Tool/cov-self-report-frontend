@@ -71,7 +71,10 @@ export const About: FC = () => (
         <a href="https://www.abettermap.com" target="_blank">
           A Better Map
         </a>{' '}
-        and has worked on such projects as the 1947 Partition Archive.
+        and has worked on such projects as the 1947 Partition Archive.{' '}
+        <a href="https://www.linkedin.com/in/jason-lampel-607b1732/">
+          View Jason's LinkedIn profile
+        </a>
       </li>
       <li>
         <b>Nathan Heston, PhD</b> has a PhD in physics from the University of
@@ -83,7 +86,12 @@ export const About: FC = () => (
         <b>Nik Wolfe</b>
       </li>
       <li>
-        <b>Sumit Arora</b>
+        <b>Sumit Arora</b> heads Civic Tech Initiatives at Janaagraha Centre for
+        Citizenship and Democracy. Launched and implemented Swachh Bharat
+        Mission official Citizen Engagement platform.{' '}
+        <a href="https://www.linkedin.com/in/sumitarorain/">
+          View Sumit's LinkedIn profile
+        </a>
       </li>
     </ul>
   </div>
