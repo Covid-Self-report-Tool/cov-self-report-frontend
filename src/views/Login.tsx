@@ -2,6 +2,7 @@ import React from 'react';
 import { LoginForm } from 'components/LoginForm';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles({
   root: {
@@ -10,10 +11,16 @@ const useStyles = makeStyles({
 });
 export const Login = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Grid container item xs={12} justify="center" className={classes.root}>
-      <LoginForm />
+      <LoginForm
+        onLogin={() => {
+          debugger;
+          history.push('/');
+        }}
+      />
     </Grid>
   );
 };

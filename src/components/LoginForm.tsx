@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   Paper,
   Grid,
@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { googleLogin, login } from 'utils/firebase';
@@ -21,7 +21,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const LoginForm: FC = () => {
+type LoginFormType = {
+  onLogin?: Function;
+};
+
+export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
   const classes = useStyles();
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<boolean>(false);
@@ -65,18 +69,31 @@ export const LoginForm: FC = () => {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long');
     } else {
-      login(email, password).catch(err => {
-        handleLoginError(err.code, err.message);
-      });
+      login(email, password)
+        .then(resp => {
+          if (onLogin) {
+            onLogin(resp);
+          }
+        })
+        .catch(err => {
+          handleLoginError(err.code, err.message);
+        });
     }
   };
 
   const handleGoogleLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
 
-    googleLogin().catch(err => {
-      handleLoginError(err.code, err.message); // how to handle Google errors?
-    });
+    googleLogin()
+      .then(resp => {
+        if (onLogin) {
+          debugger;
+          onLogin(resp);
+        }
+      })
+      .catch(err => {
+        handleLoginError(err.code, err.message); // how to handle Google errors?
+      });
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
