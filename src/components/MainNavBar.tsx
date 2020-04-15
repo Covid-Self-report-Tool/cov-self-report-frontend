@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { IfFirebaseAuthed, IfFirebaseUnAuthed } from '@react-firebase/auth';
 import { Link as RouteLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,7 +15,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { UserPopoverMenu } from 'components';
-import { UserContext, initialUserState } from 'context';
 import firebase from 'config/firebase';
 
 interface NavBarTypes {
@@ -56,17 +55,15 @@ const useStyles = (isHome: boolean) => {
   return ok();
 };
 
-export const MainNavBar = (props: NavBarTypes) => {
-  const { isHome, toggleDrawerOpen, drawerOpen } = props;
+export const MainNavBar: FC<NavBarTypes> = ({
+  isHome,
+  toggleDrawerOpen,
+  drawerOpen,
+}) => {
   const classes = useStyles(isHome);
   const trigger = useScrollTrigger();
 
-  const { state } = useContext(UserContext);
   const [user, loading] = useAuthState(firebase.auth());
-
-  const hasSubmitted = () => {
-    return !(state === initialUserState);
-  };
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
