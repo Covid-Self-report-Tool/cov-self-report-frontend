@@ -15,6 +15,7 @@ import {
   CustomSnackbarBasics,
   SimpleModal,
 } from 'components';
+import { FormProvider } from 'context';
 import { Modal } from 'components/submission';
 import { Home, Signup, About, Models, Logout, List } from 'views';
 import { firebaseConfig } from 'config';
@@ -33,55 +34,57 @@ const Routes: FC = () => {
     // @ts-ignore
     <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
       <StoreProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <GlobalCss />
-          <Router>
-            <Dashboard>
-              <Route path="/models">
-                <Models />
+        <FormProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <GlobalCss />
+            <Router>
+              <Dashboard>
+                <Route path="/models">
+                  <Models />
+                </Route>
+                <Route path="/about">
+                  <About />
+                </Route>
+                <Route path="/list">
+                  <List />
+                </Route>
+                <Route path="/" exact>
+                  <Home />
+                </Route>
+                <CustomSnackbar
+                  snackbarConfig={snackbarConfig}
+                  snackbarOpen={snackbarOpen}
+                  setSnackbarOpen={setSnackbarOpen}
+                />
+              </Dashboard>
+              {/* None of the modals need to be inside Dashboard */}
+              <Route path="/login">
+                <SimpleModal title="Login">
+                  <LoginForm />
+                </SimpleModal>
               </Route>
-              <Route path="/about">
-                <About />
+              <Route path="/logout">
+                <SimpleModal title="Logout">
+                  <Logout />
+                </SimpleModal>
               </Route>
-              <Route path="/list">
-                <List />
+              <Route path="/verify_email">
+                <SimpleModal title="Forgot password">
+                  <VerifyEmail />
+                </SimpleModal>
               </Route>
-              <Route path="/" exact>
-                <Home />
+              <Route path="/self-report">
+                <Modal setSnackbarOpen={setSnackbarOpen} />
               </Route>
-              <CustomSnackbar
-                snackbarConfig={snackbarConfig}
-                snackbarOpen={snackbarOpen}
-                setSnackbarOpen={setSnackbarOpen}
-              />
-            </Dashboard>
-            {/* None of the modals need to be inside Dashboard */}
-            <Route path="/login">
-              <SimpleModal title="Login">
-                <LoginForm />
-              </SimpleModal>
-            </Route>
-            <Route path="/logout">
-              <SimpleModal title="Logout">
-                <Logout />
-              </SimpleModal>
-            </Route>
-            <Route path="/verify_email">
-              <SimpleModal title="Forgot password">
-                <VerifyEmail />
-              </SimpleModal>
-            </Route>
-            <Route path="/self-report">
-              <Modal setSnackbarOpen={setSnackbarOpen} />
-            </Route>
-            <Route path="/signup">
-              <SimpleModal title="Sign up">
-                <Signup />
-              </SimpleModal>
-            </Route>
-          </Router>
-        </ThemeProvider>
+              <Route path="/signup">
+                <SimpleModal title="Sign up">
+                  <Signup />
+                </SimpleModal>
+              </Route>
+            </Router>
+          </ThemeProvider>
+        </FormProvider>
       </StoreProvider>
     </FirebaseAuthProvider>
   );

@@ -11,7 +11,7 @@ export type CountriesFieldsForTotals = {
 export type StoreActionType =
   | { type: 'SET_COUNTRY_DATA'; payload: [] }
   | { type: 'SET_SELF_SUBMITTED_DATA'; payload: [] }
-  | { type: 'SET_USER_SPECIFIC_DATA'; payload: {} }
+  | { type: 'SET_USER_DATA'; payload: {} }
   | { type: 'SET_SELF_SUBMITTED_TOTALS'; payload: number }
   | {
       type: 'SET_TOTALS';
@@ -31,7 +31,7 @@ export type InitialStateType = {
   currentTotals: CurrentTotalsTypes; // ticker card stats
   countries: IGeoJson[]; // Pre-joined JHU countries data
   allSelfReportedPoints: []; // self-submitted points (our body.data.locations)
-  userSpecificSelfReported: {}; // stuff for pre-populating symptoms form
+  userSelfReported: {}; // stuff for pre-populating symptoms form
 };
 
 export type StoreProviderType = {

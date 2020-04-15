@@ -1,7 +1,17 @@
-import React, { useEffect, useReducer, useContext, createContext } from 'react';
+import React, {
+  useEffect,
+  useReducer,
+  useContext,
+  createContext,
+  useState,
+} from 'react';
 
 // import { calculateTotals } from 'utils';
-import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
+import {
+  getSubmittedCases,
+  getCountryGeoJSONData,
+  getUserData,
+} from 'utils/api';
 import {
   StoreActionType,
   InitialStateType,
@@ -9,6 +19,8 @@ import {
 } from 'types/context';
 import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from 'firebase';
 
 export const initialState = {
   currentTotals: {
@@ -20,7 +32,7 @@ export const initialState = {
   }, // just the JHU stats (for the tickers)
   countries: [], // JHU countries data
   allSelfReportedPoints: [], // self-submitted points (our body.data.locations)
-  userSpecificSelfReported: {}, // stuff for pre-populating symptoms form
+  symptomForm: {}, // stuff for pre-populating symptoms form
 };
 
 const reducer = (
@@ -34,7 +46,6 @@ const reducer = (
         countries: action.payload,
       };
     case 'SET_SELF_SUBMITTED_TOTALS':
-      debugger;
       return {
         ...state,
         currentTotals: {
@@ -55,9 +66,10 @@ const reducer = (
         ...state,
         allSelfReportedPoints: action.payload,
       };
-    case 'SET_USER_SPECIFIC_DATA': // e.g. pre-populating symptoms form
+    case 'SET_USER_DATA': // e.g. pre-populating symptoms form
       return {
         ...state,
+        userSelfReported: action.payload,
       };
     default:
       return state;
@@ -72,7 +84,31 @@ export const StoreContext = createContext(initialState);
 export function StoreProvider(props: StoreProviderType) {
   // @ts-ignore
   const [state, dispatch] = useReducer(reducer, initialState);
+  // to avoid rerunning login trigger
+  const [authFlag, setAuthFlag] = useState<boolean>(true);
   const { children } = props;
+
+  const [user] = useAuthState(firebase.auth());
+
+  // when user logs in, fetch data from backend
+  if (user) {
+    if (authFlag) {
+      setAuthFlag(false);
+      user.getIdToken().then(token => {
+        getUserData(token)
+          .then((resp: any) => {
+            if (resp.status === 200 && resp.body) {
+              dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
+            }
+          })
+          .catch((resp: any) => {
+            // handle error
+          });
+      });
+
+      console.log('you are logged in!');
+    }
+  }
 
   useEffect(() => {
     getSubmittedCases()
@@ -87,27 +123,27 @@ export function StoreProvider(props: StoreProviderType) {
           payload: response.body.data.locations.length,
         });
       })
-      .catch(err => console.error(err));
-  }, []);
+      .catch(err => console.error(err)); // TODO: handle this better
 
-  useEffect(() => {
-    getCountryGeoJSONData().then((geoJSON: GeoJSONData) => {
-      dispatch({
-        type: 'SET_COUNTRY_DATA',
-        payload: geoJSON,
-      });
+    getCountryGeoJSONData()
+      .then((geoJSON: GeoJSONData) => {
+        dispatch({
+          type: 'SET_COUNTRY_DATA',
+          payload: geoJSON,
+        });
 
-      const totals = calculateTotals(geoJSON, {
-        total_confirmed: 0,
-        total_deaths: 0,
-        total_recovered: 0,
-      });
+        const totals = calculateTotals(geoJSON, {
+          total_confirmed: 0,
+          total_deaths: 0,
+          total_recovered: 0,
+        });
 
-      dispatch({
-        type: 'SET_TOTALS',
-        payload: totals,
-      });
-    });
+        dispatch({
+          type: 'SET_TOTALS',
+          payload: totals,
+        });
+      })
+      .catch(console.error); // TODO: error flash message instead
   }, []);
 
   return (

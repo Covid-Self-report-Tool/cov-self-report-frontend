@@ -18,3 +18,13 @@ export const googleLogin = async () => {
   const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
   await firebase.auth().signInWithPopup(googleAuthProvider);
 };
+
+export const onAuthStateChange = (callback: Function) => {
+  return firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      callback({ loggedIn: true });
+    } else {
+      callback({ loggedIn: false });
+    }
+  });
+};
