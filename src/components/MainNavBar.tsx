@@ -21,43 +21,46 @@ interface NavBarTypes {
   toggleDrawerOpen: (active: boolean) => void;
 }
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    zIndex: theme.zIndex.drawer + 1,
-    boxShadow: 'none',
-  },
-  title: {
-    textDecoration: 'none',
-    textAlign: 'center',
-    flex: '1 1 100%',
-    color: theme.palette.common.white,
-  },
-  signupBtn: {
-    marginLeft: theme.spacing(2),
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    color: 'inherit',
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
+const useStyles = (isHome: boolean) => {
+  const ok = makeStyles(theme => ({
+    root: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      zIndex: theme.zIndex.drawer + 1,
+      boxShadow: 'none',
+      backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
     },
-  },
-}));
+    title: {
+      textDecoration: 'none',
+      textAlign: 'center',
+      flex: '1 1 100%',
+      color: theme.palette.common.white,
+      diplay: 'flex',
+      justifyContent: 'center',
+    },
+    signupBtn: {
+      marginLeft: theme.spacing(2),
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+      color: 'inherit',
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
+    },
+  }));
+
+  return ok();
+};
 
 export const MainNavBar = (props: NavBarTypes) => {
   const { isHome, toggleDrawerOpen, drawerOpen } = props;
-  const classes = useStyles();
+  const classes = useStyles(isHome);
   const trigger = useScrollTrigger();
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
-      <AppBar
-        position="fixed"
-        color={isHome ? 'transparent' : 'primary'}
-        className={classes.root}
-      >
+      <AppBar position="fixed" className={classes.root}>
         <Toolbar>
           <IconButton
             edge="start"
