@@ -34,9 +34,5 @@ export type InitialStateType = {
   userSelfReported: {}; // stuff for pre-populating symptoms form
 };
 
-export type StoreProviderType = {
-  children: React.ReactNode;
-};
-
 // TODO: restore usage in global dispatch provider
 export type ContextDispatchType = React.Dispatch<StoreActionType>;

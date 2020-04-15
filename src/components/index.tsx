@@ -1,5 +1,5 @@
 export * from 'components/BackToTopBtn';
-export * from 'components/ContextAndStore';
+export * from 'context/GlobalContext';
 export * from 'components/CountryTable';
 export * from 'components/Dashboard';
 export * from 'components/ListItems';

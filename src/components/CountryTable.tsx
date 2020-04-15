@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import {
   Table,
   TableContainer,
@@ -9,12 +9,12 @@ import {
   Paper,
 } from '@material-ui/core';
 
-import { useStore } from 'components';
+import { GlobalContext } from 'components';
 import { IGeoJson } from 'types';
 
 export const CountryTable: FC = () => {
-  const store = useStore();
-  const data = store.countries;
+  const { state } = useContext(GlobalContext);
+  const data = state.countries;
 
   return (
     <TableContainer component={Paper}>

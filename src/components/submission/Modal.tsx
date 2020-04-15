@@ -17,7 +17,7 @@ import {
   LocationDetailsStep,
   RegistrationStep,
 } from 'components/submission/steps';
-import { FormContext } from 'context';
+import { UserContext } from 'context';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -31,7 +31,7 @@ export const Modal = (props: ModalTypes) => {
   const { setSnackbarOpen } = props;
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
-  const { state: formState, dispatch: dispatchForm } = useContext(FormContext);
+  const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
 
   const history = useHistory();
 
