@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FC } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
@@ -24,11 +24,10 @@ const getSteps = () => {
 };
 
 interface ModalTypes {
-  setSnackbarOpen: React.Dispatch<boolean>;
+  setSuccessConfOpen: React.Dispatch<boolean>;
 }
 
-export const Modal = (props: ModalTypes) => {
-  const { setSnackbarOpen } = props;
+export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
@@ -72,7 +71,7 @@ export const Modal = (props: ModalTypes) => {
         postFormData(formState, idToken)
           .then((res: any) => {
             history.push('/');
-            setSnackbarOpen(true);
+            setSuccessConfOpen(true);
           })
           .catch((err: any) => {
             console.error(err); // TODO: set error flash message
