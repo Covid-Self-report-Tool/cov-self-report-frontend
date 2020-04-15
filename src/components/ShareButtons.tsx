@@ -9,12 +9,8 @@ import {
   LinkedinShareButton,
   PinterestIcon,
   PinterestShareButton,
-  PocketIcon,
-  PocketShareButton,
   RedditIcon,
   RedditShareButton,
-  TumblrIcon,
-  TumblrShareButton,
   TwitterIcon,
   TwitterShareButton,
   WhatsappIcon,
@@ -51,7 +47,7 @@ const ShareButtonConfig = [
   </EmailShareButton>,
 ];
 
-export const ShareButtons: FC = props => {
+export const ShareButtons: FC = () => {
   return (
     <Grid container spacing={1} justify="center" wrap="nowrap">
       {ShareButtonConfig.map((item, i) => (
