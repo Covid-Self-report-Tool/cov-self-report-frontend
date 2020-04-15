@@ -1,7 +1,8 @@
 import React, { FC, useContext } from 'react';
+import { Box } from '@material-ui/core';
 
 import { WorldGraphLocation, TickerCards } from 'components';
-import { GlobalContext } from 'components';
+import { GlobalContext, SharingPopoutMenu } from 'components';
 
 export const Home: FC = () => {
   const { state } = useContext(GlobalContext);
@@ -14,6 +15,9 @@ export const Home: FC = () => {
 
   return (
     <>
+      <Box position="absolute" bottom={10} left={10} zIndex={1}>
+        <SharingPopoutMenu />
+      </Box>
       <WorldGraphLocation
         data={state.countries}
         submittedFeats={state.allSelfReportedPoints}
