@@ -8,6 +8,7 @@ export * from 'components/MainNavBar';
 export * from 'components/MobileOffCanvasNav';
 export * from 'components/SignupForm';
 export * from 'components/Snackbar';
+export * from 'components/SuccessConfModal';
 export * from 'components/TickerCards';
 export * from 'components/UserPopoverMenu';
 export * from 'components/WorldGraphLocation';
