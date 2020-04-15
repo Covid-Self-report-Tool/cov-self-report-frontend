@@ -24,8 +24,17 @@ export const About: FC = () => (
       and provide the data we need to overcome this pandemic as a global
       community.
     </p>
-    <a href="#">Link to download data</a> | <a href="#">Privacy Policy</a> |
-    <a href="#">Terms and Conditions</a>
+    <a target="_blank" rel="noopener noreferrer" href="#">
+      Link to download data
+    </a>{' '}
+    |{' '}
+    <a target="_blank" rel="noopener noreferrer" href="#">
+      Privacy Policy
+    </a>{' '}
+    |
+    <a target="_blank" rel="noopener noreferrer" href="#">
+      Terms and Conditions
+    </a>
     <h2>Our Story</h2>
     <p>
       In early March, one of our friends began feeling unusual symptoms which
@@ -44,7 +53,11 @@ export const About: FC = () => (
     <h2>Data Resources</h2>
     <ul>
       <li>
-        <a href="https://github.com/CSSEGISandData/COVID-19">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/CSSEGISandData/COVID-19"
+        >
           2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns
           Hopkins CSSE
         </a>
@@ -57,23 +70,53 @@ export const About: FC = () => (
       </li>
       <li>
         <b>Gabriel Abud</b> is a software engineer and ex-biologist based in San
-        Francisco.
+        Francisco. |{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.linkedin.com/in/gabriel-abud/"
+        >
+          LinkedIn
+        </a>
       </li>
       <li>
         <b>Guneeta Singh Bhalla, PhD</b> has a PhD in physics from the
         University of Florida and completed her post doctoral research at the
         University of California at Berkeley and the Lawrence Berkeley National
         Laboratory in the field of Condensed Matter Physics. Guneeta founded the
-        crowdsourced 1947 Partition Archive in 2011.
+        crowdsourced{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.1947PartitionArchive.org"
+        >
+          1947 Partition Archive
+        </a>{' '}
+        in 2011. |{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.linkedin.com/in/guneeta/"
+        >
+          LinkedIn
+        </a>
       </li>
       <li>
-        <b>Jason Lampel</b> owns and develops at{' '}
-        <a href="https://www.abettermap.com" target="_blank">
+        <b>Jason Lampel</b> is a web developer with a background in GIS. He owns{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.abettermap.com"
+        >
           A Better Map
         </a>{' '}
-        and has worked on such projects as the 1947 Partition Archive.{' '}
-        <a href="https://www.linkedin.com/in/jason-lampel-607b1732/">
-          View Jason's LinkedIn profile
+        and currently lives in Fort Collins, Colorado. |{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.linkedin.com/in/jason-lampel-607b1732/"
+        >
+          LinkedIn
         </a>
       </li>
       <li>
@@ -86,13 +129,56 @@ export const About: FC = () => (
         <b>Nik Wolfe</b>
       </li>
       <li>
-        <b>Sumit Arora</b> heads Civic Tech Initiatives at Janaagraha Centre for
-        Citizenship and Democracy. Launched and implemented Swachh Bharat
-        Mission official Citizen Engagement platform.{' '}
-        <a href="https://www.linkedin.com/in/sumitarorain/">
-          View Sumit's LinkedIn profile
+        <b>Sumit Arora</b> Heads Civic Tech Initiatives at Janaagraha Centre for
+        Citizenship and Democracy. He launched and implemented Swachh Bharat
+        Mission official Citizen Engagement platform for the Government of India
+        and works on platforms to enable Government and Citizen Interaction easy
+        and data driven. |{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.linkedin.com/in/sumitarorain/"
+        >
+          LinkedIn
         </a>
       </li>
     </ul>
+    <h2>Our Partners</h2>
+    <p>
+      <b>Polsinelli Law Firm</b> This project is supported through the efforts
+      of{' '}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.polsinelli.com/professionals/eharding"
+      >
+        Liz Harding
+      </a>
+      ,{' '}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.polsinelli.com/professionals/ngambhir"
+      >
+        Nitin Gambhir
+      </a>{' '}
+      and{' '}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.polsinelli.com/professionals/psternberg"
+      >
+        Pasha Sternberg
+      </a>{' '}
+      of the{' '}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.polsinelli.com"
+      >
+        Polsinelli Law Firm
+      </a>
+      .
+    </p>
   </div>
 );
