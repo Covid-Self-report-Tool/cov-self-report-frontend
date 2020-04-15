@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FC } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
@@ -27,8 +27,7 @@ interface ModalTypes {
   setSuccessConfOpen: React.Dispatch<boolean>;
 }
 
-export const Modal = (props: ModalTypes) => {
-  const { setSuccessConfOpen } = props;
+export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);

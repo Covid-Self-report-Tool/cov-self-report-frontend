@@ -10,9 +10,6 @@ import {
   Dashboard,
   LoginForm,
   GlobalProvider,
-  // TODO: restore for login/logout success/fail
-  // CustomSnackbar,
-  // CustomSnackbarBasics,
   SimpleModal,
   SuccessConfModal,
 } from 'components';
@@ -24,13 +21,6 @@ import { VerifyEmail } from 'views/VerifyEmail';
 import { theme, GlobalCss } from 'theme';
 
 const Routes: FC = () => {
-  // TODO: make messages and severity flexible.
-  // TODO: use reducer instead of shit-ton of useStates.
-  // const [snackbarConfig, setSnackbarConfig] = useState<CustomSnackbarBasics>({
-  //   message: 'Success! Thank you for submitting.',
-  //   severity: 'success',
-  // });
-  // const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [user, loading] = useAuthState(firebase.auth());
   const [successConfOpen, setSuccessConfOpen] = useState<boolean>(false);
 
