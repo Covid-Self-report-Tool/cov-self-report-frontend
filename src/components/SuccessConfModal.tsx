@@ -13,6 +13,8 @@ import {
 import { TransitionProps } from '@material-ui/core/transitions';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 
+import { ShareButtons } from 'components';
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement<any, any> },
   ref: React.Ref<unknown>
@@ -95,6 +97,9 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
               World Health Organization’s COVID-19 page
             </a>
             .
+          </p>
+          <p>
+            <ShareButtons />
           </p>
           <p>
             COMING SOON: Get updates on current infections in your area and how
