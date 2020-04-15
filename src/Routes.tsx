@@ -10,9 +10,8 @@ import {
   Dashboard,
   LoginForm,
   GlobalProvider,
-  CustomSnackbar,
-  CustomSnackbarBasics,
   SimpleModal,
+  SuccessConfModal,
 } from 'components';
 import { UserProvider } from 'context';
 import { Modal } from 'components/submission';
@@ -22,14 +21,8 @@ import { VerifyEmail } from 'views/VerifyEmail';
 import { theme, GlobalCss } from 'theme';
 
 const Routes: FC = () => {
-  // TODO: make messages and severity flexible.
-  // TODO: use reducer instead of shit-ton of useStates.
-  const [snackbarConfig, setSnackbarConfig] = useState<CustomSnackbarBasics>({
-    message: 'Success! Thank you for submitting.',
-    severity: 'success',
-  });
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [user, loading] = useAuthState(firebase.auth());
+  const [successConfOpen, setSuccessConfOpen] = useState<boolean>(false);
 
   return (
     // @ts-ignore
@@ -53,10 +46,9 @@ const Routes: FC = () => {
                 <Route path="/" exact>
                   <Home />
                 </Route>
-                <CustomSnackbar
-                  snackbarConfig={snackbarConfig}
-                  snackbarOpen={snackbarOpen}
-                  setSnackbarOpen={setSnackbarOpen}
+                <SuccessConfModal
+                  open={successConfOpen}
+                  setOpen={setSuccessConfOpen}
                 />
               </Dashboard>
               {/* None of the modals need to be inside Dashboard */}
@@ -80,7 +72,7 @@ const Routes: FC = () => {
                 </SimpleModal>
               </Route>
               <Route path="/self-report">
-                <Modal setSnackbarOpen={setSnackbarOpen} />
+                <Modal setSuccessConfOpen={setSuccessConfOpen} />
               </Route>
               <Route path="/signup">
                 <SimpleModal title="Sign up">

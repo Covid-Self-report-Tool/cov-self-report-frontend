@@ -17,6 +17,8 @@ export interface CustomSnackbarTypes {
   setSnackbarOpen: React.Dispatch<boolean>;
 }
 
+// TODO: restore for login/logout success/fail
+// TODO: make messages and severity flexible. Use reducer + global context.
 export function CustomSnackbar(props: CustomSnackbarTypes) {
   const { snackbarConfig, setSnackbarOpen, snackbarOpen } = props;
   const { severity, message } = snackbarConfig;
