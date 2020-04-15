@@ -34,6 +34,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 0,
       lineHeight: 0,
     },
+    dialogContent: {
+      '& a': {
+        color: theme.palette.info.main,
+      },
+    },
   })
 );
 
@@ -49,8 +54,8 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
     <Dialog
       open={open}
       // open={true}
+      transitionDuration={{ enter: 900, exit: 400 }}
       TransitionComponent={Transition}
-      keepMounted
       onClose={handleClose}
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description"
@@ -58,7 +63,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
       <DialogTitle id="alert-dialog-slide-title">
         Submission sent successfully
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers className={classes.dialogContent}>
         <Typography variant="h2" align="center" className={classes.iconWrap}>
           <CheckCircleRoundedIcon className={classes.icon} fontSize="inherit" />
         </Typography>
@@ -70,12 +75,26 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
           <p>
             Thank you for adding your case to the world map. You're helping us
             understand COVID-19 so that we can fight it together. Please share
-            this with friends who are unwell. Send us your thoughts and
-            feedback. Sign up for email updates on the project.
+            this with friends who are unwell. Send us your{' '}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
+            >
+              thoughts and feedback
+            </a>
+            . Sign up for email updates on the project.
           </p>
           <p>
-            To get support and learn more about COVID-19, please visit the World
-            Health Organization’s COVID-19 page.
+            To get support and learn more about COVID-19, please visit the{' '}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
+            >
+              World Health Organization’s COVID-19 page
+            </a>
+            .
           </p>
           <p>
             COMING SOON: Get updates on current infections in your area and how
