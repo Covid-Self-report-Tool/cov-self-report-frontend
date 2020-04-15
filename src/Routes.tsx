@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline } from '@material-ui/core';
-import firebase from 'firebase/app';
 import 'firebase/auth';
 import { FirebaseAuthProvider } from '@react-firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 import {
   Dashboard,
@@ -17,7 +17,7 @@ import {
 import { UserProvider } from 'context';
 import { Modal } from 'components/submission';
 import { Home, Signup, About, Models, Logout, List } from 'views';
-import { firebaseConfig } from 'config';
+import firebase from 'config/firebase';
 import { VerifyEmail } from 'views/VerifyEmail';
 import { theme, GlobalCss } from 'theme';
 
@@ -29,10 +29,11 @@ const Routes: FC = () => {
     severity: 'success',
   });
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [user, loading] = useAuthState(firebase.auth());
 
   return (
     // @ts-ignore
-    <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
+    <FirebaseAuthProvider firebase={firebase}>
       <GlobalProvider>
         <UserProvider>
           <ThemeProvider theme={theme}>
@@ -60,9 +61,13 @@ const Routes: FC = () => {
               </Dashboard>
               {/* None of the modals need to be inside Dashboard */}
               <Route path="/login">
-                <SimpleModal title="Login">
-                  <LoginForm />
-                </SimpleModal>
+                {!user && !loading ? (
+                  <SimpleModal title="Login">
+                    <LoginForm />
+                  </SimpleModal>
+                ) : (
+                  <Redirect to="/"></Redirect>
+                )}
               </Route>
               <Route path="/logout">
                 <SimpleModal title="Logout">

@@ -12,9 +12,11 @@ import {
   IconButton,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { UserPopoverMenu } from 'components';
 import { UserContext, initialUserState } from 'context';
+import firebase from 'config/firebase';
 
 interface NavBarTypes {
   isHome: boolean;
@@ -60,6 +62,7 @@ export const MainNavBar = (props: NavBarTypes) => {
   const trigger = useScrollTrigger();
 
   const { state } = useContext(UserContext);
+  const [user, loading] = useAuthState(firebase.auth());
 
   const hasSubmitted = () => {
     return !(state === initialUserState);
@@ -96,28 +99,32 @@ export const MainNavBar = (props: NavBarTypes) => {
               justifyContent: 'flex-end',
             }}
           >
-            <Button
-              variant="contained"
-              color="secondary"
-              to="/self-report"
-              component={RouteLink}
-            >
-              {hasSubmitted() ? 'Edit Symptoms' : 'Add Symptoms'}
-            </Button>
-            <IfFirebaseUnAuthed>
-              {() => (
+            {!loading && (
+              <>
                 <Button
-                  variant="outlined"
-                  color="primary"
-                  className={classes.signupBtn}
+                  variant="contained"
+                  color="secondary"
+                  to="/self-report"
                   component={RouteLink}
-                  to="/login"
                 >
-                  Login / Signup
+                  {user ? 'Edit Symptoms' : 'Add Symptoms'}
                 </Button>
-              )}
-            </IfFirebaseUnAuthed>
-            <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
+                <IfFirebaseUnAuthed>
+                  {() => (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      className={classes.signupBtn}
+                      component={RouteLink}
+                      to="/login"
+                    >
+                      Login / Signup
+                    </Button>
+                  )}
+                </IfFirebaseUnAuthed>
+                <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
+              </>
+            )}
           </div>
         </Toolbar>
       </AppBar>

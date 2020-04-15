@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useState, FC } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import firebase from 'firebase';
+import firebase from 'config/firebase';
 
 import { getUserData } from 'utils/api';
 import { SymptomForm, SubmissionFormAction } from 'types/submission';

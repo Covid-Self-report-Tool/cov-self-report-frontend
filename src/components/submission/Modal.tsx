@@ -8,7 +8,7 @@ import {
   Step,
   StepLabel,
 } from '@material-ui/core';
-import firebase from 'firebase';
+import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import {
