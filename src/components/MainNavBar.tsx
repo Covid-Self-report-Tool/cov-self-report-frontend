@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, useContext } from 'react';
 import { IfFirebaseAuthed, IfFirebaseUnAuthed } from '@react-firebase/auth';
 import { Link as RouteLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 
 import { UserPopoverMenu } from 'components';
+import { UserContext, initialUserState } from 'context';
 
 interface NavBarTypes {
   isHome: boolean;
@@ -58,6 +59,12 @@ export const MainNavBar = (props: NavBarTypes) => {
   const classes = useStyles(isHome);
   const trigger = useScrollTrigger();
 
+  const { state } = useContext(UserContext);
+
+  const hasSubmitted = () => {
+    return !(state === initialUserState);
+  };
+
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar position="fixed" className={classes.root}>
@@ -95,7 +102,7 @@ export const MainNavBar = (props: NavBarTypes) => {
               to="/self-report"
               component={RouteLink}
             >
-              Add Symptoms
+              {hasSubmitted() ? 'Edit Symptoms' : 'Add Symptoms'}
             </Button>
             <IfFirebaseUnAuthed>
               {() => (

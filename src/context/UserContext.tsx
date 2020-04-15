@@ -1,7 +1,11 @@
-import React, { createContext, useReducer, FC } from 'react';
+import React, { createContext, useReducer, useState, FC } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from 'firebase';
+
+import { getUserData } from 'utils/api';
 import { SymptomForm, SubmissionFormAction } from 'types/submission';
 
-const initialFormState: SymptomForm = {
+export const initialUserState: SymptomForm = {
   symptoms: {
     fever: { isPresent: false, startDate: null, endDate: null },
     headache: { isPresent: false, startDate: null, endDate: null },
@@ -86,12 +90,16 @@ const reducer = (
       return newForm;
     case 'TOGGLE_AGREED':
       return { ...state, hasAgreedToTerms: !state.hasAgreedToTerms };
+    case 'SET_USER_DATA': // e.g. pre-populating symptoms form
+      return {
+        ...action.payload,
+      };
     default:
       return state;
   }
 };
 
-export const FormContext = createContext<{ state: any; dispatch: any }>({
+export const UserContext = createContext<{ state: any; dispatch: any }>({
   state: null,
   dispatch: null,
 });
@@ -100,12 +108,37 @@ export type FormProviderType = {
   children: React.ReactNode;
 };
 
-export const FormProvider: FC<FormProviderType> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialFormState);
+export const UserProvider: FC<FormProviderType> = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialUserState);
+
+  // to avoid rerunning login trigger
+  const [authFlag, setAuthFlag] = useState<boolean>(true);
+
+  const [user] = useAuthState(firebase.auth());
+
+  // when user logs in, fetch data from backend
+  if (user) {
+    if (authFlag) {
+      setAuthFlag(false);
+      user.getIdToken().then(token => {
+        getUserData(token)
+          .then((resp: any) => {
+            if (resp.status === 200 && resp.body) {
+              dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
+            }
+          })
+          .catch((resp: any) => {
+            // handle error
+          });
+      });
+
+      console.log('you are logged in!');
+    }
+  }
 
   return (
-    <FormContext.Provider value={{ state, dispatch }}>
+    <UserContext.Provider value={{ state, dispatch }}>
       {children}
-    </FormContext.Provider>
+    </UserContext.Provider>
   );
 };

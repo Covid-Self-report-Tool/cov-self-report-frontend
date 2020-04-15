@@ -6,20 +6,20 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { FirebaseAuthProvider } from '@react-firebase/auth';
 
-import { theme, GlobalCss } from './theme';
 import {
   Dashboard,
   LoginForm,
-  StoreProvider,
+  GlobalProvider,
   CustomSnackbar,
   CustomSnackbarBasics,
   SimpleModal,
 } from 'components';
-import { FormProvider } from 'context';
+import { UserProvider } from 'context';
 import { Modal } from 'components/submission';
 import { Home, Signup, About, Models, Logout, List } from 'views';
 import { firebaseConfig } from 'config';
 import { VerifyEmail } from 'views/VerifyEmail';
+import { theme, GlobalCss } from 'theme';
 
 const Routes: FC = () => {
   // TODO: make messages and severity flexible.
@@ -33,8 +33,8 @@ const Routes: FC = () => {
   return (
     // @ts-ignore
     <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
-      <StoreProvider>
-        <FormProvider>
+      <GlobalProvider>
+        <UserProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <GlobalCss />
@@ -84,8 +84,8 @@ const Routes: FC = () => {
               </Route>
             </Router>
           </ThemeProvider>
-        </FormProvider>
-      </StoreProvider>
+        </UserProvider>
+      </GlobalProvider>
     </FirebaseAuthProvider>
   );
 };
