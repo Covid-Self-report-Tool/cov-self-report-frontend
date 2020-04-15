@@ -29,6 +29,7 @@ const useStyles = (isHome: boolean) => {
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(1),
       zIndex: theme.zIndex.drawer + 1,
+      color: theme.palette.common.white,
       boxShadow: 'none',
       backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
     },
@@ -36,12 +37,14 @@ const useStyles = (isHome: boolean) => {
       textDecoration: 'none',
       textAlign: 'center',
       flex: '1 1 100%',
-      color: theme.palette.common.white,
+      color: 'inherit',
       diplay: 'flex',
       justifyContent: 'center',
+      textShadow: '1px 1px 3px hsla(180, 2%, 10%, 0.75)',
     },
     signupBtn: {
-      marginLeft: theme.spacing(2),
+      color: 'inherit',
+      marginLeft: theme.spacing(1),
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -109,7 +112,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
                 <IfFirebaseUnAuthed>
                   {() => (
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
                       className={classes.signupBtn}
                       component={RouteLink}
