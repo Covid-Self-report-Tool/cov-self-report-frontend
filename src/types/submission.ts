@@ -81,4 +81,5 @@ export type SubmissionFormAction =
   | { type: 'SET_TESTED_POSITIVE'; payload: boolean }
   | { type: 'SET_DOCTOR_DIAGNOSIS'; payload: string }
   | { type: 'RESET_VALUE'; payload: keyof SymptomForm }
-  | { type: 'SET_LOCATION'; payload: Location };
+  | { type: 'SET_LOCATION'; payload: Location }
+  | { type: 'SET_USER_DATA'; payload: SymptomForm };

@@ -1,21 +1,22 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 
-import { WorldGraphLocation, TickerCards, useStore } from 'components';
+import { WorldGraphLocation, TickerCards } from 'components';
+import { GlobalContext } from 'components';
 
 export const Home: FC = () => {
-  const store = useStore();
+  const { state } = useContext(GlobalContext);
   const {
     total_confirmed,
     total_deaths,
     total_recovered,
     selfReported,
-  } = store.currentTotals;
+  } = state.currentTotals;
 
   return (
     <>
       <WorldGraphLocation
-        data={store.countries}
-        submittedFeats={store.allSelfReportedPoints}
+        data={state.countries}
+        submittedFeats={state.allSelfReportedPoints}
       />
       <TickerCards
         confirmed={total_confirmed}
