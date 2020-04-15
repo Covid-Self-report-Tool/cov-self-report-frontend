@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Paper,
   Grid,
@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { googleLogin, login } from 'utils/firebase';
