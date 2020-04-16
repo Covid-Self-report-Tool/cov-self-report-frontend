@@ -1,10 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Paper, Grid, TextField, Button } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
 import { signUp, googleLogin } from 'utils/firebase';
-import { RECAPTCHA_KEY } from 'config';
-import ReCAPTCHA from 'react-google-recaptcha';
+import firebase from 'config/firebase';
 
 const useStyles = makeStyles({
   padding: {
@@ -14,6 +13,14 @@ const useStyles = makeStyles({
     marginTop: 20,
   },
 });
+
+declare global {
+  interface Window {
+    recaptchaVerifier: any;
+  }
+}
+
+window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
   const classes = useStyles();
@@ -55,6 +62,26 @@ export const SignupForm: FC = () => {
     }
   };
 
+  useEffect(() => {
+    try {
+      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+        'recaptcha',
+        {
+          callback: (response: any) => {
+            setCaptchaToken(response);
+          },
+          'expired-callback': () => {
+            window.recaptchaVerifier.clear();
+            // Response expired. Needs to rerender captcha
+          },
+        }
+      );
+      window.recaptchaVerifier.render();
+    } catch (err) {
+      // TODO: failed to load captcha
+    }
+  }, []);
+
   const handleSignup = () => {
     resetErrors();
     if (password.length < 6) {
@@ -94,13 +121,6 @@ export const SignupForm: FC = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setPassword2(event.currentTarget.value);
-  };
-
-  // specifying verify callback function
-  const verifyCallback = (token: string | null) => {
-    if (token) {
-      setCaptchaToken(token);
-    }
   };
 
   return (
@@ -180,12 +200,7 @@ export const SignupForm: FC = () => {
             Login with Google
           </Button>
         </Grid>
-        <div className={classes.marginTop}>
-          <ReCAPTCHA
-            sitekey={RECAPTCHA_KEY as string}
-            onChange={verifyCallback}
-          />
-        </div>
+        <div className={classes.marginTop} id="recaptcha"></div>
       </div>
     </Paper>
   );
