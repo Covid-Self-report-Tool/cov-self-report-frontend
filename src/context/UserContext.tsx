@@ -105,6 +105,10 @@ const reducer = (
         ...state,
         symptoms: initialUserState.symptoms,
       };
+    case 'RESET_USER_DATA':
+      return {
+        ...initialUserState,
+      };
     default:
       return state;
   }
