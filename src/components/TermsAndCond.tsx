@@ -10,15 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const TermsAndCond: FC = () => (
-  <p>
-    Velit exercitation id dolor eu excepteur labore elit et amet dolor. Laboris
-    sunt aliquip amet officia ut veniam ad veniam cupidatat ut elit mollit.
-    Proident dolor ullamco cupidatat qui ex aute quis tempor ut magna duis
-    tempor laboris. Eiusmod enim qui anim eiusmod sit occaecat in quis enim
-    excepteur.
-  </p>
-);
+export const TermsAndCond: FC = () => <p>Terms and conditions here.</p>;
 
 export const TermsAndCondTrigger: FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
