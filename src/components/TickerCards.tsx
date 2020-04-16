@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   tickerCardsWrap: {
     position: 'absolute',
     right: theme.spacing(1),
-    top: 105, // past top bar (except on tweeners like iPhone landscape)
+    top: 115, // past top bar (except on tweeners like iPhone landscape)
     zIndex: 400,
     [theme.breakpoints.up('md')]: {
       right: theme.spacing(2),

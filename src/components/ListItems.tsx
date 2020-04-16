@@ -15,6 +15,7 @@ import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = makeStyles(theme => {
   const navItemSize = 60;
+  const shadow = '1px 1px 3px hsla(180, 2%, 10%, 0.75)';
 
   return {
     list: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => {
       top: theme.spacing(4),
       zIndex: 401,
       [theme.breakpoints.up('sm')]: {
-        top: 105, // past top bar (except on tweeners like iPhone landscape)
+        top: 115, // past top bar (except on tweeners like iPhone landscape)
       },
     },
     navItem: {
@@ -35,6 +36,12 @@ const useStyles = makeStyles(theme => {
       justifyContent: 'center',
       textAlign: 'center',
       width: navItemSize,
+      textShadow: shadow,
+      '& svg': {
+        // CRED: https://stackoverflow.com/a/13624469/1048518
+        WebkitFilter: `drop-shadow(${shadow})`,
+        filter: `drop-shadow(${shadow})`,
+      },
     },
   };
 });
