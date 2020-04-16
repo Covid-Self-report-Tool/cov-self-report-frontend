@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
-import { SignupForm, LoginForm } from 'components';
+import { SignupForm, LoginForm, TermsAndCondTrigger } from 'components';
 import { SymptomForm, DispatchFormType } from 'types/submission';
 
 type RegistrationStepType = {
@@ -74,7 +74,7 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                   }
                   label={
                     <span>
-                      I Agree to the <Link href="#">Terms and Conditions</Link>
+                      I agree to the <TermsAndCondTrigger />.
                     </span>
                   }
                 />
