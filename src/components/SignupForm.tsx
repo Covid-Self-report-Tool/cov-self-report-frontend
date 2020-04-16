@@ -199,8 +199,8 @@ export const SignupForm: FC = () => {
           >
             Login with Google
           </Button>
+          <div className={classes.marginTop} id="recaptcha"></div>
         </Grid>
-        <div className={classes.marginTop} id="recaptcha"></div>
       </div>
     </Paper>
   );

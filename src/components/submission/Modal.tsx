@@ -85,7 +85,11 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     switch (step) {
       case 0:
         return (
-          <SymptomStep formState={formState} dispatchForm={dispatchForm} />
+          <SymptomStep
+            formState={formState}
+            dispatchForm={dispatchForm}
+            setActiveStep={setActiveStep}
+          />
         );
       case 1:
         return (
