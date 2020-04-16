@@ -112,8 +112,11 @@ export const About: FC = () => {
           </a>
         </li>
         <li>
-          <strong>Gabriel Abud</strong> is a software engineer and ex-biologist
-          based in San Francisco. |{' '}
+          <strong>Gabriel Abud</strong> is a software engineer at Tempo
+          Automation, a circuit board assembly company based in San Francisco.
+          His background is in biology and bioinformatics and previously he
+          worked in agricultural biotech, helping to develop sustainable
+          fertilizer for farmers. He currently lives in Oakland, California. |{' '}
           <a
             target="_blank"
             rel="noopener noreferrer"
