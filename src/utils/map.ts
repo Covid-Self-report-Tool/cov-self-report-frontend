@@ -19,6 +19,7 @@ export const createClusterCustomIcon = function(
   }
 
   return L.divIcon({
+    className: 'marker--override',
     html: `<div style="
       height: ${diameter}px;
       width: ${diameter}px;
