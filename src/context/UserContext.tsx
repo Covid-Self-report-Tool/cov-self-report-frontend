@@ -135,7 +135,6 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
         getUserData(token)
           .then((resp: any) => {
             if (resp.status === 200 && resp.body) {
-              console.log(resp.body.data);
               dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
             }
           })
@@ -143,8 +142,6 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
             // handle error
           });
       });
-
-      console.log('you are logged in!');
     }
   }
 

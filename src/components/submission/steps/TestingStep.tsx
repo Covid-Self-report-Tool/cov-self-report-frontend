@@ -49,7 +49,6 @@ export const TestingStep: FC<TestingStepType> = ({
 
   const handleBirthDate = (date: MaterialUiPickersDate) => {
     if (date) {
-      console.log('birthMonth', date.getMonth());
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
       dispatchForm({
