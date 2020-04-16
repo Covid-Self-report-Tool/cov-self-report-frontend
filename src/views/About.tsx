@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 // Convenient to isolate this in order to simplify updates from source copy
+// TODO: move into component instead of view
 const AboutCopy: FC = () => (
   <>
     <h1 id="about">About</h1>
@@ -45,17 +46,8 @@ const AboutCopy: FC = () => (
       community.
     </p>
     <p>
-      <a target="_blank" rel="noopener noreferrer" href="#">
-        Link to download data
-      </a>{' '}
-      |{' '}
-      <a target="_blank" rel="noopener noreferrer" href="#">
-        Privacy Policy
-      </a>{' '}
-      |{' '}
-      <a target="_blank" rel="noopener noreferrer" href="#">
-        Terms and Conditions
-      </a>
+      View data API (coming soon) | Privacy Policy |{' '}
+      <a href="#terms-and-cond">Terms and Conditions</a>
     </p>
     <h2 id="our-story">Our Story</h2>
     <p>
@@ -266,7 +258,7 @@ export const About: FC = () => {
   return (
     <Container className={`simpler-font ${classes.root}`}>
       <AboutCopy />
-      <h2>Terms and Conditions</h2>
+      <h2 id="terms-and-cond">Terms and Conditions</h2>
       <TermsAndCond />
     </Container>
   );
