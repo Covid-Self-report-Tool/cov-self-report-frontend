@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
   exitIcon: {
     marginRight: theme.spacing(4),
   },
+  avatar: {
+    padding: 4,
+  },
 }));
 
 export function UserPopoverMenu() {
@@ -46,6 +49,7 @@ export function UserPopoverMenu() {
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleClick}
+        className={useStyles().avatar}
       >
         <AccountCircle />
       </IconButton>

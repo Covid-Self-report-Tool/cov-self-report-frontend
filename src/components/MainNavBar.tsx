@@ -37,14 +37,24 @@ const useStyles = (isHome: boolean) => {
       backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
     },
     titleWrap: {
+      display: 'flex',
       [theme.breakpoints.up('md')]: {
+        display: 'block',
         textAlign: 'center',
         flex: '1 1 100%',
       },
     },
+    toolbar: {
+      [theme.breakpoints.only('md')]: {
+        justifyContent: 'space-between',
+      },
+    },
     title: {
+      position: 'relative',
       textDecoration: 'none',
       textAlign: 'left',
+      paddingTop: 3,
+      paddingRight: 5,
       color: 'inherit',
       justifyContent: 'center',
       textShadow: '1px 1px 3px hsla(180, 2%, 10%, 0.75)',
@@ -65,6 +75,7 @@ const useStyles = (isHome: boolean) => {
       },
     },
     subTitle: {
+      lineHeight: 1,
       [theme.breakpoints.down('sm')]: {
         fontSize: '0.7rem',
       },
@@ -84,6 +95,17 @@ const useStyles = (isHome: boolean) => {
         lineHeight: 1,
       },
     },
+    badge: {
+      backgroundColor: 'hsla(36, 100%, 50%, 0.95)',
+      borderRadius: 7,
+      fontSize: '15px',
+      lineHeight: '17px',
+      padding: '1px 5px',
+      position: 'absolute',
+      right: 0,
+      textShadow: 'none',
+      top: 0,
+    },
   }));
 
   return ok();
@@ -102,7 +124,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar position="fixed" className={classes.root}>
-        <Toolbar disableGutters>
+        <Toolbar disableGutters className={classes.toolbar}>
           <IconButton
             edge="start"
             className={classes.menuButton}
@@ -119,7 +141,10 @@ export const MainNavBar: FC<NavBarTypes> = ({
               noWrap
               className={`${classes.title} MuiTypography-noWrap`}
             >
-              Covid-19 True Data Tracker
+              <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
+                Covid-19 True Data Tracker
+              </span>
+              <Box className={classes.badge}>BETA</Box>
               <Typography
                 component="p"
                 variant="subtitle2"
