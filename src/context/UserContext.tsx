@@ -94,6 +94,11 @@ const reducer = (
       return {
         ...action.payload,
       };
+    case 'RESET_SYMPTOMS':
+      return {
+        ...state,
+        symptoms: initialUserState.symptoms,
+      };
     default:
       return state;
   }
@@ -124,6 +129,7 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
         getUserData(token)
           .then((resp: any) => {
             if (resp.status === 200 && resp.body) {
+              console.log(resp.body.data);
               dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
             }
           })

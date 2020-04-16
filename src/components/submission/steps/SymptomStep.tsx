@@ -20,8 +20,9 @@ import {
 } from '@material-ui/pickers';
 
 const useStyles = makeStyles({
-  marginLeft: {
+  margin: {
     marginLeft: 25,
+    marginRight: 25,
   },
   center: {
     paddingTop: 30,
@@ -36,11 +37,13 @@ const useStyles = makeStyles({
 type SymptomStepType = {
   formState: SymptomForm;
   dispatchForm: DispatchFormType;
+  setActiveStep: Function;
 };
 
 export const SymptomStep: FC<SymptomStepType> = ({
   formState,
   dispatchForm,
+  setActiveStep,
 }) => {
   const classes = useStyles();
   // This is to create a grid layout, split into two groups
@@ -89,6 +92,13 @@ export const SymptomStep: FC<SymptomStepType> = ({
       // @ts-ignore
       payload: { symptom: symptom, endDate: date },
     });
+  };
+
+  const noSymptoms = () => {
+    dispatchForm({
+      type: 'RESET_SYMPTOMS',
+    });
+    setActiveStep(1);
   };
 
   return (
@@ -207,14 +217,23 @@ export const SymptomStep: FC<SymptomStepType> = ({
         </>
       )}
       <Grid container>
-        <Grid item>
+        <Grid item xs={6}>
           <Button
+            className={classes.margin}
+            variant="contained"
+            onClick={() => noSymptoms()}
+          >
+            I have no symptoms
+          </Button>
+        </Grid>
+        <Grid container item xs={6} justify="flex-end">
+          <Button
+            className={classes.margin}
             onClick={() => setShowDates(!showDates)}
             variant="outlined"
-            className={classes.marginLeft}
             disabled={!showDates && !hasSymptoms()}
           >
-            {showDates ? 'Go Back to Symptoms' : 'Set Dates'}
+            {showDates ? 'Go Back to Symptoms' : 'Set Symptom Dates'}
           </Button>
         </Grid>
       </Grid>
