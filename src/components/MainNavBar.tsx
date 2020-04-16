@@ -59,6 +59,7 @@ const useStyles = (isHome: boolean) => {
     },
     menuButton: {
       color: 'inherit',
+      padding: 6,
       [theme.breakpoints.up('sm')]: {
         display: 'none',
       },
@@ -69,12 +70,18 @@ const useStyles = (isHome: boolean) => {
       },
     },
     rightSideWrap: {
-      flex: 1,
       display: 'flex',
       [theme.breakpoints.up('md')]: {
         flex: '1 50%',
         display: 'flex',
         justifyContent: 'flex-end',
+      },
+    },
+    snugBtnMobile: {
+      [theme.breakpoints.down('sm')]: {
+        padding: 6,
+        textAlign: 'center',
+        lineHeight: 1,
       },
     },
   }));
@@ -104,13 +111,13 @@ export const MainNavBar: FC<NavBarTypes> = ({
           >
             <MenuIcon />
           </IconButton>
-          <Box className={classes.titleWrap}>
+          <Box className={`${classes.titleWrap} MuiTypography-noWrap`}>
             <Typography
               to="/"
               component={RouteLink}
               variant="h4"
               noWrap
-              className={classes.title}
+              className={`${classes.title} MuiTypography-noWrap`}
             >
               Covid-19 True Data Tracker
               <Typography
@@ -130,6 +137,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
                   variant="contained"
                   color="secondary"
                   to="/self-report"
+                  className={`${classes.signupBtn} ${classes.snugBtnMobile}`}
                   component={RouteLink}
                 >
                   {user ? 'Edit Symptoms' : 'Add Symptoms'}
@@ -139,7 +147,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
                     <Button
                       variant="contained"
                       color="primary"
-                      className={classes.signupBtn}
+                      className={`${classes.signupBtn} ${classes.snugBtnMobile}`}
                       component={RouteLink}
                       to="/login"
                     >
