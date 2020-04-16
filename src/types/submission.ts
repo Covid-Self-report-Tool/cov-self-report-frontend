@@ -75,6 +75,7 @@ export type SubmissionFormAction =
     }
   | { type: 'SET_NUM_TIMES_TESTED'; payload: number }
   | { type: 'TOGGLE_AGREED' }
+  | { type: 'SET_USER_DATA'; payload: SymptomForm }
   | { type: 'SET_TESTED'; payload: boolean }
   | { type: 'SET_ADDRESS'; payload: string }
   | { type: 'SET_SEEN_PHYSICIAN'; payload: boolean }
@@ -82,4 +83,4 @@ export type SubmissionFormAction =
   | { type: 'SET_DOCTOR_DIAGNOSIS'; payload: string }
   | { type: 'RESET_VALUE'; payload: keyof SymptomForm }
   | { type: 'SET_LOCATION'; payload: Location }
-  | { type: 'SET_USER_DATA'; payload: SymptomForm };
+  | { type: 'RESET_SYMPTOMS' };
