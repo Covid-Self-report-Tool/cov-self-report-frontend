@@ -83,4 +83,8 @@ export type SubmissionFormAction =
   | { type: 'SET_DOCTOR_DIAGNOSIS'; payload: string }
   | { type: 'RESET_VALUE'; payload: keyof SymptomForm }
   | { type: 'SET_LOCATION'; payload: Location }
+  | {
+      type: 'SET_BIRTH_DATE';
+      payload: { birthMonth: number; birthYear: number };
+    }
   | { type: 'RESET_SYMPTOMS' };

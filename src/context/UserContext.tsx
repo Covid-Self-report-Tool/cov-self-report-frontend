@@ -64,6 +64,12 @@ const reducer = (
       return { ...state, location: action.payload };
     case 'SET_ADDRESS':
       return { ...state, address: action.payload };
+    case 'SET_BIRTH_DATE':
+      return {
+        ...state,
+        birthMonth: action.payload.birthMonth,
+        birthYear: action.payload.birthYear,
+      };
     case 'SET_TESTED':
       if (action.payload === false) {
         return { ...state, testedPositive: undefined, tested: action.payload };
