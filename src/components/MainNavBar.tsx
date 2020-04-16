@@ -4,6 +4,7 @@ import { Link as RouteLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
+  Box,
   Toolbar,
   Button,
   Typography,
@@ -26,28 +27,61 @@ interface NavBarTypes {
 const useStyles = (isHome: boolean) => {
   const ok = makeStyles(theme => ({
     root: {
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
+      padding: theme.spacing(1),
+      [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(2),
+      },
       zIndex: theme.zIndex.drawer + 1,
+      color: theme.palette.common.white,
       boxShadow: 'none',
       backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
     },
+    titleWrap: {
+      [theme.breakpoints.up('md')]: {
+        textAlign: 'center',
+        flex: '1 1 100%',
+      },
+    },
     title: {
       textDecoration: 'none',
-      textAlign: 'center',
-      flex: '1 1 100%',
-      color: theme.palette.common.white,
-      diplay: 'flex',
+      textAlign: 'left',
+      color: 'inherit',
       justifyContent: 'center',
+      textShadow: '1px 1px 3px hsla(180, 2%, 10%, 0.75)',
+      [theme.breakpoints.up('md')]: {
+        flex: 0,
+        display: 'inline-block',
+      },
     },
     signupBtn: {
-      marginLeft: theme.spacing(2),
+      color: 'inherit',
+      marginLeft: theme.spacing(1),
     },
     menuButton: {
-      marginRight: theme.spacing(2),
       color: 'inherit',
+      padding: 6,
       [theme.breakpoints.up('sm')]: {
         display: 'none',
+      },
+    },
+    subTitle: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '0.7rem',
+      },
+    },
+    rightSideWrap: {
+      display: 'flex',
+      [theme.breakpoints.up('md')]: {
+        flex: '1 50%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+      },
+    },
+    snugBtnMobile: {
+      [theme.breakpoints.down('sm')]: {
+        padding: 6,
+        textAlign: 'center',
+        lineHeight: 1,
       },
     },
   }));
@@ -68,7 +102,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar position="fixed" className={classes.root}>
-        <Toolbar>
+        <Toolbar disableGutters>
           <IconButton
             edge="start"
             className={classes.menuButton}
@@ -77,31 +111,33 @@ export const MainNavBar: FC<NavBarTypes> = ({
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            to="/"
-            component={RouteLink}
-            variant="h4"
-            noWrap
-            className={classes.title}
-          >
-            Covid-19 True Data Tracker
-            <Typography component="p" variant="subtitle1" noWrap>
-              A tool that tracks self-reported and confirmed infections
+          <Box className={`${classes.titleWrap} MuiTypography-noWrap`}>
+            <Typography
+              to="/"
+              component={RouteLink}
+              variant="h4"
+              noWrap
+              className={`${classes.title} MuiTypography-noWrap`}
+            >
+              Covid-19 True Data Tracker
+              <Typography
+                component="p"
+                variant="subtitle2"
+                noWrap
+                className={classes.subTitle}
+              >
+                A tool that tracks self-reported and confirmed infections
+              </Typography>
             </Typography>
-          </Typography>
-          <div
-            style={{
-              flex: '1 50%',
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
+          </Box>
+          <Box className={classes.rightSideWrap}>
             {!loading && (
               <>
                 <Button
                   variant="contained"
                   color="secondary"
                   to="/self-report"
+                  className={`${classes.signupBtn} ${classes.snugBtnMobile}`}
                   component={RouteLink}
                 >
                   {user ? 'Edit Symptoms' : 'Add Symptoms'}
@@ -109,9 +145,9 @@ export const MainNavBar: FC<NavBarTypes> = ({
                 <IfFirebaseUnAuthed>
                   {() => (
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
-                      className={classes.signupBtn}
+                      className={`${classes.signupBtn} ${classes.snugBtnMobile}`}
                       component={RouteLink}
                       to="/login"
                     >
@@ -122,7 +158,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
                 <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
               </>
             )}
-          </div>
+          </Box>
         </Toolbar>
       </AppBar>
     </Slide>
