@@ -35,11 +35,16 @@ npm start
 
 - [JHU GitHub data](https://github.com/CSSEGISandData/COVID-19) (CSVs)
 - [JHU Postman API docs](https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest) (currently scraping the `/summary` route and adding to DynamoDB daily, the joining on the fly to countries geojson client-side)
+- [MD data source of About content](https://drive.google.com/file/d/1wk_GNkU-hJZBeh6ic5ZkOoJgVAsrMsSO/view?usp=sharing) (Guneeta is editing, Jason converts to HTML and commits it)
 
 ### Fixes
 
 - [AWS Amplify react-router issue](https://github.com/aws-amplify/amplify-js/issues/2498#issuecomment-455162939)
 - [Use env vars in React app](https://create-react-app.dev/docs/adding-custom-environment-variables/#referencing-environment-variables-in-the-html)
+
+### Handy tools
+
+- [HTML to Markdown converter](https://markdowntohtml.com/) even puts `id` tags in, easy for linking to with `href` later...
 
 ## Data notes
 
