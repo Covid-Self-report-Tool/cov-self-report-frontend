@@ -14,6 +14,9 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 const useStyles = makeStyles({
   dropdown: {
@@ -21,6 +24,9 @@ const useStyles = makeStyles({
   },
   selector: {
     marginBottom: 10,
+  },
+  datePicker: {
+    marginBottom: 20,
   },
 });
 
@@ -41,12 +47,47 @@ export const TestingStep: FC<TestingStepType> = ({
     dispatchForm({ type: 'SET_DOCTOR_DIAGNOSIS', payload: event.target.value });
   };
 
+  const handleBirthDate = (date: MaterialUiPickersDate) => {
+    if (date) {
+      console.log('birthMonth', date.getMonth());
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      dispatchForm({
+        type: 'SET_BIRTH_DATE',
+        payload: { birthMonth: month, birthYear: year },
+      });
+    }
+  };
+
+  const getBirthMonthYear = () => {
+    const month = formState.birthMonth;
+    const year = formState.birthYear;
+    if (month && year) {
+      const date = new Date();
+      date.setFullYear(year);
+      date.setMonth(month - 1);
+      return date;
+    }
+    return null;
+  };
+
   return (
     <>
       <DialogTitle id="form-dialog-title">Test Results</DialogTitle>
       <DialogContent>
         <Grid container>
           <FormControl>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                className={classes.datePicker}
+                views={['month', 'year']}
+                value={getBirthMonthYear()}
+                onChange={handleBirthDate}
+                maxDate={new Date()}
+                label="Birth Month/Year"
+                animateYearScrolling
+              />
+            </MuiPickersUtilsProvider>
             <FormLabel>Have you been tested for CoVID-19?</FormLabel>
             <RadioGroup
               value={String(formState.tested)}
