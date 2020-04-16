@@ -1,4 +1,4 @@
-import React, { useState, useContext, FC } from 'react';
+import React, { useState, useContext, FC, useCallback } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
@@ -148,7 +148,8 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           <Button
             onClick={submitForm}
             color="primary"
-            disabled={!user || !formState.hasAgreedToTerms}
+            // can't submit until you've both logged in AND agreed to terms
+            disabled={!formState.hasAgreedToTerms}
           >
             Submit
           </Button>
