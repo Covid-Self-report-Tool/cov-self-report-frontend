@@ -64,6 +64,12 @@ const reducer = (
       return { ...state, location: action.payload };
     case 'SET_ADDRESS':
       return { ...state, address: action.payload };
+    case 'SET_BIRTH_DATE':
+      return {
+        ...state,
+        birthMonth: action.payload.birthMonth,
+        birthYear: action.payload.birthYear,
+      };
     case 'SET_TESTED':
       if (action.payload === false) {
         return { ...state, testedPositive: undefined, tested: action.payload };
@@ -129,7 +135,6 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
         getUserData(token)
           .then((resp: any) => {
             if (resp.status === 200 && resp.body) {
-              console.log(resp.body.data);
               dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
             }
           })
@@ -137,8 +142,6 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
             // handle error
           });
       });
-
-      console.log('you are logged in!');
     }
   }
 

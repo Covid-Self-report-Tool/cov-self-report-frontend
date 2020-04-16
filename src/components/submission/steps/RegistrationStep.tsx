@@ -66,8 +66,10 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                     <Checkbox
                       name="checkedB"
                       color="primary"
-                      value={formState.hasAgreedToTerms}
-                      onChange={() => dispatchForm({ type: 'TOGGLE_AGREED' })}
+                      checked={!!formState.hasAgreedToTerms}
+                      onChange={() => {
+                        dispatchForm({ type: 'TOGGLE_AGREED' });
+                      }}
                     />
                   }
                   label={

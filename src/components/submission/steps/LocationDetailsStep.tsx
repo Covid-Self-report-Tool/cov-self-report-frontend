@@ -7,6 +7,7 @@ import PlacesAutocomplete, {
 import { grey } from '@material-ui/core/colors';
 
 import { SymptomForm, Location, DispatchFormType } from 'types/submission';
+import 'date-fns';
 
 type LocationDetailsStepType = {
   formState: SymptomForm;

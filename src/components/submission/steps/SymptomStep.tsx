@@ -60,10 +60,6 @@ export const SymptomStep: FC<SymptomStepType> = ({
     return getSymptoms().length > 0;
   };
 
-  useEffect(() => {
-    console.log(formState);
-  }, [formState]);
-
   // this should not return an array of string
   const getSymptoms = () => {
     return Object.keys(formState.symptoms).filter(
