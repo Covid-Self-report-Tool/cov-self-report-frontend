@@ -41,6 +41,10 @@ export type SymptomFever = {
 export type SymptomForm = {
   symptoms: { [index in keyof typeof Symptoms]: SymptomFever };
   location: Location | null;
+  city: string | null;
+  state: string | null;
+  county: string | null;
+  country: string | null;
   address: string | undefined;
   email: string | null;
   birthMonth: number | null;
@@ -61,6 +65,13 @@ export type DoctorDiagnosis =
   | undefined;
 
 export type DispatchFormType = React.Dispatch<SubmissionFormAction>;
+
+export type AddressComponents = {
+  city: string | null;
+  state: string | null;
+  county: string | null;
+  country: string | null;
+};
 
 export type SubmissionFormAction =
   | { type: 'TOGGLE_SYMPTOM'; payload: Symptoms }
@@ -83,6 +94,10 @@ export type SubmissionFormAction =
   | { type: 'SET_DOCTOR_DIAGNOSIS'; payload: string }
   | { type: 'RESET_VALUE'; payload: keyof SymptomForm }
   | { type: 'SET_LOCATION'; payload: Location }
+  | {
+      type: 'SET_ADDRESS_COMPONENTS';
+      payload: AddressComponents;
+    }
   | { type: 'RESET_USER_DATA' }
   | {
       type: 'SET_BIRTH_DATE';

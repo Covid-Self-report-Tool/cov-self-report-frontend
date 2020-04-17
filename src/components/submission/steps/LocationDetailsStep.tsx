@@ -20,6 +20,36 @@ export const LocationDetailsStep: FC<LocationDetailsStepType> = ({
 }) => {
   const handleSelectAddress = (newAddress: string) => {
     geocodeByAddress(newAddress)
+      .then((results: any) => {
+        const addressComponents: {
+          city: string | null;
+          county: string | null;
+          state: string | null;
+          country: string | null;
+        } = {
+          city: null,
+          county: null,
+          state: null,
+          country: null,
+        };
+
+        results[0].address_components.forEach((component: any) => {
+          if (component.types.includes('locality')) {
+            addressComponents.city = component.long_name;
+          } else if (component.types.includes('administrative_area_level_1')) {
+            addressComponents.state = component.long_name;
+          } else if (component.types.includes('administrative_area_level_2')) {
+            addressComponents.county = component.long_name;
+          } else if (component.types.includes('country')) {
+            addressComponents.country = component.long_name;
+          }
+        });
+        dispatchForm({
+          type: 'SET_ADDRESS_COMPONENTS',
+          payload: addressComponents,
+        });
+        return results;
+      })
       .then((results: any) => getLatLng(results[0]))
       .then((latLng: Location) => {
         dispatchForm({ type: 'SET_ADDRESS', payload: newAddress });
