@@ -1,9 +1,16 @@
-import React, { createContext, useReducer, useState, FC } from 'react';
+import React, {
+  createContext,
+  useReducer,
+  useState,
+  FC,
+  useEffect,
+} from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from 'config/firebase';
 
 import { getUserData } from 'utils/api';
 import { SymptomForm, SubmissionFormAction } from 'types/submission';
+import { onAuthStateChange } from 'utils/firebase';
 
 export const initialUserState: SymptomForm = {
   symptoms: {
@@ -105,6 +112,10 @@ const reducer = (
         ...state,
         symptoms: initialUserState.symptoms,
       };
+    case 'RESET_USER_DATA':
+      return {
+        ...initialUserState,
+      };
     default:
       return state;
   }
@@ -127,23 +138,24 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
 
   const [user] = useAuthState(firebase.auth());
 
-  // when user logs in, fetch data from backend
-  if (user) {
-    if (authFlag) {
-      setAuthFlag(false);
-      user.getIdToken().then(token => {
-        getUserData(token)
-          .then((resp: any) => {
-            if (resp.status === 200 && resp.body) {
-              dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
-            }
-          })
-          .catch((resp: any) => {
-            // handle error
-          });
-      });
-    }
-  }
+  useEffect(() => {
+    onAuthStateChange(({ loggedIn }: { loggedIn: boolean }) => {
+      if (loggedIn && user && authFlag) {
+        setAuthFlag(false);
+        user.getIdToken().then(token => {
+          getUserData(token)
+            .then((resp: any) => {
+              if (resp.status === 200 && resp.body) {
+                dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
+              }
+            })
+            .catch((resp: any) => {
+              // handle error
+            });
+        });
+      }
+    });
+  }, [user, authFlag]);
 
   return (
     <UserContext.Provider value={{ state, dispatch }}>
