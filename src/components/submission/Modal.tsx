@@ -7,6 +7,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  CircularProgress,
 } from '@material-ui/core';
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
@@ -30,6 +31,7 @@ interface ModalTypes {
 export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
 
   const history = useHistory();
@@ -67,13 +69,16 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
 
   const submitForm = () => {
     if (user) {
+      setSubmitting(true);
       user.getIdToken(true).then(idToken => {
         postFormData(formState, idToken)
           .then((res: any) => {
+            setSubmitting(false);
             history.push('/');
             setSuccessConfOpen(true);
           })
           .catch((err: any) => {
+            setSubmitting(false);
             console.error(err); // TODO: set error flash message
             history.push('/');
           });
@@ -132,7 +137,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         <Button
           onClick={handleBack}
           color="primary"
-          disabled={activeStep === 0}
+          disabled={activeStep === 0 || submitting}
         >
           Back
         </Button>
@@ -149,9 +154,9 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
             onClick={submitForm}
             color="primary"
             // can't submit until you've both logged in AND agreed to terms
-            disabled={!formState.hasAgreedToTerms}
+            disabled={!formState.hasAgreedToTerms || submitting}
           >
-            Submit
+            {!submitting ? 'Submit' : <CircularProgress />}
           </Button>
         )}
       </DialogActions>
