@@ -11,10 +11,10 @@ import { makeStyles } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-// @ts-ignore
-import Choropleth from 'react-leaflet-choropleth';
 import { mapBoxApiKey as accessToken } from 'config';
 import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
+import { Polygons } from 'components';
+import { setSymbology } from 'utils/map';
 
 require('react-leaflet-markercluster/dist/styles.min.css');
 
@@ -95,6 +95,17 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   const styles = useStyles();
   const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
 
+  // TODO: idk, not put it here
+  const polySymb = {
+    label: 'Number of cases',
+    field: 'total_confirmed', // TODO: wire up dynamicness
+    type: 'quantile',
+    symbId: 'total_confirmed',
+    palette: ['#e2dee6', '#c2abdd', '#9d87b6', '#735a8f', '#3d2e4e'],
+    numClasses: 5,
+    // brewerScale: 'GnBu', // R.I.P ?? Couldn't get TS brewer types to work...
+  };
+
   return (
     <Map
       center={initMapCenter}
@@ -106,38 +117,12 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
       <MapboxTileLayer tilesetId="dark-v9" />
       <LayersControl position="bottomleft" collapsed={true}>
         <LayersControl.Overlay name="Confirmed" checked>
-          <Choropleth
-            data={{
-              type: 'FeatureCollection',
-              features: data,
-            }}
-            valueProperty={(feature: any) => {
-              if (
-                !feature.properties ||
-                !feature.properties.hasOwnProperty('total_confirmed')
-              ) {
-                return 0; // this means something went wrong on our end
-              }
-              return feature.properties.total_confirmed;
-            }}
-            scale={['hsl(184, 69%, 10%)', 'hsl(184, 69%, 60%)']}
-            steps={100}
-            onEachFeature={(feature: any, layer: any) =>
-              layer.bindPopup(
-                feature.properties.country_name
-                  ? `${feature.properties.country_name} Confirmed: ${feature.properties.total_confirmed}`
-                  : 'No Data'
-              )
-            }
-            style={{
-              fillColor: 'hsl(184, 69%, 10%)',
-              weight: 0.5,
-              opacity: 1,
-              color: 'hsl(0, 0%, 10%)',
-              fillOpacity: 0.75,
-            }}
-            mode="q"
-          />
+          <FeatureGroup>
+            <Polygons
+              // @ts-ignore
+              features={setSymbology(data, polySymb).features}
+            />
+          </FeatureGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay checked name="User-submitted">
           <FeatureGroup>
