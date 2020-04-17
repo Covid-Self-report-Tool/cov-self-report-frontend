@@ -17,6 +17,8 @@ export const initialState = {
   countries: [], // JHU countries data
   allSelfReportedPoints: [], // self-submitted points (our body.data.locations)
   symptomForm: {}, // stuff for pre-populating symptoms form
+  showSplash: false,
+  hasSeenSplash: false,
 };
 
 const reducer = (
@@ -49,6 +51,18 @@ const reducer = (
       return {
         ...state,
         allSelfReportedPoints: action.payload,
+      };
+    case 'SHOW_SPLASH':
+      if (action.payload === true) {
+        return {
+          ...state,
+          showSplash: action.payload,
+          hasSeenSplash: true,
+        };
+      }
+      return {
+        ...state,
+        showSplash: action.payload,
       };
     default:
       return state;
