@@ -18,10 +18,11 @@ import {
 } from 'react-share';
 
 const url = 'https://covidselfreport.org/';
-const title = 'Covid self-report true data tracker';
-const summary = 'Covid self-report true data tracker';
+const title = 'Are you experiencing symptoms of COVID-19?';
+const summary =
+  'Add your case and get counted for the COVID-19 public data project';
 const imgUrl =
-  'https://user-images.githubusercontent.com/4974087/79530714-5f5c7580-802d-11ea-8afa-d069ad5455a2.jpg';
+  'https://user-images.githubusercontent.com/4974087/795333a91-ecef9380-8034-11ea-87c0-d8c5354076ae.jpeg';
 
 const ShareButtonConfig = [
   <FacebookShareButton url={url} quote={title}>
