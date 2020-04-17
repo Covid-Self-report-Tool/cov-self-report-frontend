@@ -21,7 +21,7 @@ const url = 'https://covidselfreport.org/';
 const title = 'Covid self-report true data tracker';
 const summary = 'Covid self-report true data tracker';
 const imgUrl =
-  'https://lh3.googleusercontent.com/qZJnCD8tqmt5_MOJNVZ7NIDyUYfT1dcSWYhVUdk4TSH08uyA0KrhUrArzzc5zjrhDaTIVxifnXLhn3aiYoN7JqsNZYmE7wb6eFab4-gQmI2XfwxS0Pof6-WbVuie=w1274';
+  'https://user-images.githubusercontent.com/4974087/79530714-5f5c7580-802d-11ea-8afa-d069ad5455a2.jpg';
 
 const ShareButtonConfig = [
   <FacebookShareButton url={url} quote={title}>
