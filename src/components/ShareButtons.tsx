@@ -22,7 +22,7 @@ const title = 'Have you experienced symptoms of COVID-19?';
 const summary =
   'Add your case and get counted for the COVID-19 public data project.';
 const imgUrl =
-  'https://s3.console.aws.amazon.com/s3/buckets/self-tracker-tool-public/static-web-content/?region=us-east-1&tab=overview';
+  'https://self-tracker-tool-public.s3.amazonaws.com/static-web-content/c19-self-report-social-img-preview.jpg';
 const sourceAkaAppName = 'COVID-19 Self-reporting Tool';
 
 const ShareButtonConfig = [
