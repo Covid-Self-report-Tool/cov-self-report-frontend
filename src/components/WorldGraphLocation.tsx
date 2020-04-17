@@ -27,7 +27,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   theMapItself: {
     width: '100%',
     height: '100%',
@@ -36,8 +36,19 @@ const useStyles = makeStyles({
     bottom: 0,
     left: 0,
     right: 0,
+    // Leaflet garbage default control for now, but room for custom MUI later
+    '& .leaflet-control-layers': {
+      bottom: 50, // above Share for now
+      marginLeft: 8,
+    },
+    // No one cares about zoom controls on small touch devices
+    '& .leaflet-control-zoom': {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
+    },
   },
-});
+}));
 
 type MapboxType = {
   tilesetId: string;
@@ -93,7 +104,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
       zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
-      <LayersControl position="bottomright" collapsed={true}>
+      <LayersControl position="bottomleft" collapsed={true}>
         <LayersControl.Overlay name="Confirmed" checked>
           <Choropleth
             data={{
