@@ -16,3 +16,4 @@ export * from 'components/TickerCards';
 export * from 'components/UserPopoverMenu';
 export * from 'components/WorldGraphLocation';
 export * from 'components/SimpleModal';
+export * from 'components/SplashScreen';
