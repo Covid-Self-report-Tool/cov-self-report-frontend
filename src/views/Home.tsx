@@ -36,7 +36,7 @@ export const Home: FC = () => {
   return (
     <>
       <SplashScreen />
-      <Box position="absolute" bottom={10} left={10} zIndex={1}>
+      <Box position="absolute" bottom={20} left={8} zIndex={1}>
         <SharingPopoutMenu />
       </Box>
       <WorldGraphLocation

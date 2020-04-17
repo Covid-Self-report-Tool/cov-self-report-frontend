@@ -25,13 +25,13 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.common.white,
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: theme.spacing(1),
+    marginBottom: 4,
     overflow: 'auto',
     paddingBottom: theme.spacing(1),
     paddingTop: theme.spacing(2),
     position: 'relative',
-    width: 110,
     [theme.breakpoints.up('md')]: {
+      marginBottom: theme.spacing(1),
       width: 135,
     },
   },
@@ -50,11 +50,18 @@ const useStyles = makeStyles(theme => ({
   },
   tickerCardsWrap: {
     position: 'absolute',
-    right: theme.spacing(1),
-    top: 115, // past top bar (except on tweeners like iPhone landscape)
     zIndex: 400,
+    [theme.breakpoints.down('sm')]: {
+      bottom: 16, // above attribution
+      display: 'grid',
+      gridColumnGap: 8,
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      right: 8,
+      width: 250,
+    },
     [theme.breakpoints.up('md')]: {
       right: theme.spacing(2),
+      top: 115, // past top bar (except on tweeners like iPhone landscape)
     },
   },
   infoBtn: {
@@ -135,7 +142,7 @@ const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
 
   return (
-    <Grid item xs={12} className={classes.root}>
+    <Grid item className={classes.root}>
       <Paper className={classes.paper}>
         <Title>{props.text}</Title>
         <Typography component="p" variant="h4" className={classes.tickerVal}>
@@ -154,9 +161,9 @@ export const TickerCards: FC<CurrentTotalsTypes> = ({
   selfReported,
 }) => (
   <div className={useStyles().tickerCardsWrap}>
+    <NotifierCard text="Self-reported" number={selfReported} />
     <NotifierCard text="Recovered" number={recovered} />
     <NotifierCard text="Confirmed" number={confirmed} />
-    <NotifierCard text="Self-reported" number={selfReported} />
     <NotifierCard text="Deaths" number={deaths} />
   </div>
 );
