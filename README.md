@@ -20,7 +20,7 @@ npm start
 
 ### Deploys
 
-- [Production](https://covidselfreport.org/)
+- [Production](https://www.covidselfreport.org/)
 - [Non-CMU Amplify prod deploy](https://master.d3detajy1g4axn.amplifyapp.com/) (as of 4/15/20)
 - [Non-CMU Amplify all deploys](https://console.aws.amazon.com/amplify/home?region=us-east-1#/d3detajy1g4axn) (as of 4/15/20)
 
@@ -45,6 +45,7 @@ npm start
 ### Handy tools
 
 - [HTML to Markdown converter](https://markdowntohtml.com/) even puts `id` tags in, easy for linking to with `href` later...
+- [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/?q=https%3A%2F%2Fwww.covidselfreport.org%2F) is suuuuper handy for seeing why share previews aren't working.
 
 ## Data notes
 
