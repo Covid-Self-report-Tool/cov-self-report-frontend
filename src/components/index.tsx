@@ -18,3 +18,4 @@ export * from 'components/WorldGraphLocation';
 export * from 'components/SimpleModal';
 export * from 'components/SplashScreen';
 export * from 'components/TickerInfoPopover';
+export * from 'components/Polygons';
