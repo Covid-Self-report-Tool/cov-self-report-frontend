@@ -38,6 +38,10 @@ export const initialUserState: SymptomForm = {
   birthMonth: null,
   birthYear: null,
   address: undefined,
+  city: null,
+  state: null,
+  county: null,
+  country: null,
   phoneNumber: null,
   tested: undefined,
   numTimesTested: null,
@@ -105,6 +109,11 @@ const reducer = (
       return { ...state, hasAgreedToTerms: !state.hasAgreedToTerms };
     case 'SET_USER_DATA': // e.g. pre-populating symptoms form
       return {
+        ...action.payload,
+      };
+    case 'SET_ADDRESS_COMPONENTS':
+      return {
+        ...state,
         ...action.payload,
       };
     case 'RESET_SYMPTOMS':
