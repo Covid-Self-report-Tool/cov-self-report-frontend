@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { Link as RouteLink, useHistory } from 'react-router-dom';
+import React, { FC, useContext } from 'react';
+import { Link as RouteLink } from 'react-router-dom';
 import {
   createStyles,
   Theme,
@@ -16,6 +16,8 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+
+import { GlobalContext } from 'context';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -76,16 +78,15 @@ const DialogActions = withStyles((theme: Theme) => ({
 }))(MuiDialogActions);
 
 export const SplashScreen: FC = () => {
-  const [open, setOpen] = React.useState(true);
-  const history = useHistory();
   const classes = useStyles();
+  const { state, dispatch } = useContext(GlobalContext);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    dispatch({ type: 'SHOW_SPLASH', payload: true });
   };
 
   const handleClose = () => {
-    setOpen(false);
+    dispatch({ type: 'SHOW_SPLASH', payload: false });
   };
 
   return (
@@ -96,7 +97,7 @@ export const SplashScreen: FC = () => {
       <Dialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={open}
+        open={state.showSplash}
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           COVID-19 Self-reporting Tool

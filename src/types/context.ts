@@ -13,6 +13,7 @@ export type StoreActionType =
   | { type: 'SET_SELF_SUBMITTED_DATA'; payload: [] }
   | { type: 'SET_USER_DATA'; payload: {} }
   | { type: 'SET_SELF_SUBMITTED_TOTALS'; payload: number }
+  | { type: 'SHOW_SPLASH'; payload: boolean }
   | {
       type: 'SET_TOTALS';
       payload: CountriesFieldsForTotals;
@@ -32,6 +33,8 @@ export type InitialStateType = {
   countries: IGeoJson[]; // Pre-joined JHU countries data
   allSelfReportedPoints: []; // self-submitted points (our body.data.locations)
   userSelfReported: {}; // stuff for pre-populating symptoms form
+  showSplash: boolean;
+  hasSeenSplash: boolean;
 };
 
 // TODO: restore usage in global dispatch provider
