@@ -142,7 +142,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
               className={`${classes.title} MuiTypography-noWrap`}
             >
               <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
-                Covid-19 True Data Tracker
+                Covid-19 Self-reporting Tool
               </span>
               <Box className={classes.badge}>BETA</Box>
               <Typography
@@ -151,7 +151,8 @@ export const MainNavBar: FC<NavBarTypes> = ({
                 noWrap
                 className={classes.subTitle}
               >
-                A tool that tracks self-reported and confirmed infections
+                An open data tool that tracks self-reported and confirmed
+                infections
               </Typography>
             </Typography>
           </Box>
