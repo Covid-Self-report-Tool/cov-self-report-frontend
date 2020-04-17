@@ -7,15 +7,18 @@ import {
   WithStyles,
   makeStyles,
 } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button,
+  Dialog,
+  Grid,
+  Link,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
 
 import { GlobalContext } from 'context';
 
@@ -23,7 +26,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       margin: 0,
-      padding: `${theme.spacing(4)} ${theme.spacing(4)}`,
+      padding: `${theme.spacing(4)} ${theme.spacing(6)}`,
     },
     closeButton: {
       position: 'absolute',
@@ -35,7 +38,7 @@ const styles = (theme: Theme) =>
 
 const useStyles = makeStyles(theme => ({
   symptomsBtn: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(3),
   },
 }));
@@ -66,7 +69,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
 
 const DialogContent = withStyles((theme: Theme) => ({
   root: {
-    padding: theme.spacing(2),
+    padding: `${theme.spacing(2)} ${theme.spacing(4)}`,
   },
 }))(MuiDialogContent);
 
@@ -104,11 +107,13 @@ export const SplashScreen: FC = () => {
         </DialogTitle>
         <DialogContent dividers>
           <Typography align="center" gutterBottom variant="h4">
-            Are you experiencing COVID-19 symptoms, but cannot get tested?
+            Have you experienced symptoms of COVID-19 in the last four months?
           </Typography>
-          <Typography align="center" gutterBottom>
-            Help us understand COVID-19 by adding your case to the world map, so
-            that we can understand the true spread of the virus.
+          <Typography variant="body1" align="center" gutterBottom>
+            There is a shortage of COVID-19 test-kits around the world and many
+            of us with symptoms aren't being counted. Add your case to the
+            public map and get counted so that we can estimate the true spread
+            of the virus. Let's fight COVID-19 together.
           </Typography>
           <Grid container justify="center">
             <Button
@@ -123,10 +128,14 @@ export const SplashScreen: FC = () => {
               Add symptoms
             </Button>
           </Grid>
+          <Typography align="center" gutterBottom variant="subtitle2">
+            This is an open source public data project -{' '}
+            <Link href="/about#our-story">Read our story and learn more</Link>
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Go to map
+            View symptoms map
           </Button>
         </DialogActions>
       </Dialog>
