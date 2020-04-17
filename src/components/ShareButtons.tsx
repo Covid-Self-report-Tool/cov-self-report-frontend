@@ -17,24 +17,30 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 
-const url = 'https://covidselfreport.org/';
-const title = 'Are you experiencing symptoms of COVID-19?';
+const url = 'https://www.covidselfreport.org/';
+const title = 'Have you experienced symptoms of COVID-19?';
 const summary =
-  'Add your case and get counted for the COVID-19 public data project';
+  'Add your case and get counted for the COVID-19 public data project.';
 const imgUrl =
-  'https://user-images.githubusercontent.com/4974087/795333a91-ecef9380-8034-11ea-87c0-d8c5354076ae.jpeg';
+  'https://s3.console.aws.amazon.com/s3/buckets/self-tracker-tool-public/static-web-content/?region=us-east-1&tab=overview';
+const sourceAkaAppName = 'COVID-19 Self-reporting Tool';
 
 const ShareButtonConfig = [
-  <FacebookShareButton url={url} quote={title}>
+  <FacebookShareButton url={url} quote={summary}>
     <FacebookIcon size={32} round />
   </FacebookShareButton>,
-  <TwitterShareButton url={url} title={title}>
+  <TwitterShareButton url={url} title={`${title} ${summary}`}>
     <TwitterIcon size={32} round />
   </TwitterShareButton>,
   <WhatsappShareButton url={url} title={title}>
     <WhatsappIcon size={32} round />
   </WhatsappShareButton>,
-  <LinkedinShareButton url={url} title={title}>
+  <LinkedinShareButton
+    url={url}
+    title={title}
+    summary={summary}
+    source={sourceAkaAppName}
+  >
     <LinkedinIcon size={32} round />
   </LinkedinShareButton>,
   <PinterestShareButton url={url} title={title} media={imgUrl}>
