@@ -1,4 +1,6 @@
 import firebase from 'firebase/app';
+import { DispatchFormType } from 'types/submission';
+import { History } from 'history';
 
 export const signUp = async (
   email: string,
@@ -10,6 +12,17 @@ export const signUp = async (
     .app()
     .auth()
     .createUserWithEmailAndPassword(email, password);
+};
+
+export const logOut = async (history: History, dispatch: DispatchFormType) => {
+  await firebase
+    .app()
+    .auth()
+    .signOut()
+    .then(() => {
+      dispatch({ type: 'RESET_USER_DATA' });
+    });
+  history.push('/');
 };
 
 export const login = async (email: string, password: string) => {

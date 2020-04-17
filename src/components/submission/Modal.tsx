@@ -1,4 +1,4 @@
-import React, { useState, useContext, FC, useCallback } from 'react';
+import React, { useState, useContext, FC } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
