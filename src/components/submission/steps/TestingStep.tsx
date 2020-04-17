@@ -79,7 +79,7 @@ export const TestingStep: FC<TestingStepType> = ({
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
                 className={classes.datePicker}
-                views={['month', 'year']}
+                views={['year', 'month']}
                 value={getBirthMonthYear()}
                 onChange={handleBirthDate}
                 maxDate={new Date()}
