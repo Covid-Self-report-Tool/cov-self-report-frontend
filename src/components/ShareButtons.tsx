@@ -21,7 +21,7 @@ const url = 'https://covidselfreport.org/';
 const title = 'Covid self-report true data tracker';
 const summary = 'Covid self-report true data tracker';
 const imgUrl =
-  'https://lh3.googleusercontent.com/qZJnCD8tqmt5_MOJNVZ7NIDyUYfT1dcSWYhVUdk4TSH08uyA0KrhUrArzzc5zjrhDaTIVxifnXLhn3aiYoN7JqsNZYmE7wb6eFab4-gQmI2XfwxS0Pof6-WbVuie=w1274';
+  'https://lh3.googleusercontent.com/9BMpKIAhXZXDTQwoHX1Rea6tjdfP-5byc-QYt01zZMGrLtoZ8Ls8zZjcYc3MsQpng95PHC-XhPSWj_InCHppIimFFbWW8WHZMt-GN1xqMT9g5bgZ6imntenh9Rnt7MWKvuZUwwENZ7UyyHlN_eFb9nRZuS2rEjdPyu7M9q944KMK6WluKbIeAYetiGSnH18_zO94ZiKNAVBcqDSqHHSZa8L95205rHTQS89dZQMME4GedXGZcrr4cOstMsn4TAQBSmPbw55mu6kNJ_LwAVGpI8kWRILTyT6elsnHrqQYIgkzeSGW61FSZpkzcvYdXlLFr8EZ3JJb8wP5Br-x84MgayvT5VLs0n0M2nG6OGlfNffpS5TMq0-FRDC-2wxE79ht9HtsWOzwWvikKpZt1OWu6IBnadErnRUA0pzmQrQFqBGVMvYhUwi8cGCc9n3QxHkC8-WeQQ8_up9BMkdtDRZouIZw-EJ8RALIcA98Xn1uGdmyJU__JnkDmAZqezDHAnRNpqdGi3bLKxPK94k2J6Y7reGLTyKz1wlExEtnMpHaCsQcPsKuqSBxIG30rq7GMMfj7rfY1ea4vEPegI90ampJgowqevOIHsxjWFV4SKtNnwBs6_stSM9ukCi69jyjUXD3oDMGl3JLtU-ltim1ee-TM5npbs6wdtNKS8YpXRonnSWtzItf1WAMQSOK3eKc7-aSqngY=w1920-h978-ft';
 
 const ShareButtonConfig = [
   <FacebookShareButton url={url} quote={title}>
