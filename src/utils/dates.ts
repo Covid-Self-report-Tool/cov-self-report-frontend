@@ -1,8 +1,3 @@
-export const prettyDate = (original: string) => {
-  if (original === '') {
-    return 'N/A';
-  }
-
-  const date = new Date(original);
+export const prettyDate = (date: Date) => {
   return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 };

@@ -5,7 +5,6 @@ import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
 import { StoreActionType, InitialStateType } from 'types/context';
 import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
-import { prettyDate } from 'utils/dates';
 
 export const initialState = {
   currentTotals: {
@@ -20,7 +19,7 @@ export const initialState = {
   symptomForm: {}, // stuff for pre-populating symptoms form
   showSplash: false,
   hasSeenSplash: false,
-  lastCountriesUpdate: '', // human-friendly timestamp of first country in JHU
+  lastCountriesUpdate: null, // human-friendly timestamp of first country in JHU
 };
 
 const reducer = (
@@ -108,10 +107,12 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
 
     getCountryGeoJSONData()
       .then((geoJSON: GeoJSONData) => {
-        dispatch({
-          type: 'SET_LAST_COUNTRIES_UPDATE',
-          payload: prettyDate(geoJSON[0].properties.date || ''),
-        });
+        if (geoJSON[0].properties.date) {
+          dispatch({
+            type: 'SET_LAST_COUNTRIES_UPDATE',
+            payload: new Date(geoJSON[0].properties.date),
+          });
+        }
 
         dispatch({
           type: 'SET_COUNTRY_DATA',
