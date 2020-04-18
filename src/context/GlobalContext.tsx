@@ -1,4 +1,6 @@
 import React, { useEffect, useReducer, createContext, FC } from 'react';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
 
 // import { calculateTotals } from 'utils';
 import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
@@ -26,6 +28,11 @@ const reducer = (
   action: StoreActionType
 ): InitialStateType => {
   switch (action.type) {
+    case 'SET_LAST_UPDATED':
+      return {
+        ...state,
+        lastUpdated: action.payload,
+      };
     case 'SET_COUNTRY_DATA':
       return {
         ...state,
@@ -104,6 +111,12 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
         dispatch({
           type: 'SET_COUNTRY_DATA',
           payload: geoJSON,
+        });
+
+        dispatch({
+          type: 'SET_LAST_UPDATED',
+          // @ts-ignore
+          payload: geoJSON[0].properties.date || 'unavailable',
         });
 
         const totals = calculateTotals(geoJSON, {
