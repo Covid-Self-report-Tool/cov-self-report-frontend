@@ -10,7 +10,7 @@ import {
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
 import { SignupForm, LoginForm, TermsAndCondTrigger } from 'components';
-import { SymptomForm, DispatchFormType } from 'types/submission';
+import { SymptomForm, DispatchFormType } from 'context/types';
 
 type RegistrationStepType = {
   formState: SymptomForm;

@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { camelCaseToLabel } from 'utils/strings';
-import { SymptomForm, Symptoms, DispatchFormType } from 'types/submission';
+import { SymptomForm, Symptoms, DispatchFormType } from 'context/types';
 import { makeStyles } from '@material-ui/core/styles';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';

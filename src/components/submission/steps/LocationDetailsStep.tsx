@@ -6,7 +6,7 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import { grey } from '@material-ui/core/colors';
 
-import { SymptomForm, Location, DispatchFormType } from 'types/submission';
+import { SymptomForm, Location, DispatchFormType } from 'context/types';
 import 'date-fns';
 
 type LocationDetailsStepType = {
