@@ -1,63 +1,59 @@
 import React, { FC, useContext } from 'react';
-import {
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper,
-} from '@material-ui/core';
+import MUIDataTable from 'mui-datatables';
 
 import { GlobalContext } from 'components';
 import { IGeoJson } from 'types';
 
 export const CountryTable: FC = () => {
   const { state } = useContext(GlobalContext);
-  const data = state.countries;
+  const data = state.countries
+    .map((country: IGeoJson) => {
+      const {
+        country_name,
+        total_deaths,
+        total_confirmed,
+        total_recovered,
+        new_deaths,
+        new_confirmed,
+        new_recovered,
+      } = country.properties;
+
+      return [
+        country_name,
+        total_confirmed,
+        new_confirmed,
+        total_deaths,
+        new_deaths,
+        total_recovered,
+        new_recovered,
+      ];
+    })
+    // get rid of countries with no name
+    .filter((country: Array<any>) => !!country[0]);
+
+  const columns = [
+    { name: 'Country ' },
+    {
+      name: 'Confirmed',
+      options: {
+        sortDirection: 'desc' as 'asc' | 'desc' | 'none' | undefined,
+      },
+    },
+    { name: 'Confirmed (Day Change)' },
+    { name: 'Deaths ' },
+    { name: 'Deaths (Day Change) ' },
+    { name: 'Recovered ' },
+    { name: 'Recovered (Day Change) ' },
+  ];
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Country</TableCell>
-            <TableCell align="right">Confirmed</TableCell>
-            <TableCell align="right">Confirmed (Day Change)</TableCell>
-            <TableCell align="right">Deaths</TableCell>
-            <TableCell align="right">Deaths (Day Change)</TableCell>
-            <TableCell align="right">Recovered</TableCell>
-            <TableCell align="right">Recovered (Day Change)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((country: IGeoJson) => {
-            const {
-              total_deaths,
-              total_confirmed,
-              total_recovered,
-              confirmed_day_change,
-              dead_day_change,
-              recovered_day_change,
-              country_name,
-            } = country.properties;
-
-            return (
-              <TableRow key={country_name}>
-                <TableCell component="th" scope="row">
-                  {country_name}
-                </TableCell>
-                <TableCell align="right">{total_confirmed}</TableCell>
-                <TableCell align="right">{confirmed_day_change}</TableCell>
-                <TableCell align="right">{total_deaths}</TableCell>
-                <TableCell align="right">{dead_day_change}</TableCell>
-                <TableCell align="right">{total_recovered}</TableCell>
-                <TableCell align="right">{recovered_day_change}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <MUIDataTable
+      title="Country Data"
+      data={data}
+      columns={columns}
+      options={{
+        selectableRows: 'none',
+      }}
+    />
   );
 };

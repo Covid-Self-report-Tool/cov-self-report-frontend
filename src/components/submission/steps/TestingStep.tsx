@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { SymptomForm, DispatchFormType } from 'types/submission';
+import { SymptomForm, DispatchFormType } from 'context/types';
 import {
   FormControlLabel,
   DialogTitle,
