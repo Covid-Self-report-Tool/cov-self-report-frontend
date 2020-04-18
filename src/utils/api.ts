@@ -1,5 +1,5 @@
 import { BACKEND_URL } from 'config';
-import { SymptomForm } from 'types/submission';
+import { SymptomForm } from 'context/types';
 import { IGeoJson, CountryRow } from 'types';
 import { GeoJSONCollection } from 'types/api';
 

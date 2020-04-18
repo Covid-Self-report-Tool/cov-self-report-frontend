@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { DispatchFormType } from 'types/submission';
+import { DispatchFormType } from 'context/types';
 import { History } from 'history';
 
 export const signUp = async (

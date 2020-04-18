@@ -50,9 +50,9 @@ export type CountryRow = {
   total_confirmed: number;
   total_deaths: number;
   total_recovered: number;
-  confirmed_day_change?: number;
-  dead_day_change?: number;
-  recovered_day_change?: number;
+  new_confirmed: number;
+  new_deaths: number;
+  new_recovered: number;
   ISO_AW2?: number;
 };
 
@@ -61,34 +61,3 @@ export interface TickerInfoType {
   defText?: string;
   omitLastUpdated?: boolean; // e.g. don't need to show time for self-reported
 }
-
-// TODO: rm when fully migrated away from JHU API
-// export type GlobalType = {
-//   NewConfirmed: number;
-//   TotalConfirmed: number;
-//   NewDeaths: number;
-//   TotalDeaths: number;
-//   NewRecovered: number;
-//   TotalRecovered: number;
-// };
-
-// TODO: rm when fully migrated away from JHU API
-// export type JhuApiResponse = {
-//   body: {
-//     Global: GlobalType;
-//     Countries: [
-//       {
-//         Country: string;
-//         CountryCode: string;
-//         Slug: string;
-//         NewConfirmed: number;
-//         TotalConfirmed: number;
-//         NewDeaths: number;
-//         TotalDeaths: number;
-//         NewRecovered: number;
-//         TotalRecovered: number;
-//         Date: string;
-//       }
-//     ];
-//   };
-// };

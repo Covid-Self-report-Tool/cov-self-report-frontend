@@ -9,7 +9,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from 'config/firebase';
 
 import { getUserData } from 'utils/api';
-import { SymptomForm, SubmissionFormAction } from 'types/submission';
+import { SymptomForm, SubmissionFormAction } from 'context/types';
 import { onAuthStateChange } from 'utils/firebase';
 
 export const initialUserState: SymptomForm = {
