@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { TickerInfoType } from 'types';
 import { GlobalContext } from 'components';
+import { prettyDate } from 'utils/dates';
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -84,7 +85,10 @@ export const TickerInfoPopover: FC<TickerInfoType> = ({
           <ListItem divider>
             {!omitLastUpdated && (
               <Typography variant="caption" color="textSecondary">
-                LAST UPDATED: {state.lastCountriesUpdate}
+                LAST UPDATED:{' '}
+                {state.lastCountriesUpdate
+                  ? prettyDate(state.lastCountriesUpdate)
+                  : 'N/A'}
               </Typography>
             )}
           </ListItem>
