@@ -1,12 +1,11 @@
 import React, { useEffect, useReducer, createContext, FC } from 'react';
 import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 
-// import { calculateTotals } from 'utils';
 import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
 import { StoreActionType, InitialStateType } from 'types/context';
 import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
+import { prettyDate } from 'utils/dates';
 
 export const initialState = {
   currentTotals: {
@@ -21,6 +20,7 @@ export const initialState = {
   symptomForm: {}, // stuff for pre-populating symptoms form
   showSplash: false,
   hasSeenSplash: false,
+  lastCountriesUpdate: '', // human-friendly timestamp of first country in JHU
 };
 
 const reducer = (
@@ -28,10 +28,10 @@ const reducer = (
   action: StoreActionType
 ): InitialStateType => {
   switch (action.type) {
-    case 'SET_LAST_UPDATED':
+    case 'SET_LAST_COUNTRIES_UPDATE':
       return {
         ...state,
-        lastUpdated: action.payload,
+        lastCountriesUpdate: action.payload,
       };
     case 'SET_COUNTRY_DATA':
       return {
@@ -108,15 +108,19 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
 
     getCountryGeoJSONData()
       .then((geoJSON: GeoJSONData) => {
+        const lastCountriesUpdate = prettyDate(
+          // @ts-ignore
+          geoJSON[0].properties.date || ''
+        );
+
         dispatch({
           type: 'SET_COUNTRY_DATA',
           payload: geoJSON,
         });
 
         dispatch({
-          type: 'SET_LAST_UPDATED',
-          // @ts-ignore
-          payload: geoJSON[0].properties.date || 'unavailable',
+          type: 'SET_LAST_COUNTRIES_UPDATE',
+          payload: lastCountriesUpdate,
         });
 
         const totals = calculateTotals(geoJSON, {
