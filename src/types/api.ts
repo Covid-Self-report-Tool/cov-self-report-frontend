@@ -7,6 +7,8 @@ export type GeoJSONCollection = {
 
 export type GeoJSONData = {
   type: string;
-  properties: Object;
   geometry: Object;
+  properties: {
+    date?: string;
+  };
 }[];

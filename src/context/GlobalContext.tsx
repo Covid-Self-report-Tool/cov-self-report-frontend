@@ -108,19 +108,14 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
 
     getCountryGeoJSONData()
       .then((geoJSON: GeoJSONData) => {
-        const lastCountriesUpdate = prettyDate(
-          // @ts-ignore
-          geoJSON[0].properties.date || ''
-        );
+        dispatch({
+          type: 'SET_LAST_COUNTRIES_UPDATE',
+          payload: prettyDate(geoJSON[0].properties.date || ''),
+        });
 
         dispatch({
           type: 'SET_COUNTRY_DATA',
           payload: geoJSON,
-        });
-
-        dispatch({
-          type: 'SET_LAST_COUNTRIES_UPDATE',
-          payload: lastCountriesUpdate,
         });
 
         const totals = calculateTotals(geoJSON, {
