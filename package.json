@@ -22,6 +22,7 @@
     "firebase": "^7.14.0",
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
+    "mui-datatables": "^2.14.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -68,6 +69,7 @@
   "devDependencies": {
     "@types/firebase": "^3.2.1",
     "@types/geojson": "^7946.0.7",
+    "@types/mui-datatables": "^2.13.7",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "@types/react-leaflet": "^2.5.1",

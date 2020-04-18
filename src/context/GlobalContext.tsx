@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, createContext, FC } from 'react';
 import 'date-fns';
 
 import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
-import { StoreActionType, InitialStateType } from 'types/context';
+import { StoreActionType, InitialStateType } from 'context/types';
 import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
 
