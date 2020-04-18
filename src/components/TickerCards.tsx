@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import {
   ListSubheader,
@@ -16,6 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CurrentTotalsTypes } from 'types/context';
 import { prettyPrint } from 'utils';
 import Title from './Title';
+import { GlobalContext } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -90,7 +91,11 @@ function DefPopoverMenu({
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const classes = useStyles();
+  const { state } = useContext(GlobalContext);
 
+  // TODO: make this not fail when a date string isn't passed.
+  const lastUpdated = new Date(state.lastUpdated);
+  const prettyLastUpdated = `${lastUpdated.toLocaleDateString()} ${lastUpdated.toLocaleTimeString()}`;
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -126,7 +131,7 @@ function DefPopoverMenu({
           <ListItem className={classes.definitionText}>{defText}</ListItem>
           <ListItem divider>
             <Typography variant="caption" color="textSecondary">
-              LAST UPDATED: date/time if possible
+              LAST UPDATED: {prettyLastUpdated}
             </Typography>
           </ListItem>
           <ListItem component={RouteLink} to="/about" onClick={handleClose}>
