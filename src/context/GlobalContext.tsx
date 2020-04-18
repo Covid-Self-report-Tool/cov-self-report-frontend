@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, createContext, FC } from 'react';
+import 'date-fns';
 
-// import { calculateTotals } from 'utils';
 import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
 import { StoreActionType, InitialStateType } from 'types/context';
 import { GeoJSONData } from 'types/api';
@@ -19,6 +19,7 @@ export const initialState = {
   symptomForm: {}, // stuff for pre-populating symptoms form
   showSplash: false,
   hasSeenSplash: false,
+  lastCountriesUpdate: null, // human-friendly timestamp of first country in JHU
 };
 
 const reducer = (
@@ -26,6 +27,11 @@ const reducer = (
   action: StoreActionType
 ): InitialStateType => {
   switch (action.type) {
+    case 'SET_LAST_COUNTRIES_UPDATE':
+      return {
+        ...state,
+        lastCountriesUpdate: action.payload,
+      };
     case 'SET_COUNTRY_DATA':
       return {
         ...state,
@@ -101,6 +107,13 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
 
     getCountryGeoJSONData()
       .then((geoJSON: GeoJSONData) => {
+        if (geoJSON[0].properties.date) {
+          dispatch({
+            type: 'SET_LAST_COUNTRIES_UPDATE',
+            payload: new Date(geoJSON[0].properties.date),
+          });
+        }
+
         dispatch({
           type: 'SET_COUNTRY_DATA',
           payload: geoJSON,

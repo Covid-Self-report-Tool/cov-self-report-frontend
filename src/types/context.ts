@@ -9,6 +9,7 @@ export type CountriesFieldsForTotals = {
 };
 
 export type StoreActionType =
+  | { type: 'SET_LAST_COUNTRIES_UPDATE'; payload: Date }
   | { type: 'SET_COUNTRY_DATA'; payload: [] }
   | { type: 'SET_SELF_SUBMITTED_DATA'; payload: [] }
   | { type: 'SET_USER_DATA'; payload: {} }
@@ -35,6 +36,7 @@ export type InitialStateType = {
   userSelfReported: {}; // stuff for pre-populating symptoms form
   showSplash: boolean;
   hasSeenSplash: boolean;
+  lastCountriesUpdate: Date | null;
 };
 
 // TODO: restore usage in global dispatch provider

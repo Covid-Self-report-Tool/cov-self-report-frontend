@@ -17,7 +17,6 @@ export const Login = () => {
     <Grid container item xs={12} justify="center" className={classes.root}>
       <LoginForm
         onLogin={() => {
-          debugger;
           history.push('/');
         }}
       />
