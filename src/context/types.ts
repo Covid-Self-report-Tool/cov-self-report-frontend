@@ -28,6 +28,16 @@ export type CurrentTotalsTypes = {
   suspected?: number;
 };
 
+export type CountryData = {
+  total_confirmed: number;
+  total_deaths: number;
+  total_recovered: number;
+  new_confirmed: number;
+  new_deaths: number;
+  new_recovered: number;
+  date: Date;
+};
+
 // TOOD: get these from existing types
 export type InitialStateType = {
   currentTotals: CurrentTotalsTypes; // ticker card stats

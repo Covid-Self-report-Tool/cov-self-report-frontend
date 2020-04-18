@@ -3,10 +3,11 @@ import { Grid, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { TickerInfoType } from 'types';
-import { CurrentTotalsTypes } from 'types/context';
+import { CurrentTotalsTypes } from 'context/types';
 import { prettyPrint } from 'utils';
-import Title from './Title';
 import { TickerInfoPopover } from 'components';
+
+import Title from './Title';
 
 const useStyles = makeStyles(theme => ({
   root: {
