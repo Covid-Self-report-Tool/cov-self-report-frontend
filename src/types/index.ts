@@ -56,6 +56,12 @@ export type CountryRow = {
   ISO_AW2?: number;
 };
 
+export interface TickerInfoType {
+  heading?: string;
+  defText?: string;
+  omitLastUpdated?: boolean; // e.g. don't need to show time for self-reported
+}
+
 // TODO: rm when fully migrated away from JHU API
 // export type GlobalType = {
 //   NewConfirmed: number;
