@@ -51,20 +51,20 @@ export const indivMarkerIcon = L.divIcon({
 });
 
 interface SymbConfigTypes {
-  field: string;
-  type?: 'quantile' | 'unique';
-  palette: string[];
-  fillOpacity?: number;
-  numClasses: number; // 5, // assuming type !== unique
-  gradSymbol?: boolean;
+  field: string; // field to symbolize on
+  palette: string[]; // array of colors
   precision?: number; // round to nearest whole by default
+}
+
+interface PropertiesGeneric {
+  [Key: string]: any; // generic key since properties[field] is dynamic
 }
 
 export const setSymbology = (
   srcFeats: GenericGeojsonType[],
   config: SymbConfigTypes
 ) => {
-  // GTFO if nothing to work with (e.g. filter causes empty dataset)
+  // GTFO if nothing to work with
   if (!srcFeats.length) {
     return {
       features: [],
@@ -75,31 +75,21 @@ export const setSymbology = (
   const {
     field,
     palette,
-    fillOpacity = 0.9,
-    numClasses = 5, // assuming type !== unique
-    precision = 4, // round to nearest whole by default
+    precision = 0, // round to nearest whole by default
   } = config;
+  const arrValsForSymb = srcFeats
+    .filter(
+      ({ properties }: PropertiesGeneric) => properties[field] !== undefined
+    )
+    .map(({ properties, ok }: PropertiesGeneric) => properties[field]);
 
-  // @ts-ignore
-  const arrValsForSymb = srcFeats.map(({ properties }) => {
-    // @ts-ignore
-    if (properties[field] !== undefined) {
-      // @ts-ignore
-      return properties[field];
-    }
-
-    return 0;
-  });
   const serie = new GeoStats(arrValsForSymb);
-  console.log(arrValsForSymb.sort());
-  // Round to nearest whole
+  const min = Math.min(...arrValsForSymb); // likely 0, but just in case...
+  const max = Math.max(...arrValsForSymb);
+
+  serie.setClassManually([min, 500, 10000, 25000, 60000, max]);
   serie.setPrecision(precision);
-  // serie.getClassQuantile(numClasses);
-  serie.setClassManually([0, 500, 5000, 70000, 699148]);
-  // debugger;
-  // serie.setClassManually([0, 699148]);
-  const myPalette = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
-  serie.setColors(myPalette);
+  serie.setColors(palette);
 
   // TODO: restore legend
   // const { ranges } = serie;
@@ -111,22 +101,27 @@ export const setSymbology = (
   //   };
   // });
 
-  const features = srcFeats.map(feature => {
+  const features = srcFeats.map((feature: PropertiesGeneric) => {
+    // Default to gray if there is no data available
+    const gray = 'hsl(0, 0%, 89%)';
+    let color = gray;
+    let fillColor: any = gray;
     const { properties } = feature;
-    // @ts-ignore
-    const classValue = serie.getClass(properties[field]);
-    const color = myPalette[classValue];
-    // TODO: fix wtf
-    const fillColor = color ? chroma(color).darken(2) : 'gray';
+    let valueToUse = properties[field];
+
+    if (valueToUse !== undefined) {
+      const classValue = serie.getClass(valueToUse);
+      color = palette[classValue];
+      fillColor = chroma(color);
+    }
 
     return {
       ...feature,
       properties: {
         ...properties,
         style: {
-          color: color || 'green',
+          color: 'hsl(180, 2%, 70%)',
           fillColor,
-          fillOpacity,
         },
       },
     };

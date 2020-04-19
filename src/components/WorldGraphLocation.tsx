@@ -95,15 +95,19 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   const styles = useStyles();
   const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
 
-  // TODO: idk, not put it here
+  // TODO: move all this into context and make it dynamic
   const polySymb = {
+    // Good tool: https://learnui.design/tools/data-color-picker.html#single
+    palette: [
+      '#c0e3e7',
+      '#95c0c5',
+      '#6b9fa4',
+      '#407e84',
+      '#005f66', // darkest
+    ],
     label: 'Number of cases',
     field: 'total_confirmed', // TODO: wire up dynamicness
-    type: 'quantile',
     symbId: 'total_confirmed',
-    palette: ['#e2dee6', '#c2abdd', '#9d87b6', '#735a8f', '#3d2e4e'],
-    numClasses: 5,
-    // brewerScale: 'GnBu', // R.I.P ?? Couldn't get TS brewer types to work...
   };
 
   return (
