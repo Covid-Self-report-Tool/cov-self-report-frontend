@@ -10,6 +10,13 @@ export type IGeoJson = {
   bbox?: number[];
 };
 
+export interface GenericGeojsonType {
+  type: string;
+  geometry: IGeometry;
+  properties: {};
+  bbox?: number[];
+}
+
 export type UserContext = {
   userToken: string;
   hasSubmitted: boolean;
