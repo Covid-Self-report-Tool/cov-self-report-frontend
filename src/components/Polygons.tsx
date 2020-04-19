@@ -34,10 +34,10 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
         color = 'teal',
         fill = true,
         fillColor = 'teal',
-        fillOpacity = 0.9, // L default = 0.2
-        opacity = 0.9,
+        fillOpacity = 0.95, // L default = 0.2
+        opacity = 0.95,
         stroke = true,
-        weight = 1, // L default = 3
+        weight = 0.5, // L default = 3
         // dashArray,
         // dashOffset,
         // fillRule,

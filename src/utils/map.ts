@@ -81,12 +81,25 @@ export const setSymbology = (
   } = config;
 
   // @ts-ignore
-  const arrValsForSymb = srcFeats.map(({ properties }) => properties[field]);
+  const arrValsForSymb = srcFeats.map(({ properties }) => {
+    // @ts-ignore
+    if (properties[field] !== undefined) {
+      // @ts-ignore
+      return properties[field];
+    }
+
+    return 0;
+  });
   const serie = new GeoStats(arrValsForSymb);
+  console.log(arrValsForSymb.sort());
   // Round to nearest whole
   serie.setPrecision(precision);
-  serie.getClassQuantile(numClasses);
-  serie.setColors(palette);
+  // serie.getClassQuantile(numClasses);
+  serie.setClassManually([0, 500, 5000, 70000, 699148]);
+  // debugger;
+  // serie.setClassManually([0, 699148]);
+  const myPalette = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
+  serie.setColors(myPalette);
 
   // TODO: restore legend
   // const { ranges } = serie;
@@ -102,9 +115,9 @@ export const setSymbology = (
     const { properties } = feature;
     // @ts-ignore
     const classValue = serie.getClass(properties[field]);
-    const color = palette[classValue];
+    const color = myPalette[classValue];
     // TODO: fix wtf
-    const fillColor = color ? chroma(color).darken(2) : 'purple';
+    const fillColor = color ? chroma(color).darken(2) : 'gray';
 
     return {
       ...feature,
