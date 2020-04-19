@@ -22,15 +22,15 @@ export const createClusterCustomIcon = function(
     diameter = Math.floor(diameter);
   }
 
+  // TODO: make this more portable since nearly identical to indiv. icon style
   return L.divIcon({
     className: 'marker--override',
     html: `<div style="
       height: ${diameter}px;
       width: ${diameter}px;
-      background: orange;
-      border: 3px solid #ededed;
+      background-color: hsl(39, 100%, 50%);
+      border: 2px solid hsl(39, 100%, 40%);
       border-radius: 100%;
-      text-align: center;
     "></div>`,
     iconSize: L.point(diameter, diameter, true),
   });
