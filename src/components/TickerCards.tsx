@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Grid, Paper, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { TickerInfoType } from 'types';
@@ -60,13 +60,14 @@ interface TickerCard extends TickerInfoType {
 
 const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
+  const { heading, number } = props;
 
   return (
     <Grid item className={classes.root}>
       <Paper className={classes.paper}>
-        <Title>{props.heading}</Title>
+        <Title>{heading}</Title>
         <Typography component="p" variant="h4" className={classes.tickerVal}>
-          {prettyPrint(props.number)}
+          {number ? prettyPrint(number) : <CircularProgress size={30} />}
         </Typography>
         <TickerInfoPopover {...props} />
       </Paper>
