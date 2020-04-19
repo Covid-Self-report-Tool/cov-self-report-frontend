@@ -2,15 +2,58 @@ import React, { FC } from 'react';
 import { GeoJSON as NonReactGeoJSON } from 'leaflet';
 import { Popup, Polygon } from 'react-leaflet';
 
-import { IGeoJson } from 'types';
+import { CountryRow, IGeometry } from 'types';
+
+interface PolygonProperties extends CountryRow {
+  style: {
+    color: string;
+    fillColor: string;
+    fill: boolean;
+    fillOpacity: number; // L default = 0.2
+    opacity: number; // line opacity
+    stroke: boolean; // line color
+    weight: number; // L default = 3
+  };
+}
+
+interface PolygonFeature {
+  properties: PolygonProperties;
+  geometry: IGeometry;
+}
 
 interface PolygonsTypes {
-  features: IGeoJson[];
+  features: PolygonFeature[];
 }
+
+const PolygonPopup: FC<CountryRow> = props => (
+  <Popup>
+    <h2>{props.country_name}</h2>
+    <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
+      <li>
+        <b>Total deaths:</b> {props.total_deaths}
+      </li>
+      <li>
+        <b>Total confirmed:</b> {props.total_confirmed}
+      </li>
+      <li>
+        <b>Total recovered:</b> {props.total_recovered}
+      </li>
+      <li>
+        <b>Confirmed day change:</b> {props.new_confirmed}
+      </li>
+      <li>
+        <b>Dead day change:</b> {props.new_deaths}
+      </li>
+      <li>
+        <b>Recovered day change:</b> {props.new_recovered}
+      </li>
+    </ul>
+  </Popup>
+);
 
 export const Polygons: FC<PolygonsTypes> = ({ features }) => (
   <>
-    {features.map(({ geometry, properties }: IGeoJson) => {
+    {features.map(({ geometry, properties }: PolygonFeature) => {
       // Had to do this since some sources have both Poly and Multipoly geom.
       // See source code for how it's used: https://bit.ly/2PizL8i
       const levelsDeep = geometry.type === 'Polygon' ? 1 : 2;
@@ -26,7 +69,6 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
         opacity = 1, // line opacity
         stroke = true, // line color
         weight = 1, // L default = 3
-        // @ts-ignore
       } = properties.style || {};
 
       return (
@@ -43,29 +85,7 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
             weight,
           }}
         >
-          <Popup>
-            <h2>{properties.country_name}</h2>
-            <ul style={{ paddingLeft: 10, margin: 0, listStyleType: 'none' }}>
-              <li>
-                <b>total_deaths:</b> {properties.total_deaths}
-              </li>
-              <li>
-                <b>total_confirmed:</b> {properties.total_confirmed}
-              </li>
-              <li>
-                <b>total_recovered:</b> {properties.total_recovered}
-              </li>
-              <li>
-                <b>confirmed_day_change:</b> {properties.new_confirmed}
-              </li>
-              <li>
-                <b>dead_day_change:</b> {properties.new_deaths}
-              </li>
-              <li>
-                <b>recovered_day_change:</b> {properties.new_recovered}
-              </li>
-            </ul>
-          </Popup>
+          <PolygonPopup {...properties} />
         </Polygon>
       );
     })}

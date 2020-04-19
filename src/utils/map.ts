@@ -57,7 +57,9 @@ interface SymbConfigTypes {
 }
 
 interface PropertiesGeneric {
-  [Key: string]: any; // generic key since properties[field] is dynamic
+  properties: {
+    [key: string]: number; // generic key since properties[field] is dynamic
+  };
 }
 
 export const setSymbology = (
@@ -72,16 +74,13 @@ export const setSymbology = (
     };
   }
 
-  const {
-    field,
-    palette,
-    precision = 0, // round to nearest whole by default
-  } = config;
+  // Round to nearest whole by default
+  const { precision = 0, field, palette } = config;
   const arrValsForSymb = srcFeats
     .filter(
       ({ properties }: PropertiesGeneric) => properties[field] !== undefined
     )
-    .map(({ properties, ok }: PropertiesGeneric) => properties[field]);
+    .map(({ properties }: PropertiesGeneric) => properties[field]);
 
   const serie = new GeoStats(arrValsForSymb);
   const min = Math.min(...arrValsForSymb); // likely 0, but just in case...
@@ -105,7 +104,7 @@ export const setSymbology = (
     // Default to gray if there is no data available
     const gray = 'hsl(0, 0%, 89%)';
     let color = gray;
-    let fillColor: any = gray;
+    let fillColor: string | chroma.Color = gray;
     const { properties } = feature;
     let valueToUse = properties[field];
 
