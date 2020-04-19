@@ -36,6 +36,7 @@ npm start
 - [JHU GitHub data](https://github.com/CSSEGISandData/COVID-19) (CSVs)
 - [JHU Postman API docs](https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest) (currently scraping the `/summary` route and adding to DynamoDB daily, the joining on the fly to countries geojson client-side)
 - [MD data source of About content](https://drive.google.com/file/d/1wk_GNkU-hJZBeh6ic5ZkOoJgVAsrMsSO/view?usp=sharing) (Guneeta is editing, Jason converts to HTML and commits it)
+- [JHU Counties](https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer) with geojson + totals, or non-geojson time series. May be useful for scraping.
 
 ### Fixes
 
