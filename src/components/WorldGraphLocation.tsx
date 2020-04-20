@@ -99,11 +99,14 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   const polySymb = {
     // Good tool: https://learnui.design/tools/data-color-picker.html#single
     palette: [
-      '#c0e3e7',
-      '#95c0c5',
-      '#6b9fa4',
-      '#407e84',
-      '#005f66', // darkest
+      '#b0edf3',
+      '#99d7de',
+      '#83c2c9',
+      '#6caeb4',
+      '#5699a0',
+      '#3f858c',
+      '#267279',
+      '#005f66',
     ],
     label: 'Number of cases',
     field: 'total_confirmed', // TODO: wire up dynamicness
