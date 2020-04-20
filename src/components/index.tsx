@@ -19,3 +19,4 @@ export * from 'components/SimpleModal';
 export * from 'components/SplashScreen';
 export * from 'components/TickerInfoPopover';
 export * from 'components/Polygons';
+export * from 'components/AboutSection';
