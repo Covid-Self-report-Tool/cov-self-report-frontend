@@ -86,7 +86,7 @@ export const setSymbology = (
   const min = Math.min(...arrValsForSymb); // likely 0, but just in case...
   const max = Math.max(...arrValsForSymb);
 
-  serie.setClassManually([min, 500, 2500, 12500, 62500, 312500, 1562500, max]);
+  serie.setClassManually([min, 100, 500, 2500, 12500, 62500, 312500, max]);
   serie.setPrecision(precision);
   serie.setColors(palette);
 
