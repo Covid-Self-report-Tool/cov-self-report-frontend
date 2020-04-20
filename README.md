@@ -37,6 +37,7 @@ npm start
 - [JHU Postman API docs](https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest) (currently scraping the `/summary` route and adding to DynamoDB daily, the joining on the fly to countries geojson client-side)
 - [MD data source of About content](https://drive.google.com/file/d/1wk_GNkU-hJZBeh6ic5ZkOoJgVAsrMsSO/view?usp=sharing) (Guneeta is editing, Jason converts to HTML and commits it)
 - [JHU Counties](https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer) with geojson + totals, or non-geojson time series. May be useful for scraping.
+- [ArcGIS County COVID-19 data](https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer) with both spatial and time-series data. In case we need an easy way to scrape time-series.
 
 ### Fixes
 
@@ -47,6 +48,9 @@ npm start
 
 - [HTML to Markdown converter](https://markdowntohtml.com/) even puts `id` tags in, easy for linking to with `href` later...
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/?q=https%3A%2F%2Fwww.covidselfreport.org%2F) is suuuuper handy for seeing why share previews aren't working.
+- [Mapshaper](https://mapshaper.org/) for simplifying/optimizing spatial data in a web GUI.
+- [DynamoDB Geo](https://github.com/rh389/dynamodb-geo.js) later if we want to do spatial queries in Dynamo.
+- [HTML Cleaner](https://html-cleaner.com/) works pretty well for converting Gdocs or Word into HTML sans all the cruft. Need to play w/the "Cleaning options" a bit though.
 
 ## Data notes
 
