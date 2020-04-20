@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link, Popover } from '@material-ui/core';
 
+import { AboutSection } from 'components';
+
 const useStyles = makeStyles((theme: Theme) => ({
   popover: {
     padding: theme.spacing(1),
@@ -49,9 +51,7 @@ export const TermsAndCondTrigger: FC = () => {
           horizontal: 'left',
         }}
       >
-        {/* <Box onClick={handleClose} padding={1}> */}
-        <TermsAndCond />
-        {/* </Box> */}
+        <AboutSection filename="terms-and-conditions.html" />
       </Popover>
     </>
   );
