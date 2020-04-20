@@ -21,12 +21,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+interface AboutType {
+  filename: string;
+}
+
 // Convenient to isolate this in order to simplify updates from source copy
 // TODO: move into component instead of view
-
-const AboutIntro: FC = () => {
+const AboutSection: FC<AboutType> = ({ filename }) => {
   const [html, setHtml] = useState<string>('');
-  const filename = 'about-page-full.html';
 
   useEffect(() => {
     getAboutPage(filename)
@@ -52,9 +54,13 @@ export const About: FC = () => {
 
   return (
     <Container className={`simpler-font ${classes.root}`}>
-      <AboutIntro />
-      {/* TODO: break it out */}
-      {/* <TermsAndCond /> */}
+      <AboutSection filename="table-of-contents.html" />
+      <AboutSection filename="intro.html" />
+      <AboutSection filename="data-resources.html" />
+      <AboutSection filename="team-information.html" />
+      <AboutSection filename="our-partners.html" />
+      <AboutSection filename="feedback.html" />
+      <AboutSection filename="terms-and-conditions.html" />
     </Container>
   );
 };
