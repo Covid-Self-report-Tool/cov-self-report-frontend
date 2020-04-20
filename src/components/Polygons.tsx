@@ -27,27 +27,36 @@ interface PolygonsTypes {
 
 const PolygonPopup: FC<CountryRow> = props => (
   <Popup>
-    <h2>{props.country_name}</h2>
-    <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
-      <li>
-        <b>Total deaths:</b> {props.total_deaths}
-      </li>
-      <li>
-        <b>Total confirmed:</b> {props.total_confirmed}
-      </li>
-      <li>
-        <b>Total recovered:</b> {props.total_recovered}
-      </li>
-      <li>
-        <b>Confirmed day change:</b> {props.new_confirmed}
-      </li>
-      <li>
-        <b>Dead day change:</b> {props.new_deaths}
-      </li>
-      <li>
-        <b>Recovered day change:</b> {props.new_recovered}
-      </li>
-    </ul>
+    {props.country_name ? (
+      <>
+        <h2>{props.country_name}</h2>
+        <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
+          <li>
+            <b>Total confirmed:</b> {props.total_confirmed}
+          </li>
+          <li>
+            <b>Total deaths:</b> {props.total_deaths}
+          </li>
+          <li>
+            <b>Total recovered:</b> {props.total_recovered}
+          </li>
+          <li>
+            <b>Confirmed day change:</b> {props.new_confirmed}
+          </li>
+          <li>
+            <b>Dead day change:</b> {props.new_deaths}
+          </li>
+          <li>
+            <b>Recovered day change:</b> {props.new_recovered}
+          </li>
+        </ul>
+      </>
+    ) : (
+      <>
+        <h2>{props.NAME_LONG}</h2>
+        <b>No Data Available</b>
+      </>
+    )}
   </Popup>
 );
 
