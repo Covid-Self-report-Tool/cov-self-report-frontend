@@ -60,7 +60,9 @@ export type CountryRow = {
   new_confirmed: number;
   new_deaths: number;
   new_recovered: number;
-  ISO_AW2?: number;
+  // goejson properties from polygons
+  ISO_A2?: number;
+  NAME_LONG?: string;
 };
 
 export interface TickerInfoType {

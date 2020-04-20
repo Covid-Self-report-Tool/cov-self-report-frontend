@@ -42,7 +42,7 @@ export const getCountryGeoJSONData = async () => {
 
   const geoJSONCountries = geoJSON['features'].map((feature: IGeoJson) => {
     if (
-      'ISO_A2' in feature['properties'] &&
+      feature['properties']['ISO_A2'] !== undefined &&
       feature['properties']['ISO_A2'] in propertiesHash
     ) {
       return {
