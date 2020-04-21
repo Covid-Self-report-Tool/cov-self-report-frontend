@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TickerInfoType } from 'types';
 import { CurrentTotalsTypes } from 'context/types';
 import { prettyPrint } from 'utils';
-import { TickerInfoPopover } from 'components';
+import { TickerInfoPopover, LegendSymbol } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,6 +28,8 @@ const useStyles = makeStyles(theme => ({
   heading: {
     lineHeight: 1,
     fontSize: '1rem',
+    display: 'flex',
+    justifyContent: 'center',
   },
   tickerVal: {
     color: theme.palette.common.black,
@@ -58,13 +60,15 @@ interface TickerCard extends TickerInfoType {
   heading: string;
   number: number;
   omitLastUpdated?: boolean;
+  symbolClassName?: string;
 }
 
 interface CardTitleTypes {
   heading: string;
+  symbolClassName?: string;
 }
 
-const CardTitle: FC<CardTitleTypes> = ({ heading }) => {
+const CardTitle: FC<CardTitleTypes> = ({ heading, symbolClassName }) => {
   const classes = useStyles();
 
   return (
@@ -74,6 +78,7 @@ const CardTitle: FC<CardTitleTypes> = ({ heading }) => {
       color="primary"
       className={classes.heading}
     >
+      <LegendSymbol symbolClassName={symbolClassName} />
       {heading}
     </Typography>
   );
@@ -81,12 +86,12 @@ const CardTitle: FC<CardTitleTypes> = ({ heading }) => {
 
 const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
-  const { heading, number } = props;
+  const { heading, number, symbolClassName } = props;
 
   return (
     <Grid item className={classes.root}>
       <Paper className={classes.paper}>
-        <CardTitle heading={heading} />
+        <CardTitle heading={heading} symbolClassName={symbolClassName} />
         <Typography component="p" variant="h4" className={classes.tickerVal}>
           {number ? prettyPrint(number) : <CircularProgress size={30} />}
         </Typography>
@@ -108,6 +113,7 @@ export const TickerCards: FC<CurrentTotalsTypes> = ({
       heading="Self-reported"
       number={selfReported}
       omitLastUpdated
+      symbolClassName="self-reported-symbol"
     />
     <NotifierCard
       defText="Number of individuals clinically confirmed positive for COVID-19 with a test, who have recovered from symptoms"

@@ -2,6 +2,7 @@ export * from 'components/AboutSection';
 export * from 'components/BackToTopBtn';
 export * from 'components/CountryTable';
 export * from 'components/Dashboard';
+export * from 'components/LegendSymbol';
 export * from 'components/ListItems';
 export * from 'components/LoginForm';
 export * from 'components/MainNavBar';
