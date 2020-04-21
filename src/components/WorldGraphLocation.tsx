@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { mapBoxApiKey as accessToken } from 'config';
+import { MAPBOX_API_KEY as accessToken } from 'config';
 import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
 import { Polygons } from 'components';
 import { setSymbology } from 'utils/map';
