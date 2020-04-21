@@ -18,6 +18,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+// TODO: maybe fancy upgrade later:
+// https://github.com/mui-org/material-ui-pickers/releases/tag/v4.0.0-alpha.5
 
 const useStyles = makeStyles({
   margin: {
