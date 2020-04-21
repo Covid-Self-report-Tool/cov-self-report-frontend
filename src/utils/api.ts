@@ -1,4 +1,4 @@
-import { BACKEND_URL } from 'config';
+import { BACKEND_URL, AWS_S3_BASE_URL } from 'config';
 import { SymptomForm } from 'context/types';
 import { IGeoJson, CountryRow } from 'types';
 import { GeoJSONCollection } from 'types/api';
@@ -65,11 +65,7 @@ export const getSubmittedCases = async () =>
 // export const getStateData
 // export const getCountyData
 
-export const getAboutPage = async (filename: string) => {
-  const AWS_S3_BASE_URL =
-    'https://self-tracker-tool-public.s3.amazonaws.com/static-web-content';
-
-  return await superagent
+export const getHtmlFromS3 = async (filename: string) =>
+  await superagent
     .get(`${AWS_S3_BASE_URL}/${filename}`)
     .set('Accept', 'text/html; charset=utf8');
-};
