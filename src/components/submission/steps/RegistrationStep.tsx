@@ -87,6 +87,15 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                   }
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Link
+                  href="/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View privacy policy
+                </Link>
+              </Grid>
             </DialogContent>
           </div>
         )}
