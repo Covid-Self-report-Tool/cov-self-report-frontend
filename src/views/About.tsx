@@ -31,6 +31,7 @@ export const About: FC = () => {
       <AboutSection filename="our-partners.html" />
       <AboutSection filename="feedback.html" />
       <AboutSection filename="terms-and-conditions.html" />
+      <AboutSection filename="privacy-policy.html" />
     </Container>
   );
 };

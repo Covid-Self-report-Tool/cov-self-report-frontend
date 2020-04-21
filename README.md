@@ -17,6 +17,7 @@ npm start
 - [AWS CodeCommit repos](https://us-east-1.console.aws.amazon.com/codesuite/codecommit/repositories)
 - [AWS Amplify console](https://console.aws.amazon.com/amplify/home?region=us-east-1)
 - [Jira project](https://cmu-covid.atlassian.net/browse/COV)
+- [Google Drive website content](https://drive.google.com/drive/folders/1kq-gfqbckws7O9_Md7QhycbsYTxnxZnH) (includes instructions for updating About HTML files)
 
 ### Deploys
 
