@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect } from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Link } from '@material-ui/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from 'config/firebase';
 
@@ -36,8 +36,13 @@ export const Home: FC = () => {
   return (
     <>
       <SplashScreen />
-      <Box position="absolute" bottom={20} left={8} zIndex={1}>
+      <Box position="absolute" bottom={26} left={8} zIndex={1}>
         <SharingPopoutMenu />
+      </Box>
+      <Box position="absolute" bottom={0} left={8} zIndex={1}>
+        <Link href="/terms-of-service" color="textSecondary">
+          Terms of service
+        </Link>
       </Box>
       <WorldGraphLocation
         data={state.countries}

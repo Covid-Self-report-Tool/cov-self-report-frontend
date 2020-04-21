@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { mapBoxApiKey as accessToken } from 'config';
+import { MAPBOX_API_KEY as accessToken } from 'config';
 import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
 import { Polygons } from 'components';
 import { setSymbology } from 'utils/map';
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     right: 0,
     // Leaflet garbage default control for now, but room for custom MUI later
     '& .leaflet-control-layers': {
-      bottom: 50, // above Share for now
+      bottom: 54, // above Share for now
       marginLeft: 8,
     },
     // No one cares about zoom controls on small touch devices
