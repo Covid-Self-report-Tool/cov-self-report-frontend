@@ -11,7 +11,6 @@ export * from 'components/SharingPopoutMenu';
 export * from 'components/SignupForm';
 export * from 'components/Snackbar';
 export * from 'components/SuccessConfModal';
-export * from 'components/TermsAndCond';
 export * from 'components/TickerCards';
 export * from 'components/UserPopoverMenu';
 export * from 'components/WorldGraphLocation';

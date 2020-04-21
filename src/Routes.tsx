@@ -15,7 +15,16 @@ import {
 } from 'components';
 import { UserProvider } from 'context';
 import { Modal } from 'components/submission';
-import { Home, Signup, About, Models, Logout, List } from 'views';
+import {
+  Home,
+  Signup,
+  About,
+  Models,
+  Logout,
+  List,
+  TermsOfService,
+  PrivacyPolicy,
+} from 'views';
 import firebase from 'config/firebase';
 import { VerifyEmail } from 'views/VerifyEmail';
 import { theme, GlobalCss } from 'theme';
@@ -39,6 +48,12 @@ const Routes: FC = () => {
                 </Route>
                 <Route path="/about">
                   <About />
+                </Route>
+                <Route path="/privacy-policy">
+                  <PrivacyPolicy />
+                </Route>
+                <Route path="/terms-of-service">
+                  <TermsOfService />
                 </Route>
                 <Route path="/list">
                   <List />
