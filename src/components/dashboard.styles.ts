@@ -7,7 +7,7 @@ export const useStyles = makeStyles(theme => ({
     // Self-reported markers in map, legend, etc. Includes clusters. Note that
     // the parent needs a height/width since this child is 100%.
     '& .self-reported-symbol': {
-      backgroundColor: SELF_REPORTED_STYLES.backgroundColor,
+      backgroundColor: SELF_REPORTED_STYLES.fillColor,
       borderWidth: SELF_REPORTED_STYLES.borderWidth,
       borderStyle: 'solid',
       borderColor: SELF_REPORTED_STYLES.borderColor,

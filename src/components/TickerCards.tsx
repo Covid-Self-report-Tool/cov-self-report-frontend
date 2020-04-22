@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TickerInfoType, RequiredKeys } from 'types';
 import { CurrentTotalsTypes } from 'context/types';
 import { prettyPrint } from 'utils';
-import { TickerInfoPopover, LegendSymbol } from 'components';
+import { TickerInfoPopover, LegendSymbol, LegendSymbolTypes } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,34 +60,29 @@ type RequiredTotalsKeys = RequiredKeys<CurrentTotalsTypes>;
 
 type TickerTitleTypes = {
   heading: string;
-  symbolClassName?: string;
+  renderLegendSymbol: () => React.ReactNode;
 };
 
-type TickerCard = {
+type TickerCard = Omit<TickerTitleTypes, 'renderLegendSymbol'> & {
   // Some render() props so as not to pass down data through so many levels, and
   // add more options than just `children` would.
   renderTitle: () => React.ReactNode;
   renderPopover: () => React.ReactNode;
   number?: number;
-} & TickerTitleTypes;
-
-type TickerConfigTypes = {
-  [key in RequiredTotalsKeys & string]: TickerTitleTypes &
-    TickerInfoType & {
-      omitLastUpdated?: boolean;
-      symbol: {
-        borderColor: string;
-        fillColor: string;
-      };
-    };
 };
 
-type TickerTypes = {
+type TickerConfigTypes = {
+  [key in RequiredTotalsKeys & string]: TickerInfoType & {
+    symbol: LegendSymbolTypes;
+  };
+};
+
+type TickerCardTypes = {
   data: CurrentTotalsTypes; // individual totals combined into single object
   config: TickerConfigTypes;
 };
 
-const CardTitle: FC<TickerTitleTypes> = ({ heading, symbolClassName }) => {
+const CardTitle: FC<TickerTitleTypes> = ({ heading, renderLegendSymbol }) => {
   const classes = useStyles();
 
   return (
@@ -97,7 +92,7 @@ const CardTitle: FC<TickerTitleTypes> = ({ heading, symbolClassName }) => {
       color="primary"
       className={classes.heading}
     >
-      <LegendSymbol symbolClassName={symbolClassName} />
+      {renderLegendSymbol()}
       {heading}
     </Typography>
   );
@@ -120,13 +115,13 @@ const NotifierCard: FC<TickerCard> = props => {
   );
 };
 
-export const TickerCards: FC<TickerTypes> = ({ data, config }) => {
+export const TickerCards: FC<TickerCardTypes> = ({ data, config }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.tickerCardsWrap}>
       {Object.keys(config).map((key: string) => {
-        const { heading, defText, symbolClassName, omitLastUpdated } = config[
+        const { heading, defText, symbol, omitLastUpdated } = config[
           key as RequiredTotalsKeys
         ];
 
@@ -136,7 +131,10 @@ export const TickerCards: FC<TickerTypes> = ({ data, config }) => {
             heading={heading}
             number={data[key as RequiredTotalsKeys]}
             renderTitle={() => (
-              <CardTitle heading={heading} symbolClassName={symbolClassName} />
+              <CardTitle
+                heading={heading}
+                renderLegendSymbol={() => <LegendSymbol {...symbol} />}
+              />
             )}
             renderPopover={() => (
               <TickerInfoPopover
