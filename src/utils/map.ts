@@ -10,6 +10,7 @@ const indivMarkerDiameter = SELF_REPORTED_STYLES.size;
 interface SymbConfigTypes {
   field: string; // field to symbolize on
   palette: string[]; // array of colors
+  ranges: number[]; // manually-set class breaks
   precision?: number; // round to nearest whole by default
 }
 
@@ -60,7 +61,7 @@ export const setSymbology = (
   }
 
   // Round to nearest whole by default
-  const { precision = 0, field, palette } = config;
+  const { precision = 0, field, palette, ranges } = config;
   const arrValsForSymb = srcFeats
     .filter(
       ({ properties }: PropertiesGeneric) => properties[field] !== undefined
@@ -71,7 +72,7 @@ export const setSymbology = (
   const min = Math.min(...arrValsForSymb); // likely 0, but just in case...
   const max = Math.max(...arrValsForSymb);
 
-  serie.setClassManually([min, 100, 500, 2500, 12500, 62500, 312500, max]);
+  serie.setClassManually([min, ...ranges, max]);
   serie.setPrecision(precision);
   serie.setColors(palette);
 

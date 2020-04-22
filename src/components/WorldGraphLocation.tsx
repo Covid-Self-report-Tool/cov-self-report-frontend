@@ -10,7 +10,11 @@ import { makeStyles } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+
+import { RequiredKeys } from 'types';
+import { CountriesFieldsForTotals } from 'context/types';
 import { MAPBOX_API_KEY as accessToken } from 'config';
+import { countriesSymbology } from 'config/map';
 import {
   createClusterCustomIcon,
   indivMarkerIcon,
@@ -67,6 +71,8 @@ type SubmittedType = {
   data: PositionType[];
 };
 
+type ActiveCountrySymbKey = RequiredKeys<CountriesFieldsForTotals>;
+
 const SubmittedCases: FC<SubmittedType> = ({ data }) => (
   <MarkerClusterGroup
     showCoverageOnHover={false}
@@ -94,27 +100,15 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   data,
   submittedFeats,
 }) => {
-  const { state, dispatch } = useContext(GlobalContext);
+  const { state } = useContext(GlobalContext);
+  const activeCountrySymbKey: keyof CountriesFieldsForTotals =
+    state.activeCountrySymbKey;
   const styles = useStyles();
-  const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
+  // TODO: preserve on route change, and use bounds instead
+  const initMapCenter = { lat: 30, lng: -10 };
 
-  // TODO: move all this into context and make it dynamic
-  const polySymb = {
-    // Good tool: https://learnui.design/tools/data-color-picker.html#single
-    palette: [
-      '#b0edf3',
-      '#99d7de',
-      '#83c2c9',
-      '#6caeb4',
-      '#5699a0',
-      '#3f858c',
-      '#267279',
-      '#005f66',
-    ],
-    label: 'Number of cases',
-    field: 'total_confirmed', // TODO: wire up dynamicness
-    symbId: 'total_confirmed',
-  };
+  // @ts-ignore // TODO: remove this shame
+  const polySymb = countriesSymbology[activeCountrySymbKey];
 
   return (
     <Map
@@ -129,7 +123,10 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
         <FeatureGroup>
           <Polygons
             // @ts-ignore
-            features={setSymbology(data, polySymb).features}
+            features={
+              setSymbology(data, { ...polySymb, field: activeCountrySymbKey })
+                .features
+            }
           />
         </FeatureGroup>
       )}

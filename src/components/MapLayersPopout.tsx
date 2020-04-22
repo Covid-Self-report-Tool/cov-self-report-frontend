@@ -71,16 +71,20 @@ const LayerSymbolRadios: FC = () => {
       onChange={handleChange}
     >
       <FormControlLabel
-        value="confirmed"
+        value="total_confirmed"
         control={<Radio />}
         label="Confirmed"
       />
       <FormControlLabel
-        value="recovered"
+        value="total_recovered"
         control={<Radio />}
         label="Recovered"
       />
-      <FormControlLabel value="deaths" control={<Radio />} label="Deaths" />
+      <FormControlLabel
+        value="total_deaths"
+        control={<Radio />}
+        label="Deaths"
+      />
     </RadioGroup>
   );
 };

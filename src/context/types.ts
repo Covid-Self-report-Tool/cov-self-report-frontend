@@ -8,12 +8,10 @@ export type CountriesFieldsForTotals = {
   total_recovered: number;
 };
 
-export type CountriesSymbologyKeys = 'confirmed' | 'recovered' | 'deaths';
-
 export type StoreActionType =
   | {
       type: 'SET_COUNTRY_SYMBOLOGY';
-      payload: CountriesSymbologyKeys;
+      payload: keyof CountriesFieldsForTotals;
     }
   | { type: 'TOGGLE_LAYER_VISIBILITY'; payload: keyof LayerVisibilityTypes }
   | { type: 'SET_LAST_COUNTRIES_UPDATE'; payload: Date }
@@ -52,7 +50,7 @@ export type LayerVisibilityTypes = {
 
 // TOOD: get these from existing types
 export type InitialStateType = {
-  activeCountrySymbKey: CountriesSymbologyKeys;
+  activeCountrySymbKey: keyof CountriesFieldsForTotals;
   layerVisibility: LayerVisibilityTypes;
   currentTotals: CurrentTotalsTypes; // ticker card stats
   countries: IGeoJson[]; // Pre-joined JHU countries data
