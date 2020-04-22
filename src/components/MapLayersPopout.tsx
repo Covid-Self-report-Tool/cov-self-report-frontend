@@ -8,7 +8,9 @@ import {
   FormLabel,
   FormGroup,
   FormControlLabel,
-  Checkbox,
+  Switch,
+  Radio,
+  RadioGroup,
 } from '@material-ui/core';
 import { LayersRounded } from '@material-ui/icons';
 
@@ -31,7 +33,6 @@ type LayerToggleType = {
 
 const LayerToggle: FC<LayerToggleType> = ({ name, layerId }) => {
   const { state, dispatch } = useContext(GlobalContext);
-  const classes = useStyles();
   const checked = state.layerVisibility[layerId];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +43,8 @@ const LayerToggle: FC<LayerToggleType> = ({ name, layerId }) => {
     <FormControlLabel
       label={name}
       control={
-        <Checkbox
-          className={classes.checkbox}
-          size="small"
+        <Switch
+          inputProps={{ 'aria-label': 'secondary checkbox' }}
           checked={checked}
           onChange={handleChange}
           name={layerId}
@@ -54,15 +54,52 @@ const LayerToggle: FC<LayerToggleType> = ({ name, layerId }) => {
   );
 };
 
+const LayerSymbolRadios: FC = () => {
+  const { state, dispatch } = useContext(GlobalContext);
+  const classes = useStyles();
+  const currentValue = state.activeCountrySymbKey;
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: 'SET_COUNTRY_SYMBOLOGY', payload: event.target.value });
+  };
+
+  return (
+    <RadioGroup
+      aria-label="gender"
+      name="show-countries-by"
+      value={currentValue}
+      onChange={handleChange}
+    >
+      <FormControlLabel
+        value="confirmed"
+        control={<Radio />}
+        label="Confirmed"
+      />
+      <FormControlLabel
+        value="recovered"
+        control={<Radio />}
+        label="Recovered"
+      />
+      <FormControlLabel value="deaths" control={<Radio />} label="Deaths" />
+    </RadioGroup>
+  );
+};
+
 const LayersMenu: FC = () => {
   return (
-    <FormControl component="fieldset">
-      <FormLabel component="legend">Map layers</FormLabel>
-      <FormGroup>
-        <LayerToggle layerId="selfReported" name="Self-reported" />
-        <LayerToggle layerId="countries" name="Countries" />
-      </FormGroup>
-    </FormControl>
+    <>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Map layers</FormLabel>
+        <FormGroup>
+          <LayerToggle layerId="selfReported" name="Self-reported" />
+          <LayerToggle layerId="countries" name="Countries" />
+        </FormGroup>
+      </FormControl>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Show countries by</FormLabel>
+        <LayerSymbolRadios />
+      </FormControl>
+    </>
   );
 };
 
