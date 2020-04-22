@@ -7,6 +7,7 @@ import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
 
 export const initialState = {
+  activeCountrySymbKey: 'confirmed',
   layerVisibility: {
     selfReported: true,
     countries: true,
@@ -31,6 +32,11 @@ const reducer = (
   action: StoreActionType
 ): InitialStateType => {
   switch (action.type) {
+    case 'SET_COUNTRY_SYMBOLOGY':
+      return {
+        ...state,
+        activeCountrySymbKey: action.payload,
+      };
     case 'TOGGLE_LAYER_VISIBILITY':
       return {
         ...state,
