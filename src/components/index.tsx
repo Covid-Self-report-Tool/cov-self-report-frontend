@@ -6,6 +6,7 @@ export * from 'components/LegendSymbol';
 export * from 'components/ListItems';
 export * from 'components/LoginForm';
 export * from 'components/MainNavBar';
+export * from 'components/MapLayersPopout';
 export * from 'components/MobileOffCanvasNav';
 export * from 'components/Polygons';
 export * from 'components/ShareButtons';
