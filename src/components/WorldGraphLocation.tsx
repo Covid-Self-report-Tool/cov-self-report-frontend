@@ -5,6 +5,7 @@ import {
   Marker,
   FeatureGroup,
   ZoomControl,
+  Popup,
 } from 'react-leaflet';
 import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
@@ -59,7 +60,7 @@ type MapboxType = {
   tilesetId: string;
 };
 
-type PositionType = [number, number];
+type PositionType = { lat: number; lng: number };
 
 type WorldGraphProps = {
   data: any[]; // TODO: type this
@@ -78,7 +79,17 @@ const SubmittedCases: FC<SubmittedType> = ({ data }) => (
     maxClusterRadius={60}
   >
     {data.map((position, i) => (
-      <Marker key={i} position={position} icon={indivMarkerIcon} />
+      <Marker
+        key={i}
+        position={[position.lat, position.lng]}
+        icon={indivMarkerIcon}
+      >
+        <Popup maxWidth={200}>
+          <h2>Self-reported location</h2>
+          {`Latitude: ${position.lat}`},<br />
+          {`Longitude: ${position.lng}`}
+        </Popup>
+      </Marker>
     ))}
   </MarkerClusterGroup>
 );
