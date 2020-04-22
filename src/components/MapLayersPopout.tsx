@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {
   Fab,
@@ -12,31 +12,44 @@ import {
 } from '@material-ui/core';
 import { LayersRounded } from '@material-ui/icons';
 
+import { LayerVisibilityTypes } from 'context/types';
+import { GlobalContext } from 'components';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: 'flex',
+    checkbox: {
+      paddingBottom: 6,
+      paddingTop: 6,
     },
   })
 );
 
 type LayerToggleType = {
   name: string;
+  layerId: keyof LayerVisibilityTypes;
 };
 
-const LayerToggle: FC<LayerToggleType> = ({ name }) => {
-  const [checked, setChecked] = React.useState(true);
+const LayerToggle: FC<LayerToggleType> = ({ name, layerId }) => {
+  const { state, dispatch } = useContext(GlobalContext);
+  const classes = useStyles();
+  const checked = state.layerVisibility[layerId];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(!checked);
+    dispatch({ type: 'TOGGLE_LAYER_VISIBILITY', payload: layerId });
   };
 
   return (
     <FormControlLabel
-      control={
-        <Checkbox checked={checked} onChange={handleChange} name={name} />
-      }
       label={name}
+      control={
+        <Checkbox
+          className={classes.checkbox}
+          size="small"
+          checked={checked}
+          onChange={handleChange}
+          name={layerId}
+        />
+      }
     />
   );
 };
@@ -46,8 +59,8 @@ const LayersMenu: FC = () => {
     <FormControl component="fieldset">
       <FormLabel component="legend">Map layers</FormLabel>
       <FormGroup>
-        <LayerToggle name="Self-reported" />
-        <LayerToggle name="Countries" />
+        <LayerToggle layerId="selfReported" name="Self-reported" />
+        <LayerToggle layerId="countries" name="Countries" />
       </FormGroup>
     </FormControl>
   );
@@ -86,7 +99,7 @@ export const MapLayersPopout: FC = () => {
           horizontal: 'left',
         }}
       >
-        <Box onClick={handleClose} padding={2}>
+        <Box padding={2}>
           <LayersMenu />
         </Box>
       </Popover>

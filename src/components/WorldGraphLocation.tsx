@@ -1,9 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import {
   Map,
   TileLayer,
   Marker,
-  LayersControl,
   FeatureGroup,
   ZoomControl,
 } from 'react-leaflet';
@@ -17,7 +16,7 @@ import {
   indivMarkerIcon,
   setSymbology,
 } from 'utils/map';
-import { Polygons } from 'components';
+import { Polygons, GlobalContext } from 'components';
 
 require('react-leaflet-markercluster/dist/styles.min.css');
 
@@ -95,6 +94,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   data,
   submittedFeats,
 }) => {
+  const { state, dispatch } = useContext(GlobalContext);
   const styles = useStyles();
   const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
 
@@ -125,21 +125,19 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
       zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
-      <LayersControl position="bottomleft" collapsed={true}>
-        <LayersControl.Overlay name="Confirmed" checked>
-          <FeatureGroup>
-            <Polygons
-              // @ts-ignore
-              features={setSymbology(data, polySymb).features}
-            />
-          </FeatureGroup>
-        </LayersControl.Overlay>
-        <LayersControl.Overlay checked name="User-submitted">
-          <FeatureGroup>
-            <SubmittedCases data={submittedFeats} />
-          </FeatureGroup>
-        </LayersControl.Overlay>
-      </LayersControl>
+      {state.layerVisibility.countries && (
+        <FeatureGroup>
+          <Polygons
+            // @ts-ignore
+            features={setSymbology(data, polySymb).features}
+          />
+        </FeatureGroup>
+      )}
+      {state.layerVisibility.selfReported && (
+        <FeatureGroup>
+          <SubmittedCases data={submittedFeats} />
+        </FeatureGroup>
+      )}
       <ZoomControl position="bottomright" />
     </Map>
   );
