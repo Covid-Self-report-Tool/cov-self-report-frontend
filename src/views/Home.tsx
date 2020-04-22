@@ -1,7 +1,9 @@
 import React, { FC, useContext, useEffect } from 'react';
 import { Box, Link } from '@material-ui/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
 import firebase from 'config/firebase';
+import { tickersConfig } from 'config/map';
 
 import {
   WorldGraphLocation,
@@ -49,10 +51,13 @@ export const Home: FC = () => {
         submittedFeats={state.allSelfReportedPoints}
       />
       <TickerCards
-        confirmed={total_confirmed}
-        deaths={total_deaths}
-        recovered={total_recovered}
-        selfReported={selfReported}
+        config={tickersConfig}
+        data={{
+          confirmed: total_confirmed,
+          deaths: total_deaths,
+          recovered: total_recovered,
+          selfReported: selfReported,
+        }}
       />
     </>
   );

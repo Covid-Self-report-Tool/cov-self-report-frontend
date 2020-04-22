@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Grid, Paper, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { TickerInfoType } from 'types';
+import { TickerInfoType, RequiredKeys } from 'types';
 import { CurrentTotalsTypes } from 'context/types';
 import { prettyPrint } from 'utils';
 import { TickerInfoPopover, LegendSymbol } from 'components';
@@ -56,19 +56,38 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface TickerCard extends TickerInfoType {
-  heading: string;
-  number: number;
-  omitLastUpdated?: boolean;
-  symbolClassName?: string;
-}
+type RequiredTotalsKeys = RequiredKeys<CurrentTotalsTypes>;
 
-interface CardTitleTypes {
+type TickerTitleTypes = {
   heading: string;
   symbolClassName?: string;
-}
+};
 
-const CardTitle: FC<CardTitleTypes> = ({ heading, symbolClassName }) => {
+type TickerCard = {
+  // Some render() props so as not to pass down data through so many levels, and
+  // add more options than just `children` would.
+  renderTitle: () => React.ReactNode;
+  renderPopover: () => React.ReactNode;
+  number?: number;
+} & TickerTitleTypes;
+
+type TickerConfigTypes = {
+  [key in RequiredTotalsKeys & string]: TickerTitleTypes &
+    TickerInfoType & {
+      omitLastUpdated?: boolean;
+      symbol: {
+        borderColor: string;
+        fillColor: string;
+      };
+    };
+};
+
+type TickerTypes = {
+  data: CurrentTotalsTypes; // individual totals combined into single object
+  config: TickerConfigTypes;
+};
+
+const CardTitle: FC<TickerTitleTypes> = ({ heading, symbolClassName }) => {
   const classes = useStyles();
 
   return (
@@ -86,49 +105,49 @@ const CardTitle: FC<CardTitleTypes> = ({ heading, symbolClassName }) => {
 
 const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
-  const { heading, number, symbolClassName } = props;
+  const { number, renderTitle, renderPopover } = props;
 
   return (
     <Grid item className={classes.root}>
       <Paper className={classes.paper}>
-        <CardTitle heading={heading} symbolClassName={symbolClassName} />
+        {renderTitle()}
         <Typography component="p" variant="h4" className={classes.tickerVal}>
           {number ? prettyPrint(number) : <CircularProgress size={30} />}
         </Typography>
-        <TickerInfoPopover {...props} />
+        {renderPopover()}
       </Paper>
     </Grid>
   );
 };
 
-export const TickerCards: FC<CurrentTotalsTypes> = ({
-  confirmed,
-  deaths,
-  recovered,
-  selfReported,
-}) => (
-  <div className={useStyles().tickerCardsWrap}>
-    <NotifierCard
-      defText="Number of individuals who have reported their data on this site"
-      heading="Self-reported"
-      number={selfReported}
-      omitLastUpdated
-      symbolClassName="self-reported-symbol"
-    />
-    <NotifierCard
-      defText="Number of individuals clinically confirmed positive for COVID-19 with a test, who have recovered from symptoms"
-      heading="Recovered"
-      number={recovered}
-    />
-    <NotifierCard
-      defText="Number of individuals clinically confirmed positive for COVID-19 with a test"
-      heading="Confirmed"
-      number={confirmed}
-    />
-    <NotifierCard
-      defText="Number of individuals clinically confirmed positive for COVID-19 with a test, who have died from complications related to illness caused by COVID-19"
-      heading="Deaths"
-      number={deaths}
-    />
-  </div>
-);
+export const TickerCards: FC<TickerTypes> = ({ data, config }) => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.tickerCardsWrap}>
+      {Object.keys(config).map((key: string) => {
+        const { heading, defText, symbolClassName, omitLastUpdated } = config[
+          key as RequiredTotalsKeys
+        ];
+
+        return (
+          <NotifierCard
+            key={key}
+            heading={heading}
+            number={data[key as RequiredTotalsKeys]}
+            renderTitle={() => (
+              <CardTitle heading={heading} symbolClassName={symbolClassName} />
+            )}
+            renderPopover={() => (
+              <TickerInfoPopover
+                heading={heading}
+                defText={defText}
+                omitLastUpdated={omitLastUpdated}
+              />
+            )}
+          />
+        );
+      })}
+    </div>
+  );
+};
