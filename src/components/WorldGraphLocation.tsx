@@ -6,7 +6,7 @@ import {
   FeatureGroup,
   ZoomControl,
 } from 'react-leaflet';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -101,8 +101,10 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   const activeCountrySymbKey: keyof CountriesFieldsForTotals =
     state.activeCountrySymbKey;
   const styles = useStyles();
+  const theme = useTheme();
+  const bigGuy = useMediaQuery(theme.breakpoints.up('sm'));
   // TODO: preserve on route change, and use bounds instead
-  const initMapCenter = { lat: 30, lng: -10 };
+  const initMapCenter = bigGuy ? { lat: 34, lng: -5 } : { lat: 10, lng: -90 };
 
   // @ts-ignore // TODO: remove this shame
   const polySymb = countriesSymbology[activeCountrySymbKey];
@@ -110,7 +112,7 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   return (
     <Map
       center={initMapCenter}
-      zoom={3}
+      zoom={bigGuy ? 3 : 2}
       className={styles.theMapItself}
       minZoom={2}
       zoomControl={false}
