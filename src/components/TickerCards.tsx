@@ -1,11 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Grid, Paper, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { TickerInfoType, RequiredKeys } from 'types';
 import { CurrentTotalsTypes } from 'context/types';
 import { prettyPrint } from 'utils';
-import { TickerInfoPopover, LegendSymbol, LegendSymbolTypes } from 'components';
+import {
+  TickerInfoPopover,
+  LegendSymbol,
+  LegendSymbolTypes,
+  GlobalContext,
+} from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {

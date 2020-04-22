@@ -1,5 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Box } from '@material-ui/core';
+
+import { CountriesFieldsForTotals } from 'context/types';
+import { GlobalContext } from 'components';
 
 export type LegendSymbolTypes = {
   fillColor: string;
@@ -7,6 +10,8 @@ export type LegendSymbolTypes = {
   isCircular?: boolean; // default to square
   size?: string | number;
   borderWidth?: number;
+  alwaysShow?: boolean;
+  globalStateKey?: string; // super gross, fragile
 };
 
 export const LegendSymbol: FC<LegendSymbolTypes> = ({
@@ -15,13 +20,21 @@ export const LegendSymbol: FC<LegendSymbolTypes> = ({
   isCircular = false,
   size = '0.8em',
   borderWidth = 1,
+  alwaysShow,
+  globalStateKey,
 }) => {
+  const { state } = useContext(GlobalContext);
+
   return (
     <Box
       width={size}
       height={size}
+      display={
+        alwaysShow || state.activeCountrySymbKey === globalStateKey
+          ? 'flex'
+          : 'none'
+      }
       marginRight="4px"
-      display="flex"
       alignItems="center"
     >
       <Box
