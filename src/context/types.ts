@@ -9,6 +9,7 @@ export type CountriesFieldsForTotals = {
 };
 
 export type StoreActionType =
+  | { type: 'TOGGLE_LAYER_VISIBILITY'; payload: keyof LayerVisibilityTypes }
   | { type: 'SET_LAST_COUNTRIES_UPDATE'; payload: Date }
   | { type: 'SET_COUNTRY_DATA'; payload: [] }
   | { type: 'SET_SELF_SUBMITTED_DATA'; payload: [] }
@@ -38,8 +39,14 @@ export type CountryData = {
   date: Date;
 };
 
+export type LayerVisibilityTypes = {
+  selfReported: boolean;
+  countries: boolean;
+};
+
 // TOOD: get these from existing types
 export type InitialStateType = {
+  layerVisibility: LayerVisibilityTypes;
   currentTotals: CurrentTotalsTypes; // ticker card stats
   countries: IGeoJson[]; // Pre-joined JHU countries data
   allSelfReportedPoints: []; // self-submitted points (our body.data.locations)
