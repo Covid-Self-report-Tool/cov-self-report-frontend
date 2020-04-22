@@ -7,7 +7,7 @@ import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
 
 export const initialState = {
-  activeCountrySymbKey: 'confirmed',
+  activeCountrySymbKey: 'total_confirmed',
   layerVisibility: {
     selfReported: true,
     countries: true,
