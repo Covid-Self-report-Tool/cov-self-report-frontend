@@ -1,18 +1,20 @@
 import React, { FC } from 'react';
 import { Box } from '@material-ui/core';
 
-interface LegendSymbolTypes {
-  fillColor?: string;
+export type LegendSymbolTypes = {
+  fillColor: string;
   borderColor?: string;
-  symbolClassName?: string;
+  isCircular?: boolean; // default to square
   size?: string | number;
-}
+  borderWidth?: number;
+};
 
 export const LegendSymbol: FC<LegendSymbolTypes> = ({
   fillColor,
-  borderColor,
+  borderColor = 'hsl(0, 0%, 89%)',
+  isCircular = false,
   size = '0.8em',
-  symbolClassName,
+  borderWidth = 1,
 }) => {
   return (
     <Box
@@ -23,9 +25,12 @@ export const LegendSymbol: FC<LegendSymbolTypes> = ({
       alignItems="center"
     >
       <Box
-        className={symbolClassName}
+        border={borderWidth}
+        borderRadius={isCircular && '100%'}
+        height="100%"
+        width="100%"
         bgcolor={fillColor}
-        borderColor={borderColor || fillColor}
+        borderColor={borderColor}
       />
     </Box>
   );
