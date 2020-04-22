@@ -57,6 +57,7 @@ export const tickersConfig = {
     heading: 'Self-reported',
     omitLastUpdated: true,
     symbol: {
+      alwaysShow: true,
       borderWidth: SELF_REPORTED_STYLES.borderWidth,
       borderColor: SELF_REPORTED_STYLES.borderColor,
       fillColor: SELF_REPORTED_STYLES.fillColor,
@@ -68,6 +69,7 @@ export const tickersConfig = {
       'Number of individuals clinically confirmed positive for COVID-19 with a test, who have recovered from symptoms',
     heading: 'Recovered',
     symbol: {
+      globalStateKey: 'total_recovered',
       fillColor: '#41ab5d',
     },
   },
@@ -76,6 +78,7 @@ export const tickersConfig = {
       'Number of individuals clinically confirmed positive for COVID-19 with a test',
     heading: 'Confirmed',
     symbol: {
+      globalStateKey: 'total_confirmed',
       fillColor: '#5699a0',
     },
   },
@@ -84,6 +87,7 @@ export const tickersConfig = {
       'Number of individuals clinically confirmed positive for COVID-19 with a test, who have died from complications related to illness caused by COVID-19',
     heading: 'Deaths',
     symbol: {
+      globalStateKey: 'total_deaths',
       fillColor: '#ef3b2c',
     },
   },

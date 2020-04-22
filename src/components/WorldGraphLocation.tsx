@@ -11,7 +11,6 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-import { RequiredKeys } from 'types';
 import { CountriesFieldsForTotals } from 'context/types';
 import { MAPBOX_API_KEY as accessToken } from 'config';
 import { countriesSymbology } from 'config/map';
@@ -70,8 +69,6 @@ type WorldGraphProps = {
 type SubmittedType = {
   data: PositionType[];
 };
-
-type ActiveCountrySymbKey = RequiredKeys<CountriesFieldsForTotals>;
 
 const SubmittedCases: FC<SubmittedType> = ({ data }) => (
   <MarkerClusterGroup
