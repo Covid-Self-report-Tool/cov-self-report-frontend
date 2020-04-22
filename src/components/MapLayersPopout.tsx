@@ -124,11 +124,11 @@ export const MapLayersPopout: FC = () => {
       <Fab
         size="small"
         aria-label="map layers"
-        color="secondary"
+        color="primary"
         aria-describedby="long-menu"
         onClick={handleClick}
       >
-        <LayersRounded />
+        <LayersRounded htmlColor="white" />
       </Fab>
       <Popover
         id="long-menu"
