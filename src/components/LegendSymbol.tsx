@@ -1,7 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { Box } from '@material-ui/core';
 
-import { CountriesFieldsForTotals } from 'context/types';
 import { GlobalContext } from 'components';
 
 export type LegendSymbolTypes = {
