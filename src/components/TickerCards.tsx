@@ -2,12 +2,10 @@ import React, { FC } from 'react';
 import { Grid, Paper, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { TickerInfoType } from 'types';
+import { TickerInfoType, RequiredKeys } from 'types';
 import { CurrentTotalsTypes } from 'context/types';
 import { prettyPrint } from 'utils';
-import { TickerInfoPopover } from 'components';
-
-import Title from './Title';
+import { TickerInfoPopover, LegendSymbol, LegendSymbolTypes } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +24,12 @@ const useStyles = makeStyles(theme => ({
       marginBottom: theme.spacing(1),
       width: 135,
     },
+  },
+  heading: {
+    lineHeight: 1,
+    fontSize: '1rem',
+    display: 'flex',
+    justifyContent: 'center',
   },
   tickerVal: {
     color: theme.palette.common.black,
@@ -52,56 +56,96 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface TickerCard extends TickerInfoType {
+type RequiredTotalsKeys = RequiredKeys<CurrentTotalsTypes>;
+
+type TickerTitleTypes = {
   heading: string;
-  number: number;
-  omitLastUpdated?: boolean;
-}
+  renderLegendSymbol: () => React.ReactNode;
+};
+
+type TickerCard = Omit<TickerTitleTypes, 'renderLegendSymbol'> & {
+  // Some render() props so as not to pass down data through so many levels, and
+  // add more options than just `children` would.
+  renderTitle: () => React.ReactNode;
+  renderPopover: () => React.ReactNode;
+  number?: number;
+};
+
+type TickerConfigTypes = {
+  [key in RequiredTotalsKeys & string]: TickerInfoType & {
+    symbol: LegendSymbolTypes;
+  };
+};
+
+type TickerCardTypes = {
+  data: CurrentTotalsTypes; // individual totals combined into single object
+  config: TickerConfigTypes;
+};
+
+const CardTitle: FC<TickerTitleTypes> = ({ heading, renderLegendSymbol }) => {
+  const classes = useStyles();
+
+  return (
+    <Typography
+      component="h2"
+      variant="subtitle2"
+      color="primary"
+      className={classes.heading}
+    >
+      {renderLegendSymbol()}
+      {heading}
+    </Typography>
+  );
+};
 
 const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
-  const { heading, number } = props;
+  const { number, renderTitle, renderPopover } = props;
 
   return (
     <Grid item className={classes.root}>
       <Paper className={classes.paper}>
-        <Title>{heading}</Title>
+        {renderTitle()}
         <Typography component="p" variant="h4" className={classes.tickerVal}>
           {number ? prettyPrint(number) : <CircularProgress size={30} />}
         </Typography>
-        <TickerInfoPopover {...props} />
+        {renderPopover()}
       </Paper>
     </Grid>
   );
 };
 
-export const TickerCards: FC<CurrentTotalsTypes> = ({
-  confirmed,
-  deaths,
-  recovered,
-  selfReported,
-}) => (
-  <div className={useStyles().tickerCardsWrap}>
-    <NotifierCard
-      defText="Number of individuals who have reported their data on this site"
-      heading="Self-reported"
-      number={selfReported}
-      omitLastUpdated
-    />
-    <NotifierCard
-      defText="Number of individuals clinically confirmed positive for COVID-19 with a test, who have recovered from symptoms"
-      heading="Recovered"
-      number={recovered}
-    />
-    <NotifierCard
-      defText="Number of individuals clinically confirmed positive for COVID-19 with a test"
-      heading="Confirmed"
-      number={confirmed}
-    />
-    <NotifierCard
-      defText="Number of individuals clinically confirmed positive for COVID-19 with a test, who have died from complications related to illness caused by COVID-19"
-      heading="Deaths"
-      number={deaths}
-    />
-  </div>
-);
+export const TickerCards: FC<TickerCardTypes> = ({ data, config }) => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.tickerCardsWrap}>
+      {Object.keys(config).map((key: string) => {
+        const { heading, defText, symbol, omitLastUpdated } = config[
+          key as RequiredTotalsKeys
+        ];
+
+        return (
+          <NotifierCard
+            key={key}
+            heading={heading}
+            number={data[key as RequiredTotalsKeys]}
+            renderTitle={() => (
+              <CardTitle
+                heading={heading}
+                renderLegendSymbol={() => <LegendSymbol {...symbol} />}
+              />
+            )}
+            renderPopover={() => (
+              <TickerInfoPopover
+                heading={heading}
+                defText={defText}
+                omitLastUpdated={omitLastUpdated}
+              />
+            )}
+          />
+        );
+      })}
+    </div>
+  );
+};

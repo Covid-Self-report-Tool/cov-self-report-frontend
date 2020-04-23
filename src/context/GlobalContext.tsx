@@ -7,6 +7,11 @@ import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
 
 export const initialState = {
+  activeCountrySymbKey: 'total_confirmed',
+  layerVisibility: {
+    selfReported: true,
+    countries: true,
+  },
   currentTotals: {
     total_confirmed: 0,
     total_deaths: 0,
@@ -27,6 +32,19 @@ const reducer = (
   action: StoreActionType
 ): InitialStateType => {
   switch (action.type) {
+    case 'SET_COUNTRY_SYMBOLOGY':
+      return {
+        ...state,
+        activeCountrySymbKey: action.payload,
+      };
+    case 'TOGGLE_LAYER_VISIBILITY':
+      return {
+        ...state,
+        layerVisibility: {
+          ...state.layerVisibility,
+          [action.payload]: !state.layerVisibility[action.payload],
+        },
+      };
     case 'SET_LAST_COUNTRIES_UPDATE':
       return {
         ...state,

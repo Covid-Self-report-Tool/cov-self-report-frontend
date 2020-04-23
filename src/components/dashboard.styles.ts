@@ -1,6 +1,21 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+import { SELF_REPORTED_STYLES } from 'config/map';
+
 export const useStyles = makeStyles(theme => ({
+  root: {
+    // Self-reported markers in map, legend, etc. Includes clusters. Note that
+    // the parent needs a height/width since this child is 100%.
+    '& .self-reported-symbol': {
+      backgroundColor: SELF_REPORTED_STYLES.fillColor,
+      borderWidth: SELF_REPORTED_STYLES.borderWidth,
+      borderStyle: 'solid',
+      borderColor: SELF_REPORTED_STYLES.borderColor,
+      borderRadius: '100%',
+      width: '100%',
+      height: '100%',
+    },
+  },
   toolbarIcon: {
     display: 'flex',
     alignItems: 'center',

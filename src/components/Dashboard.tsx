@@ -21,7 +21,7 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
   const [drawerOpen, toggleDrawerOpen] = useState<boolean>(false);
 
   return (
-    <>
+    <div className={classes.root}>
       <MainNavBar
         isHome={isHome}
         drawerOpen={drawerOpen}
@@ -44,6 +44,6 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
       >
         <ListItems />
       </MobileOffCanvasNav>
-    </>
+    </div>
   );
 };
