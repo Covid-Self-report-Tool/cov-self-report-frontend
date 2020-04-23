@@ -24,6 +24,7 @@ import {
   List,
   TermsOfService,
   PrivacyPolicy,
+  SecretSnackground,
 } from 'views';
 import firebase from 'config/firebase';
 import { VerifyEmail } from 'views/VerifyEmail';
@@ -57,6 +58,9 @@ const Routes: FC = () => {
                 </Route>
                 <Route path="/list">
                   <List />
+                </Route>
+                <Route path="/secret-snackground">
+                  <SecretSnackground />
                 </Route>
                 <Route path="/" exact>
                   <Home />
