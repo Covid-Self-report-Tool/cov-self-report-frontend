@@ -33,7 +33,7 @@ export const countriesSymbology = {
       '#cb181d',
       '#99000d',
     ],
-    ranges: [10, 200, 1000, 2000, 10000, 20000],
+    ranges: [625, 1250, 2500, 5000, 10000, 20000],
   },
   total_recovered: {
     palette: [
@@ -46,7 +46,7 @@ export const countriesSymbology = {
       '#238b45',
       '#005a32',
     ],
-    ranges: [100, 500, 1000, 5000, 20000, 80000],
+    ranges: [78.125, 312.5, 1250, 5000, 20000, 80000],
   },
 };
 
