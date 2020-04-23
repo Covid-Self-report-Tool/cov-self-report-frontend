@@ -1,20 +1,26 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import {
   Map,
   TileLayer,
   Marker,
-  LayersControl,
   FeatureGroup,
   ZoomControl,
+  Popup,
 } from 'react-leaflet';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+
+import { CountriesFieldsForTotals } from 'context/types';
 import { MAPBOX_API_KEY as accessToken } from 'config';
-import { createClusterCustomIcon, indivMarkerIcon } from 'utils/map';
-import { Polygons } from 'components';
-import { setSymbology } from 'utils/map';
+import { countriesSymbology } from 'config/map';
+import {
+  createClusterCustomIcon,
+  indivMarkerIcon,
+  setSymbology,
+} from 'utils/map';
+import { Polygons, GlobalContext } from 'components';
 
 require('react-leaflet-markercluster/dist/styles.min.css');
 
@@ -36,11 +42,6 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     left: 0,
     right: 0,
-    // Leaflet garbage default control for now, but room for custom MUI later
-    '& .leaflet-control-layers': {
-      bottom: 54, // above Share for now
-      marginLeft: 8,
-    },
     // No one cares about zoom controls on small touch devices
     '& .leaflet-control-zoom': {
       [theme.breakpoints.down('sm')]: {
@@ -54,7 +55,7 @@ type MapboxType = {
   tilesetId: string;
 };
 
-type PositionType = [number, number];
+type PositionType = { lat: number; lng: number };
 
 type WorldGraphProps = {
   data: any[]; // TODO: type this
@@ -73,7 +74,17 @@ const SubmittedCases: FC<SubmittedType> = ({ data }) => (
     maxClusterRadius={60}
   >
     {data.map((position, i) => (
-      <Marker key={i} position={position} icon={indivMarkerIcon} />
+      <Marker
+        key={i}
+        position={[position.lat, position.lng]}
+        icon={indivMarkerIcon}
+      >
+        <Popup maxWidth={200}>
+          <h2>Self-reported location</h2>
+          {`Latitude: ${position.lat}`},<br />
+          {`Longitude: ${position.lng}`}
+        </Popup>
+      </Marker>
     ))}
   </MarkerClusterGroup>
 );
@@ -92,51 +103,43 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
   data,
   submittedFeats,
 }) => {
+  const { state } = useContext(GlobalContext);
+  const activeCountrySymbKey: keyof CountriesFieldsForTotals =
+    state.activeCountrySymbKey;
   const styles = useStyles();
-  const initMapCenter = { lat: 30, lng: -10 }; // TODO: preserve on route change
+  const theme = useTheme();
+  const bigGuy = useMediaQuery(theme.breakpoints.up('sm'));
+  // TODO: preserve on route change, and use bounds instead
+  const initMapCenter = bigGuy ? { lat: 34, lng: -5 } : { lat: 10, lng: -90 };
 
-  // TODO: move all this into context and make it dynamic
-  const polySymb = {
-    // Good tool: https://learnui.design/tools/data-color-picker.html#single
-    palette: [
-      '#b0edf3',
-      '#99d7de',
-      '#83c2c9',
-      '#6caeb4',
-      '#5699a0',
-      '#3f858c',
-      '#267279',
-      '#005f66',
-    ],
-    label: 'Number of cases',
-    field: 'total_confirmed', // TODO: wire up dynamicness
-    symbId: 'total_confirmed',
-  };
+  // @ts-ignore // TODO: remove this shame
+  const polySymb = countriesSymbology[activeCountrySymbKey];
 
   return (
     <Map
       center={initMapCenter}
-      zoom={3}
+      zoom={bigGuy ? 3 : 2}
       className={styles.theMapItself}
       minZoom={2}
       zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
-      <LayersControl position="bottomleft" collapsed={true}>
-        <LayersControl.Overlay name="Confirmed" checked>
-          <FeatureGroup>
-            <Polygons
-              // @ts-ignore
-              features={setSymbology(data, polySymb).features}
-            />
-          </FeatureGroup>
-        </LayersControl.Overlay>
-        <LayersControl.Overlay checked name="User-submitted">
-          <FeatureGroup>
-            <SubmittedCases data={submittedFeats} />
-          </FeatureGroup>
-        </LayersControl.Overlay>
-      </LayersControl>
+      {state.layerVisibility.countries && (
+        <FeatureGroup>
+          <Polygons
+            // @ts-ignore
+            features={
+              setSymbology(data, { ...polySymb, field: activeCountrySymbKey })
+                .features
+            }
+          />
+        </FeatureGroup>
+      )}
+      {state.layerVisibility.selfReported && (
+        <FeatureGroup>
+          <SubmittedCases data={submittedFeats} />
+        </FeatureGroup>
+      )}
       <ZoomControl position="bottomright" />
     </Map>
   );

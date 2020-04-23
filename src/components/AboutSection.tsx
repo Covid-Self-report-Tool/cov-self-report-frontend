@@ -46,7 +46,7 @@ export const AboutSection: FC<AboutType> = ({ filename }) => {
       .catch(() => {
         setError(true);
       });
-  }, []);
+  }, [filename]);
 
   return (
     <div>

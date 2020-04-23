@@ -27,31 +27,35 @@ interface PolygonsTypes {
 }
 
 const PolygonPopup: FC<CountryRow> = props => (
-  <Popup>
+  <Popup maxWidth={450}>
     {props.country_name ? (
-      <>
+      <div style={{ width: 225 }}>
         <h2>{props.country_name}</h2>
+        <h3 style={{ marginBottom: 5 }}>Totals</h3>
         <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
           <li>
-            <b>Total confirmed:</b> {prettyPrint(props.total_confirmed)}
+            <b>Confirmed:</b> {prettyPrint(props.total_confirmed)}
           </li>
           <li>
-            <b>Total deaths:</b> {prettyPrint(props.total_deaths)}
+            <b>Deaths:</b> {prettyPrint(props.total_deaths)}
           </li>
           <li>
-            <b>Total recovered:</b> {prettyPrint(props.total_recovered)}
-          </li>
-          <li>
-            <b>Confirmed day change:</b> {prettyPrint(props.new_confirmed)}
-          </li>
-          <li>
-            <b>Dead day change:</b> {prettyPrint(props.new_deaths)}
-          </li>
-          <li>
-            <b>Recovered day change:</b> {prettyPrint(props.new_recovered)}
+            <b>Recovered:</b> {prettyPrint(props.total_recovered)}
           </li>
         </ul>
-      </>
+        <h3 style={{ marginBottom: 5 }}>Day changes</h3>
+        <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
+          <li>
+            <b>Confirmed:</b> {prettyPrint(props.new_confirmed)}
+          </li>
+          <li>
+            <b>Dead:</b> {prettyPrint(props.new_deaths)}
+          </li>
+          <li>
+            <b>Recovered:</b> {prettyPrint(props.new_recovered)}
+          </li>
+        </ul>
+      </div>
     ) : (
       <>
         <h2>{props.NAME_LONG}</h2>

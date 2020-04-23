@@ -1,7 +1,9 @@
 import React, { FC, useContext, useEffect } from 'react';
 import { Box, Link } from '@material-ui/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
 import firebase from 'config/firebase';
+import { tickersConfig } from 'config/map';
 
 import {
   WorldGraphLocation,
@@ -9,6 +11,7 @@ import {
   GlobalContext,
   SharingPopoutMenu,
   SplashScreen,
+  MapLayersPopout,
 } from 'components';
 
 export const Home: FC = () => {
@@ -39,6 +42,9 @@ export const Home: FC = () => {
       <Box position="absolute" bottom={26} left={8} zIndex={1}>
         <SharingPopoutMenu />
       </Box>
+      <Box position="absolute" bottom={66} left={8} zIndex={1}>
+        <MapLayersPopout />
+      </Box>
       <Box position="absolute" bottom={0} left={8} zIndex={1}>
         <Link href="/terms-of-service" color="textSecondary">
           Terms of service
@@ -49,10 +55,13 @@ export const Home: FC = () => {
         submittedFeats={state.allSelfReportedPoints}
       />
       <TickerCards
-        confirmed={total_confirmed}
-        deaths={total_deaths}
-        recovered={total_recovered}
-        selfReported={selfReported}
+        config={tickersConfig}
+        data={{
+          confirmed: total_confirmed,
+          deaths: total_deaths,
+          recovered: total_recovered,
+          selfReported: selfReported,
+        }}
       />
     </>
   );
