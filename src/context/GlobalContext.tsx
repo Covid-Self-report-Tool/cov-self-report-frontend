@@ -8,6 +8,11 @@ import { calculateTotals } from 'utils';
 
 export const initialState = {
   activeCountrySymbKey: 'total_confirmed',
+  uiAlert: {
+    open: false,
+    message: '',
+    severity: 'success',
+  },
   layerVisibility: {
     selfReported: true,
     countries: true,
@@ -36,6 +41,16 @@ const reducer = (
       return {
         ...state,
         activeCountrySymbKey: action.payload,
+      };
+    case 'TOGGLE_UI_ALERT':
+      return {
+        ...state,
+        uiAlert: {
+          ...state.uiAlert,
+          open: action.payload.open,
+          message: action.payload.message || state.uiAlert.message,
+          severity: action.payload.severity || state.uiAlert.severity,
+        },
       };
     case 'TOGGLE_LAYER_VISIBILITY':
       return {

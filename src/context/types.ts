@@ -1,4 +1,5 @@
 import React from 'react';
+import { Color } from '@material-ui/lab/Alert';
 
 import { IGeoJson } from 'types';
 
@@ -8,7 +9,17 @@ export type CountriesFieldsForTotals = {
   total_recovered: number;
 };
 
+export type AlertPayloadType = {
+  open: boolean;
+  message?: string;
+  severity?: Color;
+};
+
 export type StoreActionType =
+  | {
+      type: 'TOGGLE_UI_ALERT';
+      payload: AlertPayloadType;
+    }
   | {
       type: 'SET_COUNTRY_SYMBOLOGY';
       payload: keyof CountriesFieldsForTotals;
@@ -59,6 +70,7 @@ export type InitialStateType = {
   showSplash: boolean;
   hasSeenSplash: boolean;
   lastCountriesUpdate: Date | null;
+  uiAlert: AlertPayloadType;
 };
 
 // TODO: restore usage in global dispatch provider

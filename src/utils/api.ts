@@ -69,3 +69,6 @@ export const getHtmlFromS3 = async (filename: string) =>
   await superagent
     .get(`${AWS_S3_BASE_URL}/${filename}`)
     .set('Accept', 'text/html; charset=utf8');
+
+export const triggerBadRequest = async () =>
+  await superagent.get('http://superfake.biz/400');
