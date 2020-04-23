@@ -1,5 +1,4 @@
 import React, { FC, useContext } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {
   Fab,
   Popover,
@@ -16,15 +15,6 @@ import { LayersRounded } from '@material-ui/icons';
 
 import { LayerVisibilityTypes } from 'context/types';
 import { GlobalContext } from 'components';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    checkbox: {
-      paddingBottom: 6,
-      paddingTop: 6,
-    },
-  })
-);
 
 type LayerToggleType = {
   name: string;
@@ -56,7 +46,6 @@ const LayerToggle: FC<LayerToggleType> = ({ name, layerId }) => {
 
 const LayerSymbolRadios: FC = () => {
   const { state, dispatch } = useContext(GlobalContext);
-  const classes = useStyles();
   const currentValue = state.activeCountrySymbKey;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
