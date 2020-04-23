@@ -106,7 +106,7 @@ const NotifierCard: FC<TickerCard> = props => {
     <Grid item className={classes.root}>
       <Paper className={classes.paper}>
         {renderTitle()}
-        <Typography component="p" variant="h4" className={classes.tickerVal}>
+        <Typography component="h4" variant="h4" className={classes.tickerVal}>
           {number ? prettyPrint(number) : <CircularProgress size={30} />}
         </Typography>
         {renderPopover()}
