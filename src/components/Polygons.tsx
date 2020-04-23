@@ -67,7 +67,7 @@ const PolygonPopup: FC<CountryRow> = props => (
 
 export const Polygons: FC<PolygonsTypes> = ({ features }) => (
   <>
-    {features.map(({ geometry, properties }: PolygonFeature) => {
+    {features.map(({ geometry, properties }: PolygonFeature, i: number) => {
       // Had to do this since some sources have both Poly and Multipoly geom.
       // See source code for how it's used: https://bit.ly/2PizL8i
       const levelsDeep = geometry.type === 'Polygon' ? 1 : 2;
@@ -87,7 +87,7 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
 
       return (
         <Polygon
-          key={properties.country_code}
+          key={i}
           positions={positions}
           {...{
             color,
