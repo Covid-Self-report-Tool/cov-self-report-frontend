@@ -1,27 +1,17 @@
-import React from 'react';
+import React, { FC, useContext } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+import { GlobalContext } from 'components';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export interface CustomSnackbarBasics {
-  severity: Color;
-  message: string;
-}
-
-export interface CustomSnackbarTypes {
-  snackbarConfig: CustomSnackbarBasics;
-  snackbarOpen: boolean;
-  setSnackbarOpen: React.Dispatch<boolean>;
-}
-
 // TODO: restore for login/logout success/fail
-// TODO: make messages and severity flexible. Use reducer + global context.
-export function CustomSnackbar(props: CustomSnackbarTypes) {
-  const { snackbarConfig, setSnackbarOpen, snackbarOpen } = props;
-  const { severity, message } = snackbarConfig;
+export const CustomSnackbar: FC = () => {
+  const { state, dispatch } = useContext(GlobalContext);
+  const { open, message = '', severity } = state.uiAlert;
 
   const handleCloseInternal = (
     event?: React.SyntheticEvent,
@@ -31,18 +21,19 @@ export function CustomSnackbar(props: CustomSnackbarTypes) {
       return;
     }
 
-    setSnackbarOpen(false);
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: false,
+      },
+    });
   };
 
   return (
-    <Snackbar
-      open={snackbarOpen}
-      autoHideDuration={4500}
-      onClose={handleCloseInternal}
-    >
+    <Snackbar open={open} autoHideDuration={4500} onClose={handleCloseInternal}>
       <Alert onClose={handleCloseInternal} severity={severity}>
         {message}
       </Alert>
     </Snackbar>
   );
-}
+};

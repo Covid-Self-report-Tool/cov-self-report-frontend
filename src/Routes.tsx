@@ -11,6 +11,7 @@ import {
   LoginForm,
   GlobalProvider,
   SimpleModal,
+  CustomSnackbar,
   SuccessConfModal,
 } from 'components';
 import { UserProvider } from 'context';
@@ -69,6 +70,7 @@ const Routes: FC = () => {
                   open={successConfOpen}
                   setOpen={setSuccessConfOpen}
                 />
+                <CustomSnackbar />
               </Dashboard>
               {/* None of the modals need to be inside Dashboard */}
               <Route path="/login">
