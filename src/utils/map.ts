@@ -25,15 +25,14 @@ interface PropertiesGeneric {
 export const createClusterCustomIcon = function(
   cluster: any // TODO: legit type?
 ) {
-  const value = cluster.getChildCount();
-  let diameter = value * 10;
+  const childCount = cluster.getChildCount();
+  let diameter = childCount * 5;
 
-  if (diameter > 100) {
-    diameter = 100;
+  // TODO: try Math.min, Math.max, etc. instead
+  if (diameter > 50) {
+    diameter = 50;
   } else if (diameter < indivMarkerDiameter) {
     diameter = indivMarkerDiameter;
-  } else {
-    diameter = Math.floor(diameter);
   }
 
   return L.divIcon({

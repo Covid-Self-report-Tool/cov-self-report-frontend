@@ -42,11 +42,6 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     left: 0,
     right: 0,
-    // Leaflet garbage default control for now, but room for custom MUI later
-    '& .leaflet-control-layers': {
-      bottom: 54, // above Share for now
-      marginLeft: 8,
-    },
     // No one cares about zoom controls on small touch devices
     '& .leaflet-control-zoom': {
       [theme.breakpoints.down('sm')]: {
