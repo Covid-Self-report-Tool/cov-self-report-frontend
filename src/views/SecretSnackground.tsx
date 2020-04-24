@@ -1,14 +1,14 @@
 import React, { FC, useContext } from 'react';
-import { Container, Button } from '@material-ui/core';
+import { Container, Button, Box } from '@material-ui/core';
 
-import { triggerBadRequest } from 'utils/api';
+import { triggerBadRequest, getHtmlFromS3 } from 'utils/api';
 import { Breadcrumb, GlobalContext } from 'components';
 
-const TriggerNotFound: FC = () => {
+const ErrorTriggerBtns: FC = () => {
   const { dispatch } = useContext(GlobalContext);
 
-  const handleClick = (event: React.MouseEvent) => {
-    triggerBadRequest().catch(err => {
+  const handleBSurlClick = (event: React.MouseEvent) => {
+    triggerBadRequest().catch(() => {
       dispatch({
         type: 'TOGGLE_UI_ALERT',
         payload: {
@@ -20,10 +20,32 @@ const TriggerNotFound: FC = () => {
     });
   };
 
+  const handleBadHelpClick = (event: React.MouseEvent) => {
+    getHtmlFromS3('not-real.html').catch(() => {
+      dispatch({
+        type: 'TOGGLE_UI_ALERT',
+        payload: {
+          open: true,
+          message: 'Something went wrong. Could not get content.',
+          severity: 'error',
+        },
+      });
+    });
+  };
+
   return (
-    <Button color="secondary" variant="contained" onClick={handleClick}>
-      Trigger BS URL
-    </Button>
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleBadHelpClick}
+      >
+        Trigger Bad About
+      </Button>
+      <Button color="secondary" variant="contained" onClick={handleBSurlClick}>
+        Trigger BS URL
+      </Button>
+    </div>
   );
 };
 
@@ -35,7 +57,6 @@ export const SecretSnackground: FC = () => (
       Easy way to test error/warning/success snackbars/alerts directly without a
       million steps.
     </p>
-    <h2>BS URL</h2>
-    <TriggerNotFound />
+    <ErrorTriggerBtns />
   </Container>
 );

@@ -1,4 +1,5 @@
 import React, {
+  useContext,
   createContext,
   useReducer,
   useState,
@@ -11,6 +12,7 @@ import firebase from 'config/firebase';
 import { getUserData } from 'utils/api';
 import { SymptomForm, SubmissionFormAction } from 'context/types';
 import { onAuthStateChange } from 'utils/firebase';
+import { GlobalContext } from 'components';
 
 export const initialUserState: SymptomForm = {
   symptoms: {
@@ -141,6 +143,7 @@ export type FormProviderType = {
 
 export const UserProvider: FC<FormProviderType> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialUserState);
+  const { dispatch: dispatchGlobal } = useContext(GlobalContext);
 
   // to avoid rerunning login trigger
   const [authFlag, setAuthFlag] = useState<boolean>(true);
@@ -158,8 +161,15 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
                 dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
               }
             })
-            .catch((resp: any) => {
-              // handle error
+            .catch(() => {
+              dispatchGlobal({
+                type: 'TOGGLE_UI_ALERT',
+                payload: {
+                  open: true,
+                  message: 'Something went wrong. Could not get your data.',
+                  severity: 'error',
+                },
+              });
             });
         });
       }
