@@ -1,10 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import { Container, Link, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 
 import { getHtmlFromS3 } from 'utils/api';
+import { GlobalContext } from 'components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -36,7 +37,7 @@ interface BreadcrumbType {
 
 export const AboutSection: FC<AboutType> = ({ filename }) => {
   const [html, setHtml] = useState<string>('');
-  const [error, setError] = useState<boolean>(false);
+  const { dispatch } = useContext(GlobalContext);
 
   useEffect(() => {
     getHtmlFromS3(filename)
@@ -44,19 +45,19 @@ export const AboutSection: FC<AboutType> = ({ filename }) => {
         setHtml(response.text);
       })
       .catch(() => {
-        setError(true);
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message: 'Something went wrong. Could not get content.',
+            severity: 'error',
+          },
+        });
       });
   }, [filename]);
 
   return (
-    <div>
-      {html && <div dangerouslySetInnerHTML={{ __html: html }} />}
-      {error && (
-        <Alert severity="error" variant="filled">
-          Could not get {filename}
-        </Alert>
-      )}
-    </div>
+    <div>{html && <div dangerouslySetInnerHTML={{ __html: html }} />}</div>
   );
 };
 

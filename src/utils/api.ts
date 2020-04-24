@@ -19,9 +19,10 @@ export const getUserData = (authorization: string) => {
     .set('Accept', 'application/json');
 };
 
-// NOTE: should be able to switch to topojson for some big perf gains
+// TODO: switch to topojson or vector tiles for some perf gains
 export const getGeoJSONCountries = (): GeoJSONCollection =>
   require('data/countries.min.json');
+
 export const getCountryData = async () => {
   return superagent
     .get(`${BACKEND_URL}/countries`)

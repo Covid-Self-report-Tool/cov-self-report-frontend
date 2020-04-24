@@ -1,9 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { Paper, Grid, TextField, Button } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
 import { signUp, googleLogin } from 'utils/firebase';
 import firebase from 'config/firebase';
+
+import { GlobalContext } from 'components';
 
 const useStyles = makeStyles({
   padding: {
@@ -23,6 +25,7 @@ declare global {
 window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
+  const { dispatch } = useContext(GlobalContext);
   const classes = useStyles();
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<boolean>(false);
@@ -78,7 +81,14 @@ export const SignupForm: FC = () => {
       );
       window.recaptchaVerifier.render();
     } catch (err) {
-      // TODO: failed to load captcha
+      dispatch({
+        type: 'TOGGLE_UI_ALERT',
+        payload: {
+          open: true,
+          message: 'Something went wrong. Could not load captcha.',
+          severity: 'error',
+        },
+      });
     }
   }, []);
 
