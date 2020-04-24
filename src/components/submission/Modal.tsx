@@ -12,6 +12,7 @@ import {
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { GlobalContext } from 'components';
 import {
   SymptomStep,
   TestingStep,
@@ -33,6 +34,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
+  const { dispatch } = useContext(GlobalContext);
 
   const history = useHistory();
 
@@ -79,7 +81,16 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           })
           .catch((err: any) => {
             setSubmitting(false);
-            console.error(err); // TODO: set error flash message
+
+            dispatch({
+              type: 'TOGGLE_UI_ALERT',
+              payload: {
+                open: true,
+                message: 'Something went wrong. Your entry was not submitted.',
+                severity: 'error',
+              },
+            });
+
             history.push('/');
           });
       });

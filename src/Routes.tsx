@@ -11,6 +11,7 @@ import {
   LoginForm,
   GlobalProvider,
   SimpleModal,
+  CustomSnackbar,
   SuccessConfModal,
 } from 'components';
 import { UserProvider } from 'context';
@@ -24,6 +25,7 @@ import {
   List,
   TermsOfService,
   PrivacyPolicy,
+  SecretSnackground,
 } from 'views';
 import firebase from 'config/firebase';
 import { VerifyEmail } from 'views/VerifyEmail';
@@ -58,6 +60,9 @@ const Routes: FC = () => {
                 <Route path="/list">
                   <List />
                 </Route>
+                <Route path="/secret-snackground">
+                  <SecretSnackground />
+                </Route>
                 <Route path="/" exact>
                   <Home />
                 </Route>
@@ -65,6 +70,7 @@ const Routes: FC = () => {
                   open={successConfOpen}
                   setOpen={setSuccessConfOpen}
                 />
+                <CustomSnackbar />
               </Dashboard>
               {/* None of the modals need to be inside Dashboard */}
               <Route path="/login">

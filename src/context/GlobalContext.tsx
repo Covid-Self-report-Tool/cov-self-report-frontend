@@ -8,6 +8,11 @@ import { calculateTotals } from 'utils';
 
 export const initialState = {
   activeCountrySymbKey: 'total_confirmed',
+  uiAlert: {
+    open: false,
+    message: '',
+    severity: 'success',
+  },
   layerVisibility: {
     selfReported: true,
     countries: true,
@@ -36,6 +41,16 @@ const reducer = (
       return {
         ...state,
         activeCountrySymbKey: action.payload,
+      };
+    case 'TOGGLE_UI_ALERT':
+      return {
+        ...state,
+        uiAlert: {
+          ...state.uiAlert,
+          open: action.payload.open,
+          message: action.payload.message || state.uiAlert.message,
+          severity: action.payload.severity || state.uiAlert.severity,
+        },
       };
     case 'TOGGLE_LAYER_VISIBILITY':
       return {
@@ -121,7 +136,16 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
           payload: response.body.data.locations.length,
         });
       })
-      .catch(err => console.error(err)); // TODO: handle this better
+      .catch(() => {
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message: 'Could not get self-reported dataset',
+            severity: 'error',
+          },
+        });
+      });
 
     getCountryGeoJSONData()
       .then((geoJSON: GeoJSONData) => {
@@ -148,7 +172,16 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
           payload: totals,
         });
       })
-      .catch(console.error); // TODO: error flash message instead
+      .catch(() => {
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message: 'Could not get countries features',
+            severity: 'error',
+          },
+        });
+      });
   }, []);
 
   return (
