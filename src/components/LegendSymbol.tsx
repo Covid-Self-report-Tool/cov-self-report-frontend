@@ -38,7 +38,7 @@ export const LegendSymbol: FC<LegendSymbolTypes> = ({
     >
       <Box
         border={borderWidth}
-        borderRadius={isCircular && '100%'}
+        borderRadius={isCircular ? '100%' : 0}
         height="100%"
         width="100%"
         bgcolor={fillColor}
