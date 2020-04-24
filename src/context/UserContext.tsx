@@ -169,7 +169,8 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
                 type: 'TOGGLE_UI_ALERT',
                 payload: {
                   open: true,
-                  message: 'Something went wrong. Could not get your data.',
+                  message:
+                    'Something went wrong - failed to get user information',
                   severity: 'error',
                 },
               });
@@ -177,7 +178,7 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
         });
       }
     });
-  }, [user, authFlag]);
+  }, [user, authFlag, dispatchGlobal]);
 
   return (
     <UserContext.Provider value={{ state, dispatch }}>
