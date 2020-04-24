@@ -158,7 +158,10 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
           getUserData(token)
             .then((resp: any) => {
               if (resp.status === 200 && resp.body) {
-                dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
+                // only set data if data is not empty (ie user has already signed up before)
+                if (resp.body.data) {
+                  dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
+                }
               }
             })
             .catch(() => {
@@ -166,7 +169,8 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
                 type: 'TOGGLE_UI_ALERT',
                 payload: {
                   open: true,
-                  message: 'Something went wrong. Could not get your data.',
+                  message:
+                    'Something went wrong - failed to get user information',
                   severity: 'error',
                 },
               });
@@ -174,7 +178,7 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
         });
       }
     });
-  }, [user, authFlag]);
+  }, [user, authFlag, dispatchGlobal]);
 
   return (
     <UserContext.Provider value={{ state, dispatch }}>
