@@ -158,7 +158,10 @@ export const UserProvider: FC<FormProviderType> = ({ children }) => {
           getUserData(token)
             .then((resp: any) => {
               if (resp.status === 200 && resp.body) {
-                dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
+                // only set data if data is not empty (ie user has already signed up before)
+                if (resp.body.data) {
+                  dispatch({ type: 'SET_USER_DATA', payload: resp.body.data });
+                }
               }
             })
             .catch(() => {
