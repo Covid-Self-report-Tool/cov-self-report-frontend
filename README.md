@@ -53,6 +53,7 @@ npm start
 - [Mapshaper](https://mapshaper.org/) for simplifying/optimizing spatial data in a web GUI.
 - [DynamoDB Geo](https://github.com/rh389/dynamodb-geo.js) later if we want to do spatial queries in Dynamo.
 - [HTML Cleaner](https://html-cleaner.com/) works pretty well for converting Gdocs or Word into HTML sans all the cruft. Need to play w/the "Cleaning options" a bit though.
+- [Livestream: Refactoring to react-query](https://www.youtube.com/watch?v=eEKn8UJfYgc)
 
 ## Data notes
 
