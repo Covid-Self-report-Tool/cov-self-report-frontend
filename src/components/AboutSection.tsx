@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState, useContext } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import { Container, Link, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
 
 import { getHtmlFromS3 } from 'utils/api';
 import { GlobalContext } from 'components';
@@ -54,7 +53,7 @@ export const AboutSection: FC<AboutType> = ({ filename }) => {
           },
         });
       });
-  }, [filename]);
+  }, [filename, dispatch]);
 
   return (
     <div>{html && <div dangerouslySetInnerHTML={{ __html: html }} />}</div>

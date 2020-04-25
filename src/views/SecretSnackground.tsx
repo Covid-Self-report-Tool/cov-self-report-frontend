@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react';
-import { Container, Button, Box } from '@material-ui/core';
+import { Container, Button } from '@material-ui/core';
 
 import { triggerBadRequest, getHtmlFromS3 } from 'utils/api';
 import { Breadcrumb, GlobalContext } from 'components';
