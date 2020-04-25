@@ -92,3 +92,16 @@ So we can either POST as-is from the geocode result, or round down to the recomm
   }
 }
 ```
+
+## AWS CloudWatch queries
+
+### Parsed `INFO` with response code
+
+```
+parse @message '[*]\t*\t*\t* - - [*] "* * *" * * "*" "*" *' as eventType, stampy, someId, ip, someTimezone, requestType, path, protocol, statusCode, bytes, referrer, userAgent, unknown
+| filter eventType = 'INFO'
+| filter requestType = 'POST'
+| filter path = '/self_report'
+| filter statusCode >= 400
+| display eventType, @timestamp, requestType, path, statusCode, ip
+```
