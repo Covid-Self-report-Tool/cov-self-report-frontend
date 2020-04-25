@@ -90,7 +90,7 @@ export const SignupForm: FC = () => {
         },
       });
     }
-  }, []);
+  }, [dispatch]);
 
   const handleSignup = () => {
     resetErrors();
