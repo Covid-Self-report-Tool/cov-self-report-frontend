@@ -13,26 +13,28 @@ import {
   SplashScreen,
   MapLayersPopout,
 } from 'components';
-import { getSubmittedCases } from 'utils/api';
+import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
 import { useQuery } from 'react-query';
+import { calculateTotals } from 'utils';
 
 export const Home: FC = () => {
   const { state, dispatch } = useContext(GlobalContext);
 
-  const {
-    total_confirmed,
-    total_deaths,
-    total_recovered,
-  } = state.currentTotals;
+  let [totalConfirmed, totalDeaths, totalRecovered] = [0, 0, 0];
 
-  const { data: submissions, status } = useQuery(
+  const { data: submissions, status: statusSubmissions } = useQuery(
     'submitted',
     getSubmittedCases,
     { staleTime: 300000 }
   );
+  const {
+    data: countryTotals,
+    status: countryTotalsStatus,
+  } = useQuery('countryTotals', getCountryGeoJSONData, { staleTime: 300000 });
+
   const [user, loading] = useAuthState(firebase.auth());
 
-  if (status === 'error') {
+  if (statusSubmissions === 'error') {
     dispatch({
       type: 'TOGGLE_UI_ALERT',
       payload: {
@@ -41,6 +43,29 @@ export const Home: FC = () => {
         severity: 'error',
       },
     });
+  }
+
+  if (countryTotalsStatus === 'error') {
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Could not country data',
+        severity: 'error',
+      },
+    });
+  }
+
+  if (countryTotalsStatus === 'success' && countryTotals) {
+    ({
+      total_confirmed: totalConfirmed,
+      total_deaths: totalDeaths,
+      total_recovered: totalRecovered,
+    } = calculateTotals(countryTotals, {
+      total_confirmed: 0,
+      total_deaths: 0,
+      total_recovered: 0,
+    }));
   }
 
   // this only shows the splash screen once, to users that haven't logged in
@@ -69,15 +94,15 @@ export const Home: FC = () => {
         </Link>
       </Box>
       <WorldGraphLocation
-        data={state.countries}
-        submittedFeats={state.allSelfReportedPoints}
+        data={countryTotals || []}
+        submittedFeats={submissions}
       />
       <TickerCards
         config={tickersConfig}
         data={{
-          confirmed: total_confirmed,
-          deaths: total_deaths,
-          recovered: total_recovered,
+          confirmed: totalConfirmed,
+          deaths: totalDeaths,
+          recovered: totalRecovered,
           selfReported: submissions && submissions.length,
         }}
       />
