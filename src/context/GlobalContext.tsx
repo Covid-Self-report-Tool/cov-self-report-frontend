@@ -1,11 +1,7 @@
 import React, { useEffect, useReducer, createContext, FC } from 'react';
 import 'date-fns';
 
-import {
-  getSubmittedCases,
-  getCountryGeoJSONData,
-  bootstrapApp,
-} from 'utils/api';
+import { getCountryGeoJSONData, bootstrapApp } from 'utils/api';
 import { StoreActionType, InitialStateType } from 'context/types';
 import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
@@ -129,29 +125,6 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
 
   useEffect(() => {
     bootstrapApp();
-
-    getSubmittedCases()
-      .then(response => {
-        dispatch({
-          type: 'SET_SELF_SUBMITTED_DATA',
-          payload: response.body.data.locations,
-        });
-
-        dispatch({
-          type: 'SET_SELF_SUBMITTED_TOTALS',
-          payload: response.body.data.locations.length,
-        });
-      })
-      .catch(() => {
-        dispatch({
-          type: 'TOGGLE_UI_ALERT',
-          payload: {
-            open: true,
-            message: 'Could not get self-reported dataset',
-            severity: 'error',
-          },
-        });
-      });
 
     getCountryGeoJSONData()
       .then((geoJSON: GeoJSONData) => {

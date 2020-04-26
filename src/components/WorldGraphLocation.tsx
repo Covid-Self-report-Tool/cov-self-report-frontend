@@ -22,6 +22,8 @@ import {
   setSymbology,
 } from 'utils/map';
 import { Polygons, GlobalContext } from 'components';
+import { useQuery } from 'react-query';
+import { getSubmittedCases } from 'utils/api';
 
 require('react-leaflet-markercluster/dist/styles.min.css');
 
@@ -76,36 +78,63 @@ type SubmittedType = {
   data: PositionType[];
 };
 
-const SubmittedCases: FC<SubmittedType> = ({ data }) => (
-  <MarkerClusterGroup
-    showCoverageOnHover={false}
-    iconCreateFunction={createClusterCustomIcon}
-    disableClusteringAtZoom={8}
-    maxClusterRadius={60}
-  >
-    {data.map((selfReportedItem, i) => (
-      <Marker
-        key={i}
-        position={[selfReportedItem.lat, selfReportedItem.lng]}
-        icon={indivMarkerIcon}
-      >
-        <Popup maxWidth={200}>
-          <h2>{selfReportedItem.address}</h2>
-          <p>
-            <small>
-              <i>
-                Self-reported location{' '}
-                {selfReportedItem.date
-                  ? `submitted ${prettyDate(new Date(selfReportedItem.date))}`
-                  : ''}
-              </i>
-            </small>
-          </p>
-        </Popup>
-      </Marker>
-    ))}
-  </MarkerClusterGroup>
-);
+const SubmittedCases: FC<SubmittedType> = ({ data }) => {
+  const { dispatch } = useContext(GlobalContext);
+  const { status, data: submittedData } = useQuery(
+    'submitted',
+    getSubmittedCases,
+    { staleTime: 300000 }
+  );
+
+  if (status === 'loading') {
+    return <></>;
+  }
+
+  if (status === 'error') {
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Could not get self-reported dataset',
+        severity: 'error',
+      },
+    });
+    return <></>;
+  }
+
+  const submissions = submittedData ? submittedData : [];
+
+  return (
+    <MarkerClusterGroup
+      showCoverageOnHover={false}
+      iconCreateFunction={createClusterCustomIcon}
+      disableClusteringAtZoom={8}
+      maxClusterRadius={60}
+    >
+      {submissions.map((selfReportedItem: PositionType, i: number) => (
+        <Marker
+          key={i}
+          position={[selfReportedItem.lat, selfReportedItem.lng]}
+          icon={indivMarkerIcon}
+        >
+          <Popup maxWidth={200}>
+            <h2>{selfReportedItem.address}</h2>
+            <p>
+              <small>
+                <i>
+                  Self-reported location{' '}
+                  {selfReportedItem.date
+                    ? `submitted ${prettyDate(new Date(selfReportedItem.date))}`
+                    : ''}
+                </i>
+              </small>
+            </p>
+          </Popup>
+        </Marker>
+      ))}
+    </MarkerClusterGroup>
+  );
+};
 
 const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox';
