@@ -68,7 +68,7 @@ export const getSubmittedCases = async () =>
 
 export const getHtmlFromS3 = async (filename: string) =>
   await superagent
-    .get(`${CLOUD_HTML_BASE_URL}fake/${filename}`)
+    .get(`${CLOUD_HTML_BASE_URL}/${filename}`)
     .set('Accept', 'text/html; charset=utf8');
 
 export const triggerBadRequest = async () =>
