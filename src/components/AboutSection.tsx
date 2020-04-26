@@ -69,8 +69,7 @@ export const AboutSection: FC<AboutType> = ({ filename }) => {
   });
   const { state, dispatch } = useContext(GlobalContext);
 
-  if (status === 'error') {
-    if (!state.uiAlert.open) {
+  if (status === 'error' && !state.uiAlert.open) {
     dispatch({
       type: 'TOGGLE_UI_ALERT',
       payload: {
@@ -79,7 +78,6 @@ export const AboutSection: FC<AboutType> = ({ filename }) => {
         severity: 'error',
       },
     });
-  }
   }
 
   return (
