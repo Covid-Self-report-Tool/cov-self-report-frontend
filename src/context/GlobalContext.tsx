@@ -1,7 +1,11 @@
 import React, { useEffect, useReducer, createContext, FC } from 'react';
 import 'date-fns';
 
-import { getSubmittedCases, getCountryGeoJSONData } from 'utils/api';
+import {
+  getSubmittedCases,
+  getCountryGeoJSONData,
+  bootstrapApp,
+} from 'utils/api';
 import { StoreActionType, InitialStateType } from 'context/types';
 import { GeoJSONData } from 'types/api';
 import { calculateTotals } from 'utils';
@@ -124,6 +128,8 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    bootstrapApp();
+
     getSubmittedCases()
       .then(response => {
         dispatch({

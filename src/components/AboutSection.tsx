@@ -1,7 +1,8 @@
-import React, { FC, useEffect, useState, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import { Container, Link, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { useQuery } from 'react-query';
 
 import { getHtmlFromS3 } from 'utils/api';
 import { GlobalContext } from 'components';
@@ -34,29 +35,53 @@ interface BreadcrumbType {
   to: string;
 }
 
-export const AboutSection: FC<AboutType> = ({ filename }) => {
-  const [html, setHtml] = useState<string>('');
-  const { dispatch } = useContext(GlobalContext);
+// Jumping-off/lead paragraphs to feedback, service terms, and privacy policy
+export const AboutFooter: FC = () => (
+  <section>
+    <h2 id="feedback">Feedback</h2>
+    <p>
+      Please contact us by filling out
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
+      >
+        this short form
+      </a>
+      .
+    </p>
+    <h2 id="terms-of-service">Terms of Service</h2>
+    <p>
+      Read about our{' '}
+      <RouteLink to="/terms-of-service">terms of service</RouteLink>.
+    </p>
+    <h2 id="privacy-policy">Privacy Policy</h2>
+    <p>
+      Read more about{' '}
+      <RouteLink to="/privacy-policy">how we use your data</RouteLink>.
+    </p>
+  </section>
+);
 
-  useEffect(() => {
-    getHtmlFromS3(filename)
-      .then(response => {
-        setHtml(response.text);
-      })
-      .catch(() => {
-        dispatch({
-          type: 'TOGGLE_UI_ALERT',
-          payload: {
-            open: true,
-            message: 'Something went wrong. Could not get content.',
-            severity: 'error',
-          },
-        });
-      });
-  }, [filename, dispatch]);
+export const AboutSection: FC<AboutType> = ({ filename }) => {
+  const { status, data } = useQuery(filename, getHtmlFromS3, {
+    staleTime: Infinity,
+  });
+  const { state, dispatch } = useContext(GlobalContext);
+
+  if (status === 'error' && !state.uiAlert.open) {
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Something went wrong. Could not get content.',
+        severity: 'error',
+      },
+    });
+  }
 
   return (
-    <div>{html && <div dangerouslySetInnerHTML={{ __html: html }} />}</div>
+    <div>{data && <div dangerouslySetInnerHTML={{ __html: data.text }} />}</div>
   );
 };
 

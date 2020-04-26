@@ -1,18 +1,37 @@
 import React, { FC } from 'react';
 
-import { AboutSection, AboutContainer, Breadcrumb } from 'components';
+import {
+  AboutSection,
+  AboutContainer,
+  AboutFooter,
+  Breadcrumb,
+} from 'components';
+
+const mainAboutPages = [
+  'table-of-contents.html',
+  'intro.html',
+  'data-resources.html',
+  'team-information.html',
+  'our-partners.html',
+  'data-license.html',
+];
+const termsOfServicePage = 'terms-of-service.html';
+const privacyPolicyPage = 'privacy-policy.html';
+
+export const htmlPages = [
+  ...mainAboutPages,
+  termsOfServicePage,
+  privacyPolicyPage,
+];
 
 // The main page
 export const About: FC = () => (
   <AboutContainer>
     <Breadcrumb to="/" text="< Home" />
-    <AboutSection filename="table-of-contents.html" />
-    <AboutSection filename="intro.html" />
-    <AboutSection filename="data-resources.html" />
-    <AboutSection filename="team-information.html" />
-    <AboutSection filename="our-partners.html" />
-    <AboutSection filename="data-license.html" />
-    <AboutSection filename="footer.html" />
+    {mainAboutPages.map(page => (
+      <AboutSection filename={page} />
+    ))}
+    <AboutFooter />
   </AboutContainer>
 );
 
@@ -20,7 +39,7 @@ export const TermsOfService: FC = () => (
   <AboutContainer>
     <Breadcrumb to="/" text="Home" />
     <Breadcrumb to="/about" text="About" />
-    <AboutSection filename="terms-of-service.html" />
+    <AboutSection filename={termsOfServicePage} />
   </AboutContainer>
 );
 
@@ -28,6 +47,6 @@ export const PrivacyPolicy: FC = () => (
   <AboutContainer>
     <Breadcrumb to="/" text="Home" />
     <Breadcrumb to="/about" text="About" />
-    <AboutSection filename="privacy-policy.html" />
+    <AboutSection filename={privacyPolicyPage} />
   </AboutContainer>
 );
