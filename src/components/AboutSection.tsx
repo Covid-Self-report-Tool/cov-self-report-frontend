@@ -35,6 +35,34 @@ interface BreadcrumbType {
   to: string;
 }
 
+// Jumping-off/lead paragraphs to feedback, service terms, and privacy policy
+export const AboutFooter: FC = () => (
+  <section>
+    <h2 id="feedback">Feedback</h2>
+    <p>
+      Please contact us by filling out
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
+      >
+        this short form
+      </a>
+      .
+    </p>
+    <h2 id="terms-of-service">Terms of Service</h2>
+    <p>
+      Read about our{' '}
+      <RouteLink to="/terms-of-service">terms of service</RouteLink>.
+    </p>
+    <h2 id="privacy-policy">Privacy Policy</h2>
+    <p>
+      Read more about{' '}
+      <RouteLink to="/privacy-policy">how we use your data</RouteLink>.
+    </p>
+  </section>
+);
+
 export const AboutSection: FC<AboutType> = ({ filename }) => {
   const { status, data } = useQuery(filename, getHtmlFromS3, {
     staleTime: Infinity,
@@ -43,15 +71,15 @@ export const AboutSection: FC<AboutType> = ({ filename }) => {
 
   if (status === 'error') {
     if (!state.uiAlert.open) {
-      dispatch({
-        type: 'TOGGLE_UI_ALERT',
-        payload: {
-          open: true,
-          message: 'Something went wrong. Could not get content.',
-          severity: 'error',
-        },
-      });
-    }
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Something went wrong. Could not get content.',
+        severity: 'error',
+      },
+    });
+  }
   }
 
   return (

@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 
-import { AboutSection, AboutContainer, Breadcrumb } from 'components';
+import {
+  AboutSection,
+  AboutContainer,
+  AboutFooter,
+  Breadcrumb,
+} from 'components';
 
 const mainAboutPages = [
   'table-of-contents.html',
@@ -9,7 +14,6 @@ const mainAboutPages = [
   'team-information.html',
   'our-partners.html',
   'data-license.html',
-  'footer.html',
 ];
 const termsOfServicePage = 'terms-of-service.html';
 const privacyPolicyPage = 'privacy-policy.html';
@@ -27,6 +31,7 @@ export const About: FC = () => (
     {mainAboutPages.map(page => (
       <AboutSection filename={page} />
     ))}
+    <AboutFooter />
   </AboutContainer>
 );
 
