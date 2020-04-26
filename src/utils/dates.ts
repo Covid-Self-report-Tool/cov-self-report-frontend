@@ -1,3 +1,6 @@
 export const prettyDate = (date: Date) => {
-  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  const timezoneDate = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000
+  );
+  return `${timezoneDate.toLocaleDateString()} ${timezoneDate.toLocaleTimeString()}`;
 };
