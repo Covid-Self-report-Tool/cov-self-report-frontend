@@ -13,6 +13,8 @@ import {
   SplashScreen,
   MapLayersPopout,
 } from 'components';
+import { getSubmittedCases } from 'utils/api';
+import { useQuery } from 'react-query';
 
 export const Home: FC = () => {
   const { state, dispatch } = useContext(GlobalContext);
@@ -21,9 +23,25 @@ export const Home: FC = () => {
     total_confirmed,
     total_deaths,
     total_recovered,
-    selfReported,
   } = state.currentTotals;
+
+  const { data: submissions, status } = useQuery(
+    'submitted',
+    getSubmittedCases,
+    { staleTime: 300000 }
+  );
   const [user, loading] = useAuthState(firebase.auth());
+
+  if (status === 'error') {
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Could not get self-reported dataset',
+        severity: 'error',
+      },
+    });
+  }
 
   // this only shows the splash screen once, to users that haven't logged in
   useEffect(() => {
@@ -60,7 +78,7 @@ export const Home: FC = () => {
           confirmed: total_confirmed,
           deaths: total_deaths,
           recovered: total_recovered,
-          selfReported: selfReported,
+          selfReported: submissions && submissions.length,
         }}
       />
     </>

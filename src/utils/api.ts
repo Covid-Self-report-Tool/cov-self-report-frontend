@@ -60,10 +60,12 @@ export const getCountryGeoJSONData = async () => {
   return geoJSONCountries;
 };
 
-export const getSubmittedCases = async () =>
-  await superagent
+export const getSubmittedCases = async () => {
+  return await superagent
     .get(`${BACKEND_URL}/self_report`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .then((response: any) => response.body.data.locations);
+};
 
 // TODO: these if they're going to be a thing
 // export const getStateData
