@@ -2,17 +2,22 @@ import React, { FC } from 'react';
 
 import { AboutSection, AboutContainer, Breadcrumb } from 'components';
 
+export const htmlPages = [
+  'table-of-contents.html',
+  'intro.html',
+  'data-resources.html',
+  'team-information.html',
+  'our-partners.html',
+  'data-license.html',
+  'footer.html',
+];
 // The main page
 export const About: FC = () => (
   <AboutContainer>
     <Breadcrumb to="/" text="< Home" />
-    <AboutSection filename="table-of-contents.html" />
-    <AboutSection filename="intro.html" />
-    <AboutSection filename="data-resources.html" />
-    <AboutSection filename="team-information.html" />
-    <AboutSection filename="our-partners.html" />
-    <AboutSection filename="data-license.html" />
-    <AboutSection filename="footer.html" />
+    {htmlPages.map(page => (
+      <AboutSection filename={page} />
+    ))}
   </AboutContainer>
 );
 
