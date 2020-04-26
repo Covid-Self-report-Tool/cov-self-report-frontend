@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { AboutSection, AboutContainer, Breadcrumb } from 'components';
 
-export const htmlPages = [
+const mainAboutPages = [
   'table-of-contents.html',
   'intro.html',
   'data-resources.html',
@@ -11,11 +11,20 @@ export const htmlPages = [
   'data-license.html',
   'footer.html',
 ];
+const termsOfServicePage = 'terms-of-service.html';
+const privacyPolicyPage = 'privacy-policy.html';
+
+export const htmlPages = [
+  ...mainAboutPages,
+  termsOfServicePage,
+  privacyPolicyPage,
+];
+
 // The main page
 export const About: FC = () => (
   <AboutContainer>
     <Breadcrumb to="/" text="< Home" />
-    {htmlPages.map(page => (
+    {mainAboutPages.map(page => (
       <AboutSection filename={page} />
     ))}
   </AboutContainer>
@@ -25,7 +34,7 @@ export const TermsOfService: FC = () => (
   <AboutContainer>
     <Breadcrumb to="/" text="Home" />
     <Breadcrumb to="/about" text="About" />
-    <AboutSection filename="terms-of-service.html" />
+    <AboutSection filename={termsOfServicePage} />
   </AboutContainer>
 );
 
@@ -33,6 +42,6 @@ export const PrivacyPolicy: FC = () => (
   <AboutContainer>
     <Breadcrumb to="/" text="Home" />
     <Breadcrumb to="/about" text="About" />
-    <AboutSection filename="privacy-policy.html" />
+    <AboutSection filename={privacyPolicyPage} />
   </AboutContainer>
 );
