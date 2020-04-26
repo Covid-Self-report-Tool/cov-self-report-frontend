@@ -37,17 +37,19 @@ interface BreadcrumbType {
 
 export const AboutSection: FC<AboutType> = ({ filename }) => {
   const { status, data } = useQuery(filename, getHtmlFromS3);
-  const { dispatch } = useContext(GlobalContext);
+  const { state, dispatch } = useContext(GlobalContext);
 
   if (status === 'error') {
-    dispatch({
-      type: 'TOGGLE_UI_ALERT',
-      payload: {
-        open: true,
-        message: 'Something went wrong. Could not get content.',
-        severity: 'error',
-      },
-    });
+    if (!state.uiAlert.open) {
+      dispatch({
+        type: 'TOGGLE_UI_ALERT',
+        payload: {
+          open: true,
+          message: 'Something went wrong. Could not get content.',
+          severity: 'error',
+        },
+      });
+    }
   }
 
   return (
