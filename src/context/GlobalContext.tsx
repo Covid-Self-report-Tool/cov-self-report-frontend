@@ -48,24 +48,6 @@ const reducer = (
           [action.payload]: !state.layerVisibility[action.payload],
         },
       };
-    case 'SET_LAST_COUNTRIES_UPDATE':
-      return {
-        ...state,
-        lastCountriesUpdate: action.payload,
-      };
-    case 'SET_COUNTRY_DATA':
-      return {
-        ...state,
-        countries: action.payload,
-      };
-    case 'SET_TOTALS':
-      return {
-        ...state,
-        currentTotals: {
-          ...state.currentTotals,
-          ...action.payload,
-        },
-      };
     case 'SHOW_SPLASH':
       if (action.payload === true) {
         return {
