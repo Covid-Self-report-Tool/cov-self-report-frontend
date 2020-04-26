@@ -1,7 +1,8 @@
-import React, { FC, useEffect, useState, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import { Container, Link, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { useQuery } from 'react-query';
 
 import { getHtmlFromS3 } from 'utils/api';
 import { GlobalContext } from 'components';
@@ -35,28 +36,22 @@ interface BreadcrumbType {
 }
 
 export const AboutSection: FC<AboutType> = ({ filename }) => {
-  const [html, setHtml] = useState<string>('');
+  const { status, data } = useQuery(filename, getHtmlFromS3);
   const { dispatch } = useContext(GlobalContext);
 
-  useEffect(() => {
-    getHtmlFromS3(filename)
-      .then(response => {
-        setHtml(response.text);
-      })
-      .catch(() => {
-        dispatch({
-          type: 'TOGGLE_UI_ALERT',
-          payload: {
-            open: true,
-            message: 'Something went wrong. Could not get content.',
-            severity: 'error',
-          },
-        });
-      });
-  }, [filename, dispatch]);
+  if (status === 'error') {
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Something went wrong. Could not get content.',
+        severity: 'error',
+      },
+    });
+  }
 
   return (
-    <div>{html && <div dangerouslySetInnerHTML={{ __html: html }} />}</div>
+    <div>{data && <div dangerouslySetInnerHTML={{ __html: data.text }} />}</div>
   );
 };
 
