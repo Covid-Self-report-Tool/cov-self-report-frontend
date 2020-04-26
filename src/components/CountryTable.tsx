@@ -1,13 +1,24 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import MUIDataTable from 'mui-datatables';
+import { useQuery } from 'react-query';
 
-import { GlobalContext } from 'components';
-import { IGeoJson } from 'types';
+import { getCountryGeoJSONData } from 'utils/api';
 
 export const CountryTable: FC = () => {
-  const { state } = useContext(GlobalContext);
-  const data = state.countries
-    .map((country: IGeoJson) => {
+  const { status, data: countries } = useQuery(
+    'countryTotals',
+    getCountryGeoJSONData,
+    {
+      staleTime: 300000,
+    }
+  );
+
+  if (status !== 'success' || !countries) {
+    return <></>;
+  }
+
+  const data = countries
+    .map((country: any) => {
       const {
         country_name,
         total_deaths,

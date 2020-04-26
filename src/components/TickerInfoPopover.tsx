@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import {
   ListSubheader,
@@ -12,8 +12,9 @@ import InfoIcon from '@material-ui/icons/Info';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { TickerInfoType } from 'types';
-import { GlobalContext } from 'components';
 import { prettyDate } from 'utils/dates';
+import { useQuery } from 'react-query';
+import { getCountryGeoJSONData } from 'utils/api';
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -47,7 +48,17 @@ export const TickerInfoPopover: FC<TickerInfoType> = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const classes = useStyles();
-  const { state } = useContext(GlobalContext);
+  const { data, status } = useQuery('countryTotals', getCountryGeoJSONData, {
+    staleTime: 300000,
+  });
+
+  const lastUpdated =
+    status === 'success' &&
+    data &&
+    data[0].properties &&
+    'date' in data[0].properties
+      ? new Date(data[0].properties['date'])
+      : undefined;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -85,10 +96,7 @@ export const TickerInfoPopover: FC<TickerInfoType> = ({
           <ListItem divider>
             {!omitLastUpdated && (
               <Typography variant="caption" color="textSecondary">
-                LAST UPDATED:{' '}
-                {state.lastCountriesUpdate
-                  ? prettyDate(state.lastCountriesUpdate)
-                  : 'N/A'}
+                LAST UPDATED: {lastUpdated ? prettyDate(lastUpdated) : 'N/A'}
               </Typography>
             )}
           </ListItem>
