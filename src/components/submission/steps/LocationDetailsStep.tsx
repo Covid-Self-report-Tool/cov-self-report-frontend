@@ -73,7 +73,7 @@ export const LocationDetailsStep: FC<LocationDetailsStepType> = ({
           onSelect={handleSelectAddress}
           // NOTE: actually need the parentheses around 'regions'
           // https://developers.google.com/places/supported_types#table3
-          searchOptions={{ types: ['(regions)'] }}
+          searchOptions={{ types: ['(cities)'] }}
           debounce={300}
           shouldFetchSuggestions={
             !!formState.address && formState.address.length > 2
