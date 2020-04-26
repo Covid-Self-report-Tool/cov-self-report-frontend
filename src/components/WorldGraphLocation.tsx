@@ -15,6 +15,7 @@ import L from 'leaflet';
 import { CountriesFieldsForTotals } from 'context/types';
 import { MAPBOX_API_KEY as accessToken } from 'config';
 import { countriesSymbology } from 'config/map';
+import { prettyDate } from 'utils/dates';
 import {
   createClusterCustomIcon,
   indivMarkerIcon,
@@ -55,7 +56,16 @@ type MapboxType = {
   tilesetId: string;
 };
 
-type PositionType = { lat: number; lng: number };
+type PositionType = {
+  address: string;
+  city: string | null;
+  country: string | null;
+  county: string | null;
+  date: string | null;
+  lat: number;
+  lng: number;
+  state: string | null;
+};
 
 type WorldGraphProps = {
   data: any[]; // TODO: type this
@@ -73,16 +83,24 @@ const SubmittedCases: FC<SubmittedType> = ({ data }) => (
     disableClusteringAtZoom={8}
     maxClusterRadius={60}
   >
-    {data.map((position, i) => (
+    {data.map((selfReportedItem, i) => (
       <Marker
         key={i}
-        position={[position.lat, position.lng]}
+        position={[selfReportedItem.lat, selfReportedItem.lng]}
         icon={indivMarkerIcon}
       >
         <Popup maxWidth={200}>
-          <h2>Self-reported location</h2>
-          {`Latitude: ${position.lat}`},<br />
-          {`Longitude: ${position.lng}`}
+          <h2>{selfReportedItem.address}</h2>
+          <p>
+            <small>
+              <i>
+                Self-reported location{' '}
+                {selfReportedItem.date
+                  ? `submitted ${prettyDate(new Date(selfReportedItem.date))}`
+                  : ''}
+              </i>
+            </small>
+          </p>
         </Popup>
       </Marker>
     ))}
