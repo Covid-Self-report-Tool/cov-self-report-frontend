@@ -27,9 +27,7 @@ export type StoreActionType =
   | { type: 'TOGGLE_LAYER_VISIBILITY'; payload: keyof LayerVisibilityTypes }
   | { type: 'SET_LAST_COUNTRIES_UPDATE'; payload: Date }
   | { type: 'SET_COUNTRY_DATA'; payload: [] }
-  | { type: 'SET_SELF_SUBMITTED_DATA'; payload: [] }
   | { type: 'SET_USER_DATA'; payload: {} }
-  | { type: 'SET_SELF_SUBMITTED_TOTALS'; payload: number }
   | { type: 'SHOW_SPLASH'; payload: boolean }
   | {
       type: 'SET_TOTALS';
@@ -41,7 +39,6 @@ export type CurrentTotalsTypes = {
   deaths: number;
   recovered: number;
   selfReported: number;
-  suspected?: number;
 };
 
 export type CountryData = {
