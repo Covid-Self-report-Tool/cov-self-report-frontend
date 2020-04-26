@@ -36,7 +36,9 @@ interface BreadcrumbType {
 }
 
 export const AboutSection: FC<AboutType> = ({ filename }) => {
-  const { status, data } = useQuery(filename, getHtmlFromS3);
+  const { status, data } = useQuery(filename, getHtmlFromS3, {
+    staleTime: Infinity,
+  });
   const { state, dispatch } = useContext(GlobalContext);
 
   if (status === 'error') {
