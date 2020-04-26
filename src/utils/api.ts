@@ -1,7 +1,10 @@
+import { queryCache } from 'react-query';
+
 import { BACKEND_URL, CLOUD_HTML_BASE_URL } from 'config';
 import { SymptomForm } from 'context/types';
 import { IGeoJson, CountryRow } from 'types';
 import { GeoJSONCollection } from 'types/api';
+import { htmlPages } from 'views';
 
 const superagent = require('superagent');
 
@@ -73,3 +76,15 @@ export const getHtmlFromS3 = async (filename: string) =>
 
 export const triggerBadRequest = async () =>
   await superagent.get('http://superfake.biz/400');
+
+export const bootstrapApp = async () => {
+  await prefetchAboutData();
+};
+
+const prefetchAboutData = async () => {
+  htmlPages.forEach(async page => {
+    await queryCache.prefetchQuery(page, getHtmlFromS3, {
+      staleTime: Infinity,
+    });
+  });
+};
