@@ -18,17 +18,19 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { UserPopoverMenu } from 'components';
 import firebase from 'config/firebase';
 
-interface NavBarTypes {
-  isHome: boolean;
-  drawerOpen: boolean;
-  toggleDrawerOpen: (active: boolean) => void;
-}
-
 type MuiClassList = {
   classes: {
     [key: string]: string;
   };
 };
+
+type NavBarTypes = {
+  isHome: boolean;
+  drawerOpen: boolean;
+  toggleDrawerOpen: (active: boolean) => void;
+};
+
+type BurgerTypes = Omit<NavBarTypes, 'isHome'> & MuiClassList;
 
 const useStyles = (isHome: boolean) => {
   const ok = makeStyles(theme => ({
@@ -42,30 +44,19 @@ const useStyles = (isHome: boolean) => {
         padding: theme.spacing(2),
       },
     },
-    titleWrap: {
-      display: 'flex',
-      [theme.breakpoints.up('md')]: {
-        display: 'block',
-        textAlign: 'center',
-        flex: '1 1 100%',
-      },
-    },
     toolbar: {
       justifyContent: 'space-between',
     },
     title: {
-      position: 'relative',
-      textDecoration: 'none',
-      textAlign: 'left',
-      paddingTop: 3,
-      paddingRight: 5,
       color: 'inherit',
       justifyContent: 'center',
+      marginRight: 'auto',
+      paddingRight: 5,
+      paddingTop: 3,
+      position: 'relative',
+      textAlign: 'left',
+      textDecoration: 'none',
       textShadow: '1px 1px 3px hsla(180, 2%, 10%, 0.75)',
-      [theme.breakpoints.up('md')]: {
-        flex: 0,
-        display: 'inline-block',
-      },
     },
     appBarBtns: {
       color: 'inherit',
@@ -75,6 +66,7 @@ const useStyles = (isHome: boolean) => {
       },
     },
     signupLoginBtn: {
+      // Put login/signup btn into sidebar on mobile, too much 💩 up top
       [theme.breakpoints.down('sm')]: {
         display: 'none',
       },
@@ -83,7 +75,8 @@ const useStyles = (isHome: boolean) => {
     menuButton: {
       color: 'inherit',
       padding: 6,
-      [theme.breakpoints.up('sm')]: {
+      // Hide on larger than wide tablet portrait
+      [theme.breakpoints.up('md')]: {
         display: 'none',
       },
     },
@@ -149,44 +142,41 @@ const LoginSignupBtn: FC<MuiClassList> = ({ classes }) => (
 );
 
 const TitleWrap: FC<MuiClassList> = ({ classes }) => (
-  <Box className={`${classes.titleWrap} MuiTypography-noWrap`}>
+  <Typography
+    to="/"
+    component={RouteLink}
+    variant="h5"
+    className={`${classes.title} MuiTypography-noWrap`}
+  >
+    <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
+      Covid-19 Self-reporting Tool
+    </span>
+    <Box className={classes.badge}>BETA</Box>
     <Typography
-      to="/"
-      component={RouteLink}
-      variant="h5"
-      // noWrap
-      className={`${classes.title} MuiTypography-noWrap`}
+      component="p"
+      variant="subtitle2"
+      noWrap
+      className={classes.subTitle}
     >
-      <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
-        Covid-19 Self-reporting Tool
-      </span>
-      <Box className={classes.badge}>BETA</Box>
-      <Typography
-        component="p"
-        variant="subtitle2"
-        noWrap
-        className={classes.subTitle}
-      >
-        An open data tool that tracks self-reported and confirmed infections
-      </Typography>
+      An open data tool that tracks self-reported and confirmed infections
     </Typography>
-  </Box>
+  </Typography>
 );
 
-const Burger: FC<NavBarTypes> = ({ isHome, toggleDrawerOpen, drawerOpen }) => {
-  const classes = useStyles(isHome);
-
-  return (
-    <IconButton
-      edge="start"
-      className={classes.menuButton}
-      aria-label="menu"
-      onClick={() => toggleDrawerOpen(!drawerOpen)}
-    >
-      <MenuIcon />
-    </IconButton>
-  );
-};
+const Burger: FC<BurgerTypes> = ({
+  toggleDrawerOpen,
+  drawerOpen,
+  classes = {},
+}) => (
+  <IconButton
+    edge="start"
+    className={classes.menuButton}
+    aria-label="menu"
+    onClick={() => toggleDrawerOpen(!drawerOpen)}
+  >
+    <MenuIcon />
+  </IconButton>
+);
 
 const MySymptomsBtn: FC<MuiClassList> = ({ classes }) => (
   <Button
@@ -215,7 +205,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
       <AppBar position="fixed" className={classes.root}>
         <Toolbar disableGutters className={classes.toolbar} variant="dense">
           <Burger
-            isHome={isHome}
+            classes={classes}
             toggleDrawerOpen={toggleDrawerOpen}
             drawerOpen={drawerOpen}
           />
