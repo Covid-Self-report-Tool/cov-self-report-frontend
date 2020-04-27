@@ -79,7 +79,6 @@ type SubmittedType = {
 };
 
 const SubmittedCases: FC<SubmittedType> = ({ data }) => {
-  const { dispatch } = useContext(GlobalContext);
   const { status, data: submittedData } = useQuery(
     'submitted',
     getSubmittedCases,
@@ -87,18 +86,6 @@ const SubmittedCases: FC<SubmittedType> = ({ data }) => {
   );
 
   if (status === 'loading') {
-    return <></>;
-  }
-
-  if (status === 'error') {
-    dispatch({
-      type: 'TOGGLE_UI_ALERT',
-      payload: {
-        open: true,
-        message: 'Could not get self-reported dataset',
-        severity: 'error',
-      },
-    });
     return <></>;
   }
 
