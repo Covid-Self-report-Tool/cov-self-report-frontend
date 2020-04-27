@@ -32,6 +32,9 @@ export const SimpleModal: FC<SimpleModalTypes> = ({ children, title }) => {
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button onClick={() => history.goBack()} color="primary">
+          Back
+        </Button>
+        <Button onClick={() => history.push('/')} color="primary">
           Cancel
         </Button>
       </DialogActions>
