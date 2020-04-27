@@ -27,14 +27,14 @@ interface NavBarTypes {
 const useStyles = (isHome: boolean) => {
   const ok = makeStyles(theme => ({
     root: {
+      backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
+      boxShadow: 'none',
+      color: theme.palette.common.white,
       padding: theme.spacing(1),
+      zIndex: theme.zIndex.drawer + 1,
       [theme.breakpoints.up('md')]: {
         padding: theme.spacing(2),
       },
-      zIndex: theme.zIndex.drawer + 1,
-      color: theme.palette.common.white,
-      boxShadow: 'none',
-      backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
     },
     titleWrap: {
       display: 'flex',
@@ -45,9 +45,7 @@ const useStyles = (isHome: boolean) => {
       },
     },
     toolbar: {
-      [theme.breakpoints.only('md')]: {
-        justifyContent: 'space-between',
-      },
+      justifyContent: 'space-between',
     },
     title: {
       position: 'relative',
@@ -63,10 +61,19 @@ const useStyles = (isHome: boolean) => {
         display: 'inline-block',
       },
     },
-    signupBtn: {
+    appBarBtns: {
       color: 'inherit',
-      marginLeft: theme.spacing(1),
+      marginLeft: 'auto',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+      },
     },
+    signupLoginBtn: {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
+    },
+    // Hamburger
     menuButton: {
       color: 'inherit',
       padding: 6,
@@ -77,7 +84,7 @@ const useStyles = (isHome: boolean) => {
     subTitle: {
       lineHeight: 1,
       [theme.breakpoints.down('sm')]: {
-        fontSize: '0.7rem',
+        display: 'none',
       },
     },
     rightSideWrap: {
@@ -89,17 +96,19 @@ const useStyles = (isHome: boolean) => {
       },
     },
     snugBtnMobile: {
-      [theme.breakpoints.down('sm')]: {
-        padding: 6,
-        textAlign: 'center',
+      [theme.breakpoints.down('xs')]: {
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingLeft: 0,
+        paddingRight: 0,
         lineHeight: 1,
       },
     },
     badge: {
       backgroundColor: 'hsla(36, 100%, 50%, 0.95)',
       borderRadius: 7,
-      fontSize: '15px',
-      lineHeight: '17px',
+      fontSize: '10px',
+      lineHeight: '12px',
       padding: '1px 5px',
       position: 'absolute',
       right: 0,
@@ -124,7 +133,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar position="fixed" className={classes.root}>
-        <Toolbar disableGutters className={classes.toolbar}>
+        <Toolbar disableGutters className={classes.toolbar} variant="dense">
           <IconButton
             edge="start"
             className={classes.menuButton}
@@ -137,8 +146,8 @@ export const MainNavBar: FC<NavBarTypes> = ({
             <Typography
               to="/"
               component={RouteLink}
-              variant="h4"
-              noWrap
+              variant="h5"
+              // noWrap
               className={`${classes.title} MuiTypography-noWrap`}
             >
               <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
@@ -162,18 +171,19 @@ export const MainNavBar: FC<NavBarTypes> = ({
                 <Button
                   variant="contained"
                   color="secondary"
+                  size="small"
                   to="/self-report"
-                  className={`${classes.signupBtn} ${classes.snugBtnMobile}`}
+                  className={`${classes.appBarBtns} ${classes.snugBtnMobile}`}
                   component={RouteLink}
                 >
-                  {user ? 'Edit Symptoms' : 'Add Symptoms'}
+                  My Case
                 </Button>
                 <IfFirebaseUnAuthed>
                   {() => (
                     <Button
                       variant="contained"
                       color="primary"
-                      className={`${classes.signupBtn} ${classes.snugBtnMobile}`}
+                      className={`${classes.appBarBtns} ${classes.signupLoginBtn} ${classes.snugBtnMobile}`}
                       component={RouteLink}
                       to="/login"
                     >
