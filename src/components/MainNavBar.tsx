@@ -38,10 +38,16 @@ const useStyles = (isHome: boolean) => {
       backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
       boxShadow: 'none',
       color: theme.palette.common.white,
-      padding: theme.spacing(1),
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      paddingLeft: 6,
+      paddingRight: 6,
       zIndex: theme.zIndex.drawer + 1,
-      [theme.breakpoints.up('md')]: {
-        padding: theme.spacing(2),
+      [theme.breakpoints.up(600)]: {
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
       },
     },
     toolbar: {
@@ -57,10 +63,41 @@ const useStyles = (isHome: boolean) => {
       textAlign: 'left',
       textDecoration: 'none',
       textShadow: '1px 1px 3px hsla(180, 2%, 10%, 0.75)',
+      fontSize: '1.5rem',
+      lineHeight: 1,
+      [theme.breakpoints.up('md')]: {
+        fontSize: '2.5rem',
+      },
+    },
+    titleAndBadge: {
+      position: 'relative',
+      display: 'flex',
+      flexWrap: 'nowrap',
+      flex: 1,
+    },
+    // Hamburger
+    burger: {
+      color: 'inherit',
+      padding: 0, // let the app bar do the padding
+      marginLeft: 0, // default is -12px wtf
+      marginRight: 4, // space between the title
+      [theme.breakpoints.up(600)]: {
+        marginRight: 8, // nitpicky: more room for landscape phones and up
+      },
+      // Hide on larger than wide tablet portrait
+      [theme.breakpoints.up('md')]: {
+        display: 'none',
+      },
+    },
+    subTitle: {
+      // lineHeight: 1,
+      fontSize: '0.75rem',
+      [theme.breakpoints.down(600)]: {
+        fontSize: '0.5rem',
+      },
     },
     appBarBtns: {
       color: 'inherit',
-      marginLeft: 'auto', // forces it to the end in flexbox
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(1),
       },
@@ -72,48 +109,23 @@ const useStyles = (isHome: boolean) => {
         display: 'none',
       },
     },
-    // Hamburger
-    burger: {
-      color: 'inherit',
-      padding: 6,
-      // Hide on larger than wide tablet portrait
-      [theme.breakpoints.up('md')]: {
-        display: 'none',
-      },
-    },
-    subTitle: {
-      lineHeight: 1,
-      [theme.breakpoints.down(600)]: {
-        display: 'none',
-      },
-    },
-    rightSideWrap: {
-      display: 'flex',
-      [theme.breakpoints.up('md')]: {
-        flex: '1 50%',
-        display: 'flex',
-        justifyContent: 'flex-end',
-      },
-    },
     snugBtnMobile: {
-      [theme.breakpoints.down('xs')]: {
-        paddingTop: 4,
-        paddingBottom: 4,
-        paddingLeft: 2,
-        paddingRight: 2,
+      [theme.breakpoints.down(400)]: {
         lineHeight: 1,
+        minWidth: 'auto', // default is not very compatible w/topbar flex
+        padding: 6,
       },
     },
     badge: {
       backgroundColor: 'hsla(36, 100%, 50%, 0.95)',
       borderRadius: 7,
       fontSize: '10px',
-      lineHeight: '12px',
-      padding: '1px 5px',
+      left: -9,
+      lineHeight: 1,
+      padding: '1px 3px',
       position: 'absolute',
-      right: 0,
-      textShadow: 'none',
-      top: 0,
+      top: -5,
+      zIndex: 1,
     },
   }));
 
@@ -121,13 +133,13 @@ const useStyles = (isHome: boolean) => {
 };
 
 const MainNavBarBtns: FC<MuiClassList> = ({ classes }) => (
-  <Box className={classes.rightSideWrap}>
+  <>
     <MySymptomsBtn classes={classes} />
     <IfFirebaseUnAuthed>
       {() => <LoginSignupBtn classes={classes} />}
     </IfFirebaseUnAuthed>
     <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
-  </Box>
+  </>
 );
 
 const LoginSignupBtn: FC<MuiClassList> = ({ classes }) => (
@@ -146,13 +158,11 @@ const TitleWrap: FC<MuiClassList> = ({ classes }) => (
   <Typography
     to="/"
     component={RouteLink}
-    variant="h5"
     className={`${classes.title} MuiTypography-noWrap`}
   >
     <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
       Covid-19 Self-reporting Tool
     </span>
-    <Box className={classes.badge}>BETA</Box>
     <Typography
       component="p"
       variant="subtitle2"
@@ -183,7 +193,6 @@ const MySymptomsBtn: FC<MuiClassList> = ({ classes }) => (
   <Button
     variant="contained"
     color="secondary"
-    size="small"
     to="/self-report"
     className={`${classes.appBarBtns} ${classes.snugBtnMobile}`}
     component={RouteLink}
@@ -210,7 +219,10 @@ export const MainNavBar: FC<NavBarTypes> = ({
             toggleDrawerOpen={toggleDrawerOpen}
             drawerOpen={drawerOpen}
           />
-          <TitleWrap classes={classes} />
+          <Box className={classes.titleAndBadge}>
+            <sup className={classes.badge}>BETA</sup>
+            <TitleWrap classes={classes} />
+          </Box>
           {!loading && <MainNavBarBtns classes={classes} />}
         </Toolbar>
       </AppBar>
