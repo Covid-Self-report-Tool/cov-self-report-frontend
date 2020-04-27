@@ -14,28 +14,29 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = makeStyles(theme => {
-  const navItemSize = 60;
+  const navItemSize = 80; // TODO: make consistent with MobileOffCanvas
   const shadow = '1px 1px 3px hsla(180, 2%, 10%, 0.75)';
 
   return {
     list: {
-      left: 0,
-      position: 'fixed',
-      top: theme.spacing(4),
-      zIndex: 401,
-      [theme.breakpoints.up('sm')]: {
-        top: 115, // past top bar (except on tweeners like iPhone landscape)
+      paddingTop: theme.spacing(4),
+      [theme.breakpoints.up('md')]: {
+        left: 0,
+        zIndex: 401,
+        position: 'fixed',
+        top: 115, // past top bar on wide portrait and above
       },
     },
-    navItem: {
+    listItem: {
+      height: navItemSize,
+      justifyContent: 'center',
+    },
+    navItemLink: {
       alignItems: 'center',
       color: theme.palette.common.white,
       display: 'flex',
       flexDirection: 'column',
-      height: navItemSize,
       justifyContent: 'center',
-      textAlign: 'center',
-      width: navItemSize,
       textShadow: shadow,
       '& svg': {
         // CRED: https://stackoverflow.com/a/13624469/1048518
@@ -47,39 +48,51 @@ const useStyles = makeStyles(theme => {
 });
 
 // The top-level nav btns in sidebar or wherever
-export const SiteNavBtns: React.FC = () => (
-  <List className={useStyles().list}>
-    <ListItem button>
-      <Link to="/" component={RouterLink} className={useStyles().navItem}>
-        <MapIcon />
-        <ListItemText
-          primary={<Typography variant="overline">Map</Typography>}
-        />
-      </Link>
-    </ListItem>
-    <ListItem button>
-      <Link to="/list" component={RouterLink} className={useStyles().navItem}>
-        <ListIcon />
-        <ListItemText
-          primary={<Typography variant="overline">List</Typography>}
-        />
-      </Link>
-    </ListItem>
-    <ListItem button>
-      <Link to="/models" component={RouterLink} className={useStyles().navItem}>
-        <BarChartIcon />
-        <ListItemText
-          primary={<Typography variant="overline">Models</Typography>}
-        />
-      </Link>
-    </ListItem>
-    <ListItem button>
-      <Link to="/about" component={RouterLink} className={useStyles().navItem}>
-        <InfoIcon />
-        <ListItemText
-          primary={<Typography variant="overline">About</Typography>}
-        />
-      </Link>
-    </ListItem>
-  </List>
-);
+export const SiteNavBtns: React.FC = () => {
+  const classes = useStyles();
+
+  return (
+    <List className={classes.list}>
+      <ListItem button component="li" className={classes.listItem}>
+        <Link to="/" component={RouterLink} className={classes.navItemLink}>
+          <MapIcon />
+          <ListItemText
+            primary={<Typography variant="subtitle2">Map</Typography>}
+          />
+        </Link>
+      </ListItem>
+      <ListItem button component="li" className={classes.listItem}>
+        <Link to="/list" component={RouterLink} className={classes.navItemLink}>
+          <ListIcon />
+          <ListItemText
+            primary={<Typography variant="subtitle2">List</Typography>}
+          />
+        </Link>
+      </ListItem>
+      <ListItem button component="li" className={classes.listItem}>
+        <Link
+          to="/models"
+          component={RouterLink}
+          className={classes.navItemLink}
+        >
+          <BarChartIcon />
+          <ListItemText
+            primary={<Typography variant="subtitle2">Models</Typography>}
+          />
+        </Link>
+      </ListItem>
+      <ListItem button component="li" className={classes.listItem}>
+        <Link
+          to="/about"
+          component={RouterLink}
+          className={classes.navItemLink}
+        >
+          <InfoIcon />
+          <ListItemText
+            primary={<Typography variant="subtitle2">About</Typography>}
+          />
+        </Link>
+      </ListItem>
+    </List>
+  );
+};
