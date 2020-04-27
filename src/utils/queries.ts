@@ -6,9 +6,11 @@ import {
   getHtmlFromS3,
 } from 'utils/api';
 
+const FIVE_MINUTES = 300000;
+
 export const useCountryTotals = (dispatch: any) =>
   useQuery('countryTotals', getCountryGeoJSONData, {
-    staleTime: 30000,
+    staleTime: FIVE_MINUTES,
     onError: error => {
       dispatch({
         type: 'TOGGLE_UI_ALERT',
@@ -23,7 +25,7 @@ export const useCountryTotals = (dispatch: any) =>
 
 export const useSubmitted = (dispatch: any) =>
   useQuery('submitted', getSubmittedCases, {
-    staleTime: 30000,
+    staleTime: FIVE_MINUTES,
     onError: error => {
       dispatch({
         type: 'TOGGLE_UI_ALERT',
