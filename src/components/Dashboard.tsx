@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import {
   MainNavBar,
-  ListItems,
+  SiteNavBtns,
   BackToTopBtn,
   MobileOffCanvasNav,
 } from 'components';
@@ -42,7 +42,7 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
         drawerOpen={drawerOpen}
         toggleDrawerOpen={toggleDrawerOpen}
       >
-        <ListItems />
+        <SiteNavBtns />
       </MobileOffCanvasNav>
     </div>
   );
