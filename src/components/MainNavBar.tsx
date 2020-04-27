@@ -50,7 +50,7 @@ const useStyles = (isHome: boolean) => {
     title: {
       color: 'inherit',
       justifyContent: 'center',
-      marginRight: 'auto',
+      marginRight: 'auto', // forces it to the beginning in flexbox
       paddingRight: 5,
       paddingTop: 3,
       position: 'relative',
@@ -60,19 +60,20 @@ const useStyles = (isHome: boolean) => {
     },
     appBarBtns: {
       color: 'inherit',
-      marginLeft: 'auto',
+      marginLeft: 'auto', // forces it to the end in flexbox
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(1),
       },
     },
     signupLoginBtn: {
+      marginLeft: theme.spacing(1),
       // Put login/signup btn into sidebar on mobile, too much 💩 up top
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down(500)]: {
         display: 'none',
       },
     },
     // Hamburger
-    menuButton: {
+    burger: {
       color: 'inherit',
       padding: 6,
       // Hide on larger than wide tablet portrait
@@ -82,7 +83,7 @@ const useStyles = (isHome: boolean) => {
     },
     subTitle: {
       lineHeight: 1,
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down(600)]: {
         display: 'none',
       },
     },
@@ -98,8 +99,8 @@ const useStyles = (isHome: boolean) => {
       [theme.breakpoints.down('xs')]: {
         paddingTop: 4,
         paddingBottom: 4,
-        paddingLeft: 0,
-        paddingRight: 0,
+        paddingLeft: 2,
+        paddingRight: 2,
         lineHeight: 1,
       },
     },
@@ -170,7 +171,7 @@ const Burger: FC<BurgerTypes> = ({
 }) => (
   <IconButton
     edge="start"
-    className={classes.menuButton}
+    className={classes.burger}
     aria-label="menu"
     onClick={() => toggleDrawerOpen(!drawerOpen)}
   >
