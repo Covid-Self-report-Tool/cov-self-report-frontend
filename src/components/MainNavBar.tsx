@@ -43,11 +43,11 @@ const useStyles = (isHome: boolean) => {
       paddingLeft: 6,
       paddingRight: 6,
       zIndex: theme.zIndex.drawer + 1,
-      [theme.breakpoints.up(600)]: {
-        paddingTop: theme.spacing(3),
-        paddingBottom: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
       },
     },
     toolbar: {
@@ -65,6 +65,9 @@ const useStyles = (isHome: boolean) => {
       textShadow: '1px 1px 3px hsla(180, 2%, 10%, 0.75)',
       fontSize: '1.5rem',
       lineHeight: 1,
+      [theme.breakpoints.up('sm')]: {
+        fontSize: '2rem',
+      },
       [theme.breakpoints.up('md')]: {
         fontSize: '2.5rem',
       },
@@ -74,6 +77,12 @@ const useStyles = (isHome: boolean) => {
       display: 'flex',
       flexWrap: 'nowrap',
       flex: 1,
+      [theme.breakpoints.up('md')]: {
+        marginLeft: 105,
+      },
+      [theme.breakpoints.up('lg')]: {
+        marginLeft: 150,
+      },
     },
     // Hamburger
     burger: {
@@ -120,11 +129,11 @@ const useStyles = (isHome: boolean) => {
       backgroundColor: 'hsla(36, 100%, 50%, 0.95)',
       borderRadius: 7,
       fontSize: '10px',
-      left: -9,
+      left: -11,
       lineHeight: 1,
       padding: '1px 3px',
       position: 'absolute',
-      top: -5,
+      top: -3,
       zIndex: 1,
     },
   }));
@@ -213,7 +222,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar position="fixed" className={classes.root}>
-        <Toolbar disableGutters className={classes.toolbar} variant="dense">
+        <Toolbar disableGutters className={classes.toolbar}>
           <Burger
             classes={classes}
             toggleDrawerOpen={toggleDrawerOpen}
