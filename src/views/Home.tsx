@@ -13,37 +13,20 @@ import {
   SplashScreen,
   MapLayersPopout,
 } from 'components';
-import { getSubmittedCases } from 'utils/api';
-import { useQuery } from 'react-query';
 import { calculateTotals } from 'utils';
-import { useCountryTotals } from 'utils/queries';
+import { useCountryTotals, useSubmitted } from 'utils/queries';
 
 export const Home: FC = () => {
   const { state, dispatch } = useContext(GlobalContext);
 
   let [totalConfirmed, totalDeaths, totalRecovered] = [0, 0, 0];
 
-  const { data: submissions, status: statusSubmissions } = useQuery(
-    'submitted',
-    getSubmittedCases,
-    { staleTime: 300000 }
-  );
+  const { data: submissions } = useSubmitted(dispatch);
   const { data: countryTotals, status: countryTotalsStatus } = useCountryTotals(
     dispatch
   ); // useQuery('countryTotals', getCountryGeoJSONData, { staleTime: 300000 });
 
   const [user, loading] = useAuthState(firebase.auth());
-
-  if (statusSubmissions === 'error') {
-    dispatch({
-      type: 'TOGGLE_UI_ALERT',
-      payload: {
-        open: true,
-        message: 'Could not get self-reported dataset',
-        severity: 'error',
-      },
-    });
-  }
 
   if (countryTotalsStatus === 'success' && countryTotals) {
     ({
