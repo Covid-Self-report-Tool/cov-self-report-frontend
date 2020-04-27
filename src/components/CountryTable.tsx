@@ -1,17 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import MUIDataTable from 'mui-datatables';
-import { useQuery } from 'react-query';
 
-import { getCountryGeoJSONData } from 'utils/api';
+import { GlobalContext } from 'context';
+import { useCountryTotals } from 'utils/queries';
 
 export const CountryTable: FC = () => {
-  const { status, data: countries } = useQuery(
-    'countryTotals',
-    getCountryGeoJSONData,
-    {
-      staleTime: 300000,
-    }
-  );
+  const { dispatch } = useContext(GlobalContext);
+  const { status, data: countries } = useCountryTotals(dispatch);
 
   if (status !== 'success' || !countries) {
     return <></>;
