@@ -24,6 +24,12 @@ interface NavBarTypes {
   toggleDrawerOpen: (active: boolean) => void;
 }
 
+type MuiClassList = {
+  classes: {
+    [key: string]: string;
+  };
+};
+
 const useStyles = (isHome: boolean) => {
   const ok = makeStyles(theme => ({
     root: {
@@ -120,6 +126,81 @@ const useStyles = (isHome: boolean) => {
   return ok();
 };
 
+const MainNavBarBtns: FC<MuiClassList> = ({ classes }) => (
+  <Box className={classes.rightSideWrap}>
+    <MySymptomsBtn classes={classes} />
+    <IfFirebaseUnAuthed>
+      {() => <LoginSignupBtn classes={classes} />}
+    </IfFirebaseUnAuthed>
+    <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
+  </Box>
+);
+
+const LoginSignupBtn: FC<MuiClassList> = ({ classes }) => (
+  <Button
+    variant="contained"
+    color="primary"
+    className={`${classes.appBarBtns} ${classes.signupLoginBtn} ${classes.snugBtnMobile}`}
+    component={RouteLink}
+    to="/login"
+  >
+    Login / Signup
+  </Button>
+);
+
+const TitleWrap: FC<MuiClassList> = ({ classes }) => (
+  <Box className={`${classes.titleWrap} MuiTypography-noWrap`}>
+    <Typography
+      to="/"
+      component={RouteLink}
+      variant="h5"
+      // noWrap
+      className={`${classes.title} MuiTypography-noWrap`}
+    >
+      <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
+        Covid-19 Self-reporting Tool
+      </span>
+      <Box className={classes.badge}>BETA</Box>
+      <Typography
+        component="p"
+        variant="subtitle2"
+        noWrap
+        className={classes.subTitle}
+      >
+        An open data tool that tracks self-reported and confirmed infections
+      </Typography>
+    </Typography>
+  </Box>
+);
+
+const Burger: FC<NavBarTypes> = ({ isHome, toggleDrawerOpen, drawerOpen }) => {
+  const classes = useStyles(isHome);
+
+  return (
+    <IconButton
+      edge="start"
+      className={classes.menuButton}
+      aria-label="menu"
+      onClick={() => toggleDrawerOpen(!drawerOpen)}
+    >
+      <MenuIcon />
+    </IconButton>
+  );
+};
+
+const MySymptomsBtn: FC<MuiClassList> = ({ classes }) => (
+  <Button
+    variant="contained"
+    color="secondary"
+    size="small"
+    to="/self-report"
+    className={`${classes.appBarBtns} ${classes.snugBtnMobile}`}
+    component={RouteLink}
+  >
+    My Case
+  </Button>
+);
+
 export const MainNavBar: FC<NavBarTypes> = ({
   isHome,
   toggleDrawerOpen,
@@ -127,74 +208,19 @@ export const MainNavBar: FC<NavBarTypes> = ({
 }) => {
   const classes = useStyles(isHome);
   const trigger = useScrollTrigger();
-
-  const [user, loading] = useAuthState(firebase.auth());
+  const [, loading] = useAuthState(firebase.auth());
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar position="fixed" className={classes.root}>
         <Toolbar disableGutters className={classes.toolbar} variant="dense">
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            aria-label="menu"
-            onClick={() => toggleDrawerOpen(!drawerOpen)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box className={`${classes.titleWrap} MuiTypography-noWrap`}>
-            <Typography
-              to="/"
-              component={RouteLink}
-              variant="h5"
-              // noWrap
-              className={`${classes.title} MuiTypography-noWrap`}
-            >
-              <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
-                Covid-19 Self-reporting Tool
-              </span>
-              <Box className={classes.badge}>BETA</Box>
-              <Typography
-                component="p"
-                variant="subtitle2"
-                noWrap
-                className={classes.subTitle}
-              >
-                An open data tool that tracks self-reported and confirmed
-                infections
-              </Typography>
-            </Typography>
-          </Box>
-          <Box className={classes.rightSideWrap}>
-            {!loading && (
-              <>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  to="/self-report"
-                  className={`${classes.appBarBtns} ${classes.snugBtnMobile}`}
-                  component={RouteLink}
-                >
-                  My Case
-                </Button>
-                <IfFirebaseUnAuthed>
-                  {() => (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={`${classes.appBarBtns} ${classes.signupLoginBtn} ${classes.snugBtnMobile}`}
-                      component={RouteLink}
-                      to="/login"
-                    >
-                      Login / Signup
-                    </Button>
-                  )}
-                </IfFirebaseUnAuthed>
-                <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
-              </>
-            )}
-          </Box>
+          <Burger
+            isHome={isHome}
+            toggleDrawerOpen={toggleDrawerOpen}
+            drawerOpen={drawerOpen}
+          />
+          <TitleWrap classes={classes} />
+          {!loading && <MainNavBarBtns classes={classes} />}
         </Toolbar>
       </AppBar>
     </Slide>
