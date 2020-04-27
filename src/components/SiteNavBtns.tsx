@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => {
 });
 
 // The top-level nav btns in sidebar or wherever
-export const ListItems: React.FC = () => (
+export const SiteNavBtns: React.FC = () => (
   <List className={useStyles().list}>
     <ListItem button>
       <Link to="/" component={RouterLink} className={useStyles().navItem}>
