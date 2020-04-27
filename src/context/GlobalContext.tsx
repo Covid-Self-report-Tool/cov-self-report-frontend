@@ -1,14 +1,8 @@
 import React, { useEffect, useReducer, createContext, FC } from 'react';
 import 'date-fns';
 
-import {
-  getSubmittedCases,
-  getCountryGeoJSONData,
-  bootstrapApp,
-} from 'utils/api';
+import { bootstrapApp } from 'utils/api';
 import { StoreActionType, InitialStateType } from 'context/types';
-import { GeoJSONData } from 'types/api';
-import { calculateTotals } from 'utils';
 
 export const initialState = {
   activeCountrySymbKey: 'total_confirmed',
@@ -21,16 +15,6 @@ export const initialState = {
     selfReported: true,
     countries: true,
   },
-  currentTotals: {
-    total_confirmed: 0,
-    total_deaths: 0,
-    total_recovered: 0,
-    selfReported: 0,
-    suspected: 0,
-  }, // just the JHU stats (for the tickers)
-  countries: [], // JHU countries data
-  allSelfReportedPoints: [], // self-submitted points (our body.data.locations)
-  symptomForm: {}, // stuff for pre-populating symptoms form
   showSplash: false,
   hasSeenSplash: false,
   lastCountriesUpdate: null, // human-friendly timestamp of first country in JHU
@@ -63,37 +47,6 @@ const reducer = (
           ...state.layerVisibility,
           [action.payload]: !state.layerVisibility[action.payload],
         },
-      };
-    case 'SET_LAST_COUNTRIES_UPDATE':
-      return {
-        ...state,
-        lastCountriesUpdate: action.payload,
-      };
-    case 'SET_COUNTRY_DATA':
-      return {
-        ...state,
-        countries: action.payload,
-      };
-    case 'SET_SELF_SUBMITTED_TOTALS':
-      return {
-        ...state,
-        currentTotals: {
-          ...state.currentTotals,
-          selfReported: action.payload,
-        },
-      };
-    case 'SET_TOTALS':
-      return {
-        ...state,
-        currentTotals: {
-          ...state.currentTotals,
-          ...action.payload,
-        },
-      };
-    case 'SET_SELF_SUBMITTED_DATA':
-      return {
-        ...state,
-        allSelfReportedPoints: action.payload,
       };
     case 'SHOW_SPLASH':
       if (action.payload === true) {
@@ -129,65 +82,6 @@ export const GlobalProvider: FC<GlobalProviderType> = ({ children }) => {
 
   useEffect(() => {
     bootstrapApp();
-
-    getSubmittedCases()
-      .then(response => {
-        dispatch({
-          type: 'SET_SELF_SUBMITTED_DATA',
-          payload: response.body.data.locations,
-        });
-
-        dispatch({
-          type: 'SET_SELF_SUBMITTED_TOTALS',
-          payload: response.body.data.locations.length,
-        });
-      })
-      .catch(() => {
-        dispatch({
-          type: 'TOGGLE_UI_ALERT',
-          payload: {
-            open: true,
-            message: 'Could not get self-reported dataset',
-            severity: 'error',
-          },
-        });
-      });
-
-    getCountryGeoJSONData()
-      .then((geoJSON: GeoJSONData) => {
-        if (geoJSON[0].properties.date) {
-          dispatch({
-            type: 'SET_LAST_COUNTRIES_UPDATE',
-            payload: new Date(geoJSON[0].properties.date),
-          });
-        }
-
-        dispatch({
-          type: 'SET_COUNTRY_DATA',
-          payload: geoJSON,
-        });
-
-        const totals = calculateTotals(geoJSON, {
-          total_confirmed: 0,
-          total_deaths: 0,
-          total_recovered: 0,
-        });
-
-        dispatch({
-          type: 'SET_TOTALS',
-          payload: totals,
-        });
-      })
-      .catch(() => {
-        dispatch({
-          type: 'TOGGLE_UI_ALERT',
-          payload: {
-            open: true,
-            message: 'Could not get countries features',
-            severity: 'error',
-          },
-        });
-      });
   }, []);
 
   return (

@@ -78,6 +78,7 @@
     "@types/react-leaflet": "^2.5.1",
     "@types/react-leaflet-markercluster": "^2.0.0",
     "@types/react-map-gl": "^5.2.2",
+    "@types/react-query": "^1.1.2",
     "@types/recharts": "^1.8.9",
     "@types/superagent": "^4.1.7",
     "eslint": "^6.8.0",
