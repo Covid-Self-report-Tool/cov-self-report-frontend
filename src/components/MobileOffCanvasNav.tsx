@@ -15,10 +15,12 @@ export const MobileOffCanvasNav: FC<OffCanvasTypes> = ({
   children,
 }) => {
   const theme = useTheme();
-  const bigGuy = useMediaQuery(theme.breakpoints.up('md'));
+  const wideTabletPortraitAndUp = useMediaQuery(theme.breakpoints.up('md'));
 
-  // Show only on wide portrait and up
-  if (bigGuy) {
+  // Hide on larger than wide tablet portrait. While there is plenty of room
+  // on screens that wide in portrait, if people turn their phones sideways
+  // to landscape, they won't see the menu. 🙄
+  if (wideTabletPortraitAndUp) {
     return <>{children}</>;
   }
 
