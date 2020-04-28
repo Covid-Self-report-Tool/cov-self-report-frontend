@@ -1,13 +1,9 @@
 import React, { FC, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container } from '@material-ui/core';
-import {
-  MainNavBar,
-  SiteNavBtns,
-  BackToTopBtn,
-  MobileOffCanvasNav,
-} from 'components';
 
+import { SiteNavBtns, BackToTopBtn, MobileOffCanvasNav } from 'components';
+import { TopBar } from 'components/top-bar';
 import { useStyles } from './dashboard.styles';
 
 type DashboardTypes = {
@@ -22,7 +18,7 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
 
   return (
     <div className={classes.root}>
-      <MainNavBar
+      <TopBar
         isHome={isHome}
         drawerOpen={drawerOpen}
         toggleDrawerOpen={toggleDrawerOpen}
