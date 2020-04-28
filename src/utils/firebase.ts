@@ -37,6 +37,11 @@ export const googleLogin = async () => {
   await firebase.auth().signInWithPopup(googleAuthProvider);
 };
 
+export const facebookLogin = async () => {
+  const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
+  await firebase.auth().signInWithPopup(facebookAuthProvider);
+};
+
 export const onAuthStateChange = (callback: Function) => {
   return firebase.auth().onAuthStateChanged(user => {
     if (user) {
