@@ -14,6 +14,7 @@ import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 import { SymptomForm, DispatchFormType } from 'context/types';
 import { SignupFields } from 'components/signup/SignupFields';
 import { initialFormStateType } from 'components/signup/types';
+import { googleLogin } from 'utils/firebase';
 
 const useStyles = makeStyles({
   marginTop: {
@@ -57,7 +58,11 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                     </Button>
                   </Grid>
                   <Grid item xs={12}>
-                    <Button variant="contained" className={classes.marginTop}>
+                    <Button
+                      variant="contained"
+                      onClick={() => googleLogin()}
+                      className={classes.marginTop}
+                    >
                       Google
                     </Button>
                   </Grid>

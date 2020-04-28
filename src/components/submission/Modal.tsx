@@ -125,6 +125,9 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           },
         });
         break;
+      // I don't know why this is an error in the first place
+      case 'auth/cancelled-popup-request':
+        break;
       default:
         dispatch({
           type: 'TOGGLE_UI_ALERT',
