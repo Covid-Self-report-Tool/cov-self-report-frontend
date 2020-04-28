@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
   DialogTitle,
   DialogContent,
@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
-import { SignupForm, LoginForm } from 'components';
+import { SignupForm } from 'components/signup';
 import { SymptomForm, DispatchFormType } from 'context/types';
 
 type RegistrationStepType = {
@@ -21,35 +21,16 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
   formState,
   dispatchForm,
 }) => {
-  const [register, setRegister] = useState<boolean>(true);
-
   return (
     <div>
       <IfFirebaseUnAuthed>
         {() => (
-          <div>
-            {register ? (
-              <div>
-                <DialogTitle>Register</DialogTitle>
-                <DialogContent>
-                  <SignupForm />
-                  <Link href="#" onClick={() => setRegister(!register)}>
-                    Already a User?
-                  </Link>
-                </DialogContent>
-              </div>
-            ) : (
-              <div>
-                <DialogTitle>Login</DialogTitle>
-                <DialogContent>
-                  <LoginForm />
-                  <Link href="#" onClick={() => setRegister(!register)}>
-                    Need to Register?
-                  </Link>
-                </DialogContent>
-              </div>
-            )}
-          </div>
+          <>
+            <DialogTitle>Register</DialogTitle>
+            <DialogContent>
+              <SignupForm />
+            </DialogContent>
+          </>
         )}
       </IfFirebaseUnAuthed>
       <IfFirebaseAuthed>
