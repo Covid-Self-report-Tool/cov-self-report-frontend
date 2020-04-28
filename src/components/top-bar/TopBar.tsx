@@ -1,40 +1,37 @@
 import React, { FC } from 'react';
-import { IfFirebaseAuthed, IfFirebaseUnAuthed } from '@react-firebase/auth';
-import { Link as RouteLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
   Box,
   Toolbar,
-  Button,
-  Typography,
   useScrollTrigger,
   Slide,
-  IconButton,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { IfFirebaseAuthed, IfFirebaseUnAuthed } from '@react-firebase/auth';
 
-import { UserPopoverMenu } from 'components';
 import firebase from 'config/firebase';
+import { NavBarTypes, MuiClassList } from 'types/top-bar';
+import { UserPopoverMenu } from 'components/top-bar';
+import {
+  TitleWrap,
+  Burger,
+  MySymptomsBtn,
+  LoginSignupBtn,
+} from 'components/top-bar';
 
-type MuiClassList = {
-  classes: {
-    [key: string]: string;
-  };
-};
-
-type NavBarTypes = {
-  isHome: boolean;
-  drawerOpen: boolean;
-  toggleDrawerOpen: (active: boolean) => void;
-};
-
-type BurgerTypes = Omit<NavBarTypes, 'isHome'> & MuiClassList;
+const TopBarBtns: FC<MuiClassList> = ({ classes }) => (
+  <>
+    <MySymptomsBtn classes={classes} />
+    <IfFirebaseUnAuthed>
+      {() => <LoginSignupBtn classes={classes} />}
+    </IfFirebaseUnAuthed>
+    <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
+  </>
+);
 
 const useStyles = (isHome: boolean) => {
-  const ok = makeStyles(theme => ({
+  const topBarStyles = makeStyles(theme => ({
     root: {
       backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
       // backgroundColor: 'hsla(0, 0%, 20%, 0.4)', // TODO: give er a go
@@ -155,91 +152,10 @@ const useStyles = (isHome: boolean) => {
     },
   }));
 
-  return ok();
+  return topBarStyles();
 };
 
-const MainNavBarBtns: FC<MuiClassList> = ({ classes }) => (
-  <>
-    <MySymptomsBtn classes={classes} />
-    <IfFirebaseUnAuthed>
-      {() => <LoginSignupBtn classes={classes} />}
-    </IfFirebaseUnAuthed>
-    <IfFirebaseAuthed>{() => <UserPopoverMenu />}</IfFirebaseAuthed>
-  </>
-);
-
-const LoginSignupBtn: FC<MuiClassList> = ({ classes }) => (
-  <>
-    <Button
-      variant="contained"
-      color="primary"
-      className={`${classes.appBarBtns} ${classes.signupLoginBtn} ${classes.snugBtnMobile}`}
-      component={RouteLink}
-      to="/login"
-    >
-      Login / Signup
-    </Button>
-    <IconButton
-      aria-label="login-or-signup"
-      className={classes.signupLoginMobile}
-      color="primary"
-      size="small"
-      component={RouteLink}
-      to="/login"
-    >
-      <PersonOutlineIcon fontSize="inherit" htmlColor="white" />
-    </IconButton>
-  </>
-);
-
-const TitleWrap: FC<MuiClassList> = ({ classes }) => (
-  <Typography
-    to="/"
-    component={RouteLink}
-    className={`${classes.title} MuiTypography-noWrap`}
-  >
-    <span className="MuiTypography-noWrap" style={{ lineHeight: 1 }}>
-      Covid-19 Self-reporting Tool
-    </span>
-    <Typography
-      component="p"
-      variant="subtitle2"
-      noWrap
-      className={classes.subTitle}
-    >
-      An open data tool that tracks self-reported and confirmed infections
-    </Typography>
-  </Typography>
-);
-
-const Burger: FC<BurgerTypes> = ({
-  toggleDrawerOpen,
-  drawerOpen,
-  classes = {},
-}) => (
-  <IconButton
-    edge="start"
-    className={classes.burger}
-    aria-label="menu"
-    onClick={() => toggleDrawerOpen(!drawerOpen)}
-  >
-    <MenuIcon />
-  </IconButton>
-);
-
-const MySymptomsBtn: FC<MuiClassList> = ({ classes }) => (
-  <Button
-    variant="contained"
-    color="secondary"
-    to="/self-report"
-    className={`${classes.appBarBtns} ${classes.snugBtnMobile}`}
-    component={RouteLink}
-  >
-    My Case
-  </Button>
-);
-
-export const MainNavBar: FC<NavBarTypes> = ({
+export const TopBar: FC<NavBarTypes> = ({
   isHome,
   toggleDrawerOpen,
   drawerOpen,
@@ -261,7 +177,7 @@ export const MainNavBar: FC<NavBarTypes> = ({
             <sup className={classes.badge}>BETA</sup>
             <TitleWrap classes={classes} />
           </Box>
-          {!loading && <MainNavBarBtns classes={classes} />}
+          {!loading && <TopBarBtns classes={classes} />}
         </Toolbar>
       </AppBar>
     </Slide>
