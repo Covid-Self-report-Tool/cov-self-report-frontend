@@ -33,7 +33,6 @@ export const formReducer = (
   state: initialFormStateType,
   action: actionType
 ) => {
-  debugger;
   switch (action.type) {
     case 'SET_FIELD':
       if (action.payload) {

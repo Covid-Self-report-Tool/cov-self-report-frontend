@@ -127,6 +127,8 @@ export type DoctorDiagnosis =
 
 export type DispatchFormType = React.Dispatch<SubmissionFormAction>;
 
+export type DispatchStoreType = React.Dispatch<StoreActionType>;
+
 export type AddressComponents = {
   city: string | null;
   state: string | null;

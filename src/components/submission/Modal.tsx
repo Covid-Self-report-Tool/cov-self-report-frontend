@@ -22,6 +22,7 @@ import {
 } from 'components/submission/steps';
 import { UserContext } from 'context';
 import { formReducer, initialFormState } from 'components/signup';
+import { signUp } from 'utils/firebase';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -41,8 +42,6 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     formReducer,
     initialFormState
   );
-
-  console.log('resetting state');
 
   const history = useHistory();
 
@@ -80,19 +79,16 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
-  const submitForm = () => {
-    if (user) {
-      setSubmitting(true);
-      user.getIdToken(true).then(idToken => {
+  const submitForm = (firebaseUser: firebase.User | null) => {
+    if (firebaseUser) {
+      firebaseUser.getIdToken(true).then(idToken => {
+        setSubmitting(true);
         postFormData(formState, idToken)
           .then((res: any) => {
-            setSubmitting(false);
             history.push('/');
             setSuccessConfOpen(true);
           })
           .catch((err: any) => {
-            setSubmitting(false);
-
             dispatch({
               type: 'TOGGLE_UI_ALERT',
               payload: {
@@ -101,6 +97,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
                 severity: 'error',
               },
             });
+            setSubmitting(false);
 
             history.push('/');
           });
@@ -108,8 +105,69 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
+  const handleSignupError = (code: string, message: string) => {
+    switch (code) {
+      case 'auth/email-already-in-use':
+        registrationDispatch({
+          type: 'SET_FIELD',
+          payload: {
+            field: 'emailError',
+            value: 'That email is already in use',
+          },
+        });
+        break;
+      case 'auth/invalid-email':
+        registrationDispatch({
+          type: 'SET_FIELD',
+          payload: {
+            field: 'emailError',
+            value: 'Invalid email',
+          },
+        });
+        break;
+      default:
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message,
+            severity: 'error',
+          },
+        });
+        break;
+    }
+  };
+
+  const handleSubmit = () => {
+    if (user) {
+      submitForm(user);
+    }
+    // hasn't registered yet
+    else {
+      signUp(
+        registrationState.email,
+        registrationState.password,
+        registrationState.password2
+      )
+        .then(() => {
+          setSubmitting(true);
+          const { currentUser } = firebase.auth();
+          submitForm(currentUser);
+        })
+        .catch(err => {
+          setSubmitting(false);
+          handleSignupError(err.code, err.message);
+        });
+    }
+  };
+
   const isLastStep = () => {
-    return user && formState.location;
+    return (
+      user &&
+      formState.location &&
+      formState.hasAgreedToTerms &&
+      activeStep === steps.length - 1
+    );
   };
 
   const displayStep = (step: number) => {
@@ -182,7 +240,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           </Button>
         ) : (
           <Button
-            onClick={submitForm}
+            onClick={handleSubmit}
             color="primary"
             // can't submit until you've both logged in AND agreed to terms
             disabled={!formState.hasAgreedToTerms || submitting}
