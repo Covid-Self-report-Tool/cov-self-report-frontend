@@ -41,6 +41,10 @@ npm start
 - [JHU Counties](https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer) with geojson + totals, or non-geojson time series. May be useful for scraping.
 - [ArcGIS County COVID-19 data](https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer) with both spatial and time-series data. In case we need an easy way to scrape time-series.
 
+### Maps
+
+- [NYT US cases](https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html)
+
 ### Fixes
 
 - [AWS Amplify react-router issue](https://github.com/aws-amplify/amplify-js/issues/2498#issuecomment-455162939)
