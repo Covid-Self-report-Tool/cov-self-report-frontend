@@ -54,10 +54,10 @@ export const Home: FC = () => {
   return (
     <>
       <SplashScreen />
-      <Box position="absolute" bottom={26} left={8} zIndex={1}>
+      <Box position="absolute" bottom={29} left={8} zIndex={1}>
         <SharingPopoutMenu />
       </Box>
-      <Box position="absolute" bottom={66} left={8} zIndex={1}>
+      <Box position="absolute" bottom={70} left={8} zIndex={1}>
         <MapLayersPopout />
       </Box>
       <Box position="absolute" bottom={0} left={8} zIndex={1}>
