@@ -28,7 +28,6 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
   const { dispatch: dispatchGlobal } = useContext(GlobalContext);
 
   const setFormValue = (field: string, value: string) => {
-    console.log(field, value);
     dispatch({ type: 'SET_FIELD', payload: { field, value } });
   };
 
@@ -61,7 +60,7 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
         },
       });
     }
-  }, [dispatch]);
+  }, [dispatchGlobal]);
 
   return (
     <>
