@@ -1,4 +1,4 @@
-import React, { useState, useContext, FC } from 'react';
+import React, { useState, useContext, FC, useReducer } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
@@ -9,9 +9,10 @@ import {
   StepLabel,
   CircularProgress,
 } from '@material-ui/core';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { GlobalContext } from 'components';
 import {
   SymptomStep,
@@ -20,6 +21,7 @@ import {
   RegistrationStep,
 } from 'components/submission/steps';
 import { UserContext } from 'context';
+import { formReducer, initialFormState } from 'components/signup';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -35,12 +37,19 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
   const { dispatch } = useContext(GlobalContext);
+  const [registrationState, registrationDispatch] = useReducer(
+    formReducer,
+    initialFormState
+  );
+
+  console.log('resetting state');
 
   const history = useHistory();
 
   const steps = getSteps();
 
   const handleNext = () => {
+    // Next button on registration acts as signup
     setActiveStep(prevActiveStep => prevActiveStep + 1);
   };
 
@@ -64,6 +73,8 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         return true;
       case 2:
         return !formState.location;
+      case 3:
+        return !registrationState.captcha;
       default:
         return false;
     }
@@ -97,6 +108,10 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
+  const isLastStep = () => {
+    return user && formState.location;
+  };
+
   const displayStep = (step: number) => {
     switch (step) {
       case 0:
@@ -120,7 +135,12 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         );
       case 3:
         return (
-          <RegistrationStep formState={formState} dispatchForm={dispatchForm} />
+          <RegistrationStep
+            formState={formState}
+            dispatchForm={dispatchForm}
+            state={registrationState}
+            dispatch={registrationDispatch}
+          />
         );
       default:
         return null;
@@ -152,7 +172,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         >
           Back
         </Button>
-        {activeStep < steps.length - 1 ? (
+        {activeStep < steps.length - 1 && !isLastStep() ? (
           <Button
             onClick={handleNext}
             color="primary"

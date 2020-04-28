@@ -33,6 +33,7 @@ export const formReducer = (
   state: initialFormStateType,
   action: actionType
 ) => {
+  debugger;
   switch (action.type) {
     case 'SET_FIELD':
       if (action.payload) {
@@ -122,7 +123,7 @@ export const SignupForm: FC = () => {
   return (
     <Paper className={classes.padding}>
       <>
-        <SignupFields dispatch={dispatchForm} state={state} />
+        <SignupFields state={state} dispatch={dispatchForm} />
         <Grid container justify="center" style={{ marginTop: '20px' }}>
           <Button
             variant="outlined"

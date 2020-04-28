@@ -1,9 +1,10 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useContext } from 'react';
 import { Grid, TextField, makeStyles } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 
 import firebase from 'config/firebase';
 import { initialFormStateType } from 'components/signup/types';
+import { GlobalContext } from 'context';
 
 declare global {
   interface Window {
@@ -21,12 +22,13 @@ type SignupFieldsType = {
   state: initialFormStateType;
 };
 
-export const SignupFields: FC<SignupFieldsType> = props => {
+export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
   const classes = useStyles();
 
-  const { state, dispatch } = props;
+  const { dispatch: dispatchGlobal } = useContext(GlobalContext);
 
   const setFormValue = (field: string, value: string) => {
+    console.log(field, value);
     dispatch({ type: 'SET_FIELD', payload: { field, value } });
   };
 
@@ -50,7 +52,7 @@ export const SignupFields: FC<SignupFieldsType> = props => {
       );
       window.recaptchaVerifier.render();
     } catch (err) {
-      dispatch({
+      dispatchGlobal({
         type: 'TOGGLE_UI_ALERT',
         payload: {
           open: true,
@@ -72,6 +74,7 @@ export const SignupFields: FC<SignupFieldsType> = props => {
             id="email"
             label="Email"
             type="email"
+            name="email"
             value={state.email}
             onChange={handleChange}
             error={!!state.emailError}
@@ -91,6 +94,7 @@ export const SignupFields: FC<SignupFieldsType> = props => {
             id="password"
             label="Password"
             type="password"
+            name="password"
             value={state.password}
             onChange={handleChange}
             fullWidth
