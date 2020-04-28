@@ -1,25 +1,31 @@
 import React from 'react';
 import { LoginForm } from 'components/LoginForm';
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     margin: '40px',
   },
-});
+  link: {
+    color: theme.palette.grey['500'],
+  },
+}));
 export const Login = () => {
   const classes = useStyles();
   const history = useHistory();
 
   return (
-    <Grid container item xs={12} justify="center" className={classes.root}>
+    <>
       <LoginForm
         onLogin={() => {
           history.push('/');
         }}
       />
-    </Grid>
+      <Link to="/signup" className={classes.link}>
+        Don't have an account?
+      </Link>
+    </>
   );
 };

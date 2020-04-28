@@ -1,11 +1,26 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { SignupForm } from 'components';
+import { Link } from 'react-router-dom';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    margin: '40px',
+  },
+  link: {
+    color: theme.palette.grey['500'],
+  },
+}));
 
 export const Signup = () => {
+  const classes = useStyles();
+
   return (
-    <Grid container item xs={12} justify="center">
+    <>
       <SignupForm />
-    </Grid>
+      <Link to="/login" className={classes.link}>
+        Already have an account?
+      </Link>
+    </>
   );
 };
