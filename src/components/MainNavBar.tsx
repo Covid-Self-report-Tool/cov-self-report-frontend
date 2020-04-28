@@ -13,6 +13,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { UserPopoverMenu } from 'components';
@@ -36,6 +37,7 @@ const useStyles = (isHome: boolean) => {
   const ok = makeStyles(theme => ({
     root: {
       backgroundColor: isHome ? 'transparent' : theme.palette.grey[800],
+      // backgroundColor: 'hsla(0, 0%, 20%, 0.4)', // TODO: give er a go
       boxShadow: 'none',
       color: theme.palette.common.white,
       paddingTop: theme.spacing(1),
@@ -65,6 +67,11 @@ const useStyles = (isHome: boolean) => {
       textShadow: '1px 1px 3px hsla(180, 2%, 10%, 0.75)',
       fontSize: '1.5rem',
       lineHeight: 1,
+      // So gross but there's just no room on super small screens 😔
+      [theme.breakpoints.down(321)]: {
+        fontSize: '1.2rem',
+        maxWidth: 200,
+      },
       [theme.breakpoints.up('sm')]: {
         fontSize: '2rem',
       },
@@ -99,8 +106,7 @@ const useStyles = (isHome: boolean) => {
       },
     },
     subTitle: {
-      // lineHeight: 1,
-      fontSize: '0.75rem',
+      fontSize: '0.8rem',
       [theme.breakpoints.down(600)]: {
         fontSize: '0.5rem',
       },
@@ -118,9 +124,20 @@ const useStyles = (isHome: boolean) => {
         display: 'none',
       },
     },
+    signupLoginMobile: {
+      marginLeft: 4,
+      borderRadius: '100%',
+      background: theme.palette.primary.main,
+      padding: 3,
+      // Put login/signup btn into sidebar on mobile, too much 💩 up top
+      [theme.breakpoints.up(500)]: {
+        display: 'none',
+      },
+    },
     snugBtnMobile: {
       [theme.breakpoints.down(400)]: {
         lineHeight: 1,
+        textAlign: 'center',
         minWidth: 'auto', // default is not very compatible w/topbar flex
         padding: 6,
       },
@@ -152,15 +169,27 @@ const MainNavBarBtns: FC<MuiClassList> = ({ classes }) => (
 );
 
 const LoginSignupBtn: FC<MuiClassList> = ({ classes }) => (
-  <Button
-    variant="contained"
-    color="primary"
-    className={`${classes.appBarBtns} ${classes.signupLoginBtn} ${classes.snugBtnMobile}`}
-    component={RouteLink}
-    to="/login"
-  >
-    Login / Signup
-  </Button>
+  <>
+    <Button
+      variant="contained"
+      color="primary"
+      className={`${classes.appBarBtns} ${classes.signupLoginBtn} ${classes.snugBtnMobile}`}
+      component={RouteLink}
+      to="/login"
+    >
+      Login / Signup
+    </Button>
+    <IconButton
+      aria-label="login-or-signup"
+      className={classes.signupLoginMobile}
+      color="primary"
+      size="small"
+      component={RouteLink}
+      to="/login"
+    >
+      <PersonOutlineIcon fontSize="inherit" htmlColor="white" />
+    </IconButton>
+  </>
 );
 
 const TitleWrap: FC<MuiClassList> = ({ classes }) => (
