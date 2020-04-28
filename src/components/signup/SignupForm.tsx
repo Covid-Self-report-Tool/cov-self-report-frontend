@@ -1,19 +1,15 @@
-import React, { FC, useReducer, useEffect, useContext } from 'react';
-import { Paper, Grid, TextField, Button } from '@material-ui/core';
-import { Face, Fingerprint } from '@material-ui/icons';
+import React, { FC, useReducer, useContext } from 'react';
+import { Paper, Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { signUp, googleLogin } from 'utils/firebase';
-import firebase from 'config/firebase';
 
 import { GlobalContext } from 'components';
 import { initialFormStateType, actionType } from 'components/signup/types';
+import { SignupFields } from './SignupFields';
 
 const useStyles = makeStyles({
   padding: {
     padding: '20px',
-  },
-  marginTop: {
-    marginTop: 20,
   },
 });
 
@@ -23,7 +19,7 @@ declare global {
   }
 }
 
-const initialFormState = {
+export const initialFormState = {
   email: '',
   password: '',
   password2: '',
@@ -92,33 +88,6 @@ export const SignupForm: FC = () => {
     }
   };
 
-  useEffect(() => {
-    try {
-      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-        'recaptcha',
-        {
-          callback: (response: any) => {
-            setFormValue('captcha', response);
-          },
-          'expired-callback': () => {
-            window.recaptchaVerifier.clear();
-            // Response expired. Needs to rerender captcha
-          },
-        }
-      );
-      window.recaptchaVerifier.render();
-    } catch (err) {
-      dispatch({
-        type: 'TOGGLE_UI_ALERT',
-        payload: {
-          open: true,
-          message: 'Something went wrong. Could not load captcha.',
-          severity: 'error',
-        },
-      });
-    }
-  }, [dispatch]);
-
   const handleSignup = () => {
     dispatchForm({ type: 'RESET_FORM_ERRORS' });
     //resetErrors();
@@ -150,71 +119,10 @@ export const SignupForm: FC = () => {
     });
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValue(event.currentTarget.name, event.currentTarget.value);
-  };
-
   return (
     <Paper className={classes.padding}>
       <>
-        <Grid container spacing={8} alignItems="flex-end">
-          <Grid item>
-            <Face />
-          </Grid>
-          <Grid item md sm xs>
-            <TextField
-              id="email"
-              label="Email"
-              type="email"
-              name="email"
-              value={state.email}
-              onChange={handleChange}
-              error={!!state.emailError}
-              helperText={state.emailError}
-              fullWidth
-              autoFocus
-              required
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={8} alignItems="flex-end">
-          <Grid item>
-            <Fingerprint />
-          </Grid>
-          <Grid item md sm xs>
-            <TextField
-              id="password"
-              label="Password"
-              type="password"
-              name="password"
-              value={state.password}
-              onChange={handleChange}
-              fullWidth
-              required
-              error={!!state.passwordError}
-              helperText={state.passwordError}
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={8} alignItems="flex-end">
-          <Grid item>
-            <Fingerprint />
-          </Grid>
-          <Grid item md sm xs>
-            <TextField
-              id="password2"
-              label="Confirm Password"
-              type="password"
-              name="password2"
-              value={state.password2}
-              onChange={handleChange}
-              fullWidth
-              required
-              error={!!state.passwordError2}
-              helperText={state.passwordError2}
-            />
-          </Grid>
-        </Grid>
+        <SignupFields dispatch={dispatchForm} state={state} />
         <Grid container justify="center" style={{ marginTop: '20px' }}>
           <Button
             variant="outlined"
@@ -233,7 +141,6 @@ export const SignupForm: FC = () => {
           >
             Login with Google
           </Button>
-          <div className={classes.marginTop} id="recaptcha"></div>
         </Grid>
       </>
     </Paper>
