@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useReducer, useEffect, useContext } from 'react';
 import { Paper, Grid, TextField, Button } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
@@ -6,6 +6,7 @@ import { signUp, googleLogin } from 'utils/firebase';
 import firebase from 'config/firebase';
 
 import { GlobalContext } from 'components';
+import { initialFormStateType, actionType } from 'components/signup/types';
 
 const useStyles = makeStyles({
   padding: {
@@ -22,45 +23,71 @@ declare global {
   }
 }
 
+const initialFormState = {
+  email: '',
+  password: '',
+  password2: '',
+  emailError: '',
+  passwordError: '',
+  passwordError2: '',
+  captcha: '',
+};
+
+export const formReducer = (
+  state: initialFormStateType,
+  action: actionType
+) => {
+  switch (action.type) {
+    case 'SET_FIELD':
+      if (action.payload) {
+        return {
+          ...state,
+          [action.payload.field]: action.payload.value,
+        };
+      }
+      return {
+        ...state,
+      };
+    case 'RESET_FORM_ERRORS':
+      return {
+        ...state,
+        emailError: '',
+        passwordError: '',
+        passwordError2: '',
+      };
+    default:
+      return { ...state };
+  }
+};
+
 window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
   const { dispatch } = useContext(GlobalContext);
   const classes = useStyles();
-  const [email, setEmail] = useState<string>('');
-  const [emailError, setEmailError] = useState<boolean>(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [password2, setPassword2] = useState<string>('');
-  const [errorPasswordMessage, setErrorPasswordMessage] = useState<string>('');
-  const [errorPassword, setErrorPassword] = useState<boolean>(false);
-  const [errorPasswordMessage2, setErrorPasswordMessage2] = useState<string>(
-    ''
-  );
-  const [errorPassword2, setErrorPassword2] = useState<boolean>(false);
-  const [captchaToken, setCaptchaToken] = useState<string>('');
+  const [state, dispatchForm] = useReducer(formReducer, initialFormState);
 
-  const resetErrors = () => {
-    setEmailError(false);
-    setErrorPassword(false);
-    setErrorPassword2(false);
-    setEmailErrorMessage('');
-    setErrorPasswordMessage('');
-    setErrorPasswordMessage2('');
+  const setFormValue = (field: string, value: string) => {
+    dispatchForm({ type: 'SET_FIELD', payload: { field, value } });
   };
 
   const handleSignupError = (code: string, message: string) => {
     switch (code) {
       case 'auth/email-already-in-use':
-        setEmailError(true);
-        setEmailErrorMessage('That email is already in use');
+        setFormValue('emailError', 'That email is already in use');
         break;
       case 'auth/invalid-email':
-        setEmailError(true);
-        setEmailErrorMessage('Invalid email');
+        setFormValue('emailError', 'Invalid email');
         break;
       default:
-        alert(message); // change to flash message
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message,
+            severity: 'error',
+          },
+        });
         break;
     }
   };
@@ -71,7 +98,7 @@ export const SignupForm: FC = () => {
         'recaptcha',
         {
           callback: (response: any) => {
-            setCaptchaToken(response);
+            setFormValue('captcha', response);
           },
           'expired-callback': () => {
             window.recaptchaVerifier.clear();
@@ -93,19 +120,23 @@ export const SignupForm: FC = () => {
   }, [dispatch]);
 
   const handleSignup = () => {
-    resetErrors();
-    if (password.length < 6) {
-      setErrorPassword(true);
-      setErrorPasswordMessage('Password must be at least 6 characters long');
-    } else if (password2.length < 6) {
-      setErrorPassword2(true);
-      setErrorPasswordMessage2('Password must be at least 6 characters long');
-    } else if (password !== password2) {
-      setErrorPassword2(true);
-      setErrorPasswordMessage2('Passwords do not match');
+    dispatchForm({ type: 'RESET_FORM_ERRORS' });
+    //resetErrors();
+    if (state.password.length < 6) {
+      setFormValue(
+        'passwordError',
+        'Password must be at least 6 characters long'
+      );
+    } else if (state.password2.length < 6) {
+      setFormValue(
+        'passwordError2',
+        'Password must be at least 6 characters long'
+      );
+    } else if (state.password !== state.password2) {
+      setFormValue('passwordError2', 'Passwords do not match');
     } else {
       // TODO: verify captcha on backend
-      signUp(email, password, captchaToken).catch(err => {
+      signUp(state.email, state.password, state.captcha).catch(err => {
         handleSignupError(err.code, err.message);
       });
     }
@@ -119,23 +150,13 @@ export const SignupForm: FC = () => {
     });
   };
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.currentTarget.value);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value);
-  };
-
-  const handlePasswordChange2 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPassword2(event.currentTarget.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValue(event.currentTarget.name, event.currentTarget.value);
   };
 
   return (
     <Paper className={classes.padding}>
-      <div>
+      <>
         <Grid container spacing={8} alignItems="flex-end">
           <Grid item>
             <Face />
@@ -145,10 +166,11 @@ export const SignupForm: FC = () => {
               id="email"
               label="Email"
               type="email"
-              value={email}
-              onChange={handleEmailChange}
-              error={emailError}
-              helperText={emailErrorMessage}
+              name="email"
+              value={state.email}
+              onChange={handleChange}
+              error={!!state.emailError}
+              helperText={state.emailError}
               fullWidth
               autoFocus
               required
@@ -164,12 +186,13 @@ export const SignupForm: FC = () => {
               id="password"
               label="Password"
               type="password"
-              value={password}
-              onChange={handlePasswordChange}
+              name="password"
+              value={state.password}
+              onChange={handleChange}
               fullWidth
               required
-              error={errorPassword}
-              helperText={errorPasswordMessage}
+              error={!!state.passwordError}
+              helperText={state.passwordError}
             />
           </Grid>
         </Grid>
@@ -182,12 +205,13 @@ export const SignupForm: FC = () => {
               id="password2"
               label="Confirm Password"
               type="password"
-              value={password2}
-              onChange={handlePasswordChange2}
+              name="password2"
+              value={state.password2}
+              onChange={handleChange}
               fullWidth
               required
-              error={errorPassword2}
-              helperText={errorPasswordMessage2}
+              error={!!state.passwordError2}
+              helperText={state.passwordError2}
             />
           </Grid>
         </Grid>
@@ -197,7 +221,7 @@ export const SignupForm: FC = () => {
             color="primary"
             style={{ textTransform: 'none', marginRight: '20px' }}
             onClick={handleSignup}
-            disabled={!Boolean(captchaToken)}
+            disabled={!Boolean(state.captcha)}
           >
             Sign Up
           </Button>
@@ -211,7 +235,7 @@ export const SignupForm: FC = () => {
           </Button>
           <div className={classes.marginTop} id="recaptcha"></div>
         </Grid>
-      </div>
+      </>
     </Paper>
   );
 };
