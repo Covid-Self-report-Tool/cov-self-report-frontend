@@ -1,13 +1,7 @@
 import React, { FC } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
-const useStyles = makeStyles({
-  list: {
-    width: 100,
-  },
-});
 
 type OffCanvasTypes = {
   drawerOpen: boolean;
@@ -20,18 +14,19 @@ export const MobileOffCanvasNav: FC<OffCanvasTypes> = ({
   toggleDrawerOpen,
   children,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
-  const bigGuy = useMediaQuery(theme.breakpoints.up('sm'));
+  const wideTabletPortraitAndUp = useMediaQuery(theme.breakpoints.up('md'));
 
-  if (bigGuy) {
+  // Hide on larger than wide tablet portrait. While there is plenty of room
+  // on screens that wide in portrait, if people turn their phones sideways
+  // to landscape, they won't see the menu. 🙄
+  if (wideTabletPortraitAndUp) {
     return <>{children}</>;
   }
 
   return (
     <Drawer open={drawerOpen} onClose={() => toggleDrawerOpen(false)}>
       <div
-        className={classes.list}
         role="presentation"
         onClick={() => toggleDrawerOpen(false)}
         onKeyDown={() => toggleDrawerOpen(false)}

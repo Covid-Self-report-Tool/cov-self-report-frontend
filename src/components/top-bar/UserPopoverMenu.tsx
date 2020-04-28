@@ -27,7 +27,10 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(4),
   },
   avatar: {
-    padding: 4,
+    // Let the top bar gutter have the final say, otherwise it doesn't fit in
+    // phone portrait without wrapping.
+    padding: 0,
+    marginLeft: 2,
   },
 }));
 
@@ -35,7 +38,7 @@ export function UserPopoverMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const history = useHistory();
   const { dispatch } = useContext(UserContext);
-
+  const classes = useStyles();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -51,7 +54,7 @@ export function UserPopoverMenu() {
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleClick}
-        className={useStyles().avatar}
+        className={classes.avatar}
       >
         <AccountCircle />
       </IconButton>
@@ -68,9 +71,9 @@ export function UserPopoverMenu() {
           sure if this will be the case w/Google auth but if so then need a 
           check to determine if this should be shown.
         */}
-        <MenuItem className={useStyles().noBgChangeOnHover} divider>
+        <MenuItem className={classes.noBgChangeOnHover} divider>
           <ListItemText
-            className={useStyles().noBgChangeOnHover}
+            className={classes.noBgChangeOnHover}
             primary={
               <>
                 <Typography
@@ -93,7 +96,7 @@ export function UserPopoverMenu() {
             logOut(history, dispatch);
           }}
         >
-          <ExitToAppIcon fontSize="small" className={useStyles().exitIcon} />
+          <ExitToAppIcon fontSize="small" className={classes.exitIcon} />
           <ListItemText primary="Logout" />
         </MenuItem>
       </Menu>

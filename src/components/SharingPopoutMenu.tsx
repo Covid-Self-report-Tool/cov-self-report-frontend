@@ -4,9 +4,24 @@ import ShareIcon from '@material-ui/icons/Share';
 
 import { ShareButtons } from 'components';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  shareBtn: {
+    [theme.breakpoints.down(321)]: { display: 'none' },
+  },
+  shareBtnMobile: {
+    borderRadius: '100%',
+    [theme.breakpoints.up(321)]: {
+      display: 'none',
+    },
+  },
+}));
+
 export const SharingPopoutMenu: FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const classes = useStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -19,11 +34,22 @@ export const SharingPopoutMenu: FC = () => {
   return (
     <div>
       <Fab
+        size="small"
+        aria-label="share"
+        color="secondary"
+        aria-describedby="long-menu"
+        className={classes.shareBtnMobile}
+        onClick={handleClick}
+      >
+        <ShareIcon />
+      </Fab>
+      <Fab
         variant="extended"
         size="small"
         aria-label="share"
         color="secondary"
         aria-describedby="long-menu"
+        className={classes.shareBtn}
         onClick={handleClick}
       >
         <ShareIcon />
