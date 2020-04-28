@@ -8,7 +8,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 import {
   Dashboard,
-  LoginForm,
   GlobalProvider,
   SimpleModal,
   CustomSnackbar,
@@ -26,6 +25,7 @@ import {
   TermsOfService,
   PrivacyPolicy,
   SecretSnackground,
+  Login,
 } from 'views';
 import firebase from 'config/firebase';
 import { VerifyEmail } from 'views/VerifyEmail';
@@ -76,7 +76,7 @@ const Routes: FC = () => {
               <Route path="/login">
                 {!user && !loading ? (
                   <SimpleModal title="Login">
-                    <LoginForm />
+                    <Login />
                   </SimpleModal>
                 ) : (
                   <Redirect to="/"></Redirect>

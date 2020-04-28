@@ -14,7 +14,7 @@ import { googleLogin, login } from 'utils/firebase';
 
 const useStyles = makeStyles(theme => ({
   link: {
-    color: theme.palette.grey['500'], // can't use theme here?
+    color: theme.palette.grey['500'],
   },
   padding: {
     padding: '20px',
