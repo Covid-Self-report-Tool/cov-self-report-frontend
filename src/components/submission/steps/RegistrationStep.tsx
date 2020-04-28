@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useReducer } from 'react';
 import {
   DialogTitle,
   DialogContent,
@@ -6,11 +6,20 @@ import {
   FormControlLabel,
   Link,
   Grid,
+  Button,
+  makeStyles,
 } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
-import { SignupForm } from 'components/signup';
 import { SymptomForm, DispatchFormType } from 'context/types';
+import { SignupFields } from 'components/signup/SignupFields';
+import { formReducer, initialFormState } from 'components/signup';
+
+const useStyles = makeStyles({
+  marginTop: {
+    marginTop: 20,
+  },
+});
 
 type RegistrationStepType = {
   formState: SymptomForm;
@@ -21,6 +30,13 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
   formState,
   dispatchForm,
 }) => {
+  const classes = useStyles();
+  const [hasChosenRegistration, setHasChosenRegistration] = useState<Boolean>(
+    false
+  );
+
+  const [state, dispatch] = useReducer(formReducer, initialFormState);
+
   return (
     <div>
       <IfFirebaseUnAuthed>
@@ -28,7 +44,29 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
           <>
             <DialogTitle>Register</DialogTitle>
             <DialogContent>
-              <SignupForm />
+              {!hasChosenRegistration ? (
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      onClick={() => setHasChosenRegistration(true)}
+                    >
+                      Email
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button variant="contained" className={classes.marginTop}>
+                      Google
+                    </Button>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Grid container>
+                  <Grid item xs={12} style={{ overflow: 'hidden' }}>
+                    <SignupFields state={state} dispatch={dispatch} />
+                  </Grid>
+                </Grid>
+              )}
             </DialogContent>
           </>
         )}

@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, TextField, makeStyles } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 
 import firebase from 'config/firebase';
@@ -11,12 +11,19 @@ declare global {
   }
 }
 
+const useStyles = makeStyles({
+  marginTop: {
+    marginTop: 20,
+  },
+});
 type SignupFieldsType = {
   dispatch: any;
   state: initialFormStateType;
 };
 
 export const SignupFields: FC<SignupFieldsType> = props => {
+  const classes = useStyles();
+
   const { state, dispatch } = props;
 
   const setFormValue = (field: string, value: string) => {
@@ -111,6 +118,9 @@ export const SignupFields: FC<SignupFieldsType> = props => {
             helperText={state.passwordError2}
           />
         </Grid>
+      </Grid>
+      <Grid container justify="center">
+        <div className={classes.marginTop} id="recaptcha"></div>
       </Grid>
     </>
   );

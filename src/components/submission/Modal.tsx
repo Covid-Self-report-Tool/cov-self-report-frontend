@@ -123,7 +123,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           <RegistrationStep formState={formState} dispatchForm={dispatchForm} />
         );
       default:
-        return <></>;
+        return null;
     }
   };
 
