@@ -20,7 +20,7 @@ export const Login = () => {
     <>
       <LoginForm
         onLogin={() => {
-          history.push('/');
+          history.goBack();
         }}
       />
       <Link to="/signup" className={classes.link}>

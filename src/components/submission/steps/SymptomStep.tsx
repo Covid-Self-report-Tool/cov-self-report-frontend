@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 
 import { camelCaseToLabel } from 'utils/strings';
 import { SymptomForm, Symptoms, DispatchFormType } from 'context/types';
+import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 // TODO: maybe fancy upgrade later:
 // https://github.com/mui-org/material-ui-pickers/releases/tag/v4.0.0-alpha.5
 
@@ -235,11 +236,15 @@ export const SymptomStep: FC<SymptomStepType> = ({
       </Grid>
       <Grid container className={classes.marginTop}>
         <Grid item xs={6}>
-          <Button className={classes.margin} variant="contained">
-            <Link to="/login" className={classes.link}>
-              Already have an account?
-            </Link>
-          </Button>
+          <IfFirebaseUnAuthed>
+            {() => (
+              <Button className={classes.margin} variant="contained">
+                <Link to="/login" className={classes.link}>
+                  Already have an account?
+                </Link>
+              </Button>
+            )}
+          </IfFirebaseUnAuthed>
         </Grid>
         <Grid container item xs={6} justify="flex-end">
           <Button

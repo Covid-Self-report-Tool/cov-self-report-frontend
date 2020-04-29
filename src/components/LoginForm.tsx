@@ -87,7 +87,6 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
     googleLogin()
       .then(resp => {
         if (onLogin) {
-          debugger;
           onLogin(resp);
         }
       })
