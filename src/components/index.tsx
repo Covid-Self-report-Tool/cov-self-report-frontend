@@ -9,7 +9,6 @@ export * from 'components/MobileOffCanvasNav';
 export * from 'components/Polygons';
 export * from 'components/ShareButtons';
 export * from 'components/SharingPopoutMenu';
-export * from 'components/SignupForm';
 export * from 'components/SimpleModal';
 export * from 'components/SiteNavBtns';
 export * from 'components/Snackbar';
