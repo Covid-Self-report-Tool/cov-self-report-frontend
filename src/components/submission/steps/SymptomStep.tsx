@@ -9,8 +9,6 @@ import {
   Button,
   Typography,
 } from '@material-ui/core';
-import { camelCaseToLabel } from 'utils/strings';
-import { SymptomForm, Symptoms, DispatchFormType } from 'context/types';
 import { makeStyles } from '@material-ui/core/styles';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -18,10 +16,15 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import { Link } from 'react-router-dom';
+
+import { camelCaseToLabel } from 'utils/strings';
+import { SymptomForm, Symptoms, DispatchFormType } from 'context/types';
+import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 // TODO: maybe fancy upgrade later:
 // https://github.com/mui-org/material-ui-pickers/releases/tag/v4.0.0-alpha.5
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   margin: {
     marginLeft: 25,
     marginRight: 25,
@@ -34,7 +37,13 @@ const useStyles = makeStyles({
     marginLeft: 5,
     marginRight: 5,
   },
-});
+  marginTop: {
+    marginTop: 20,
+  },
+  link: {
+    color: theme.palette.grey['900'], // can't use theme here?
+  },
+}));
 
 type SymptomStepType = {
   formState: SymptomForm;
@@ -215,7 +224,7 @@ export const SymptomStep: FC<SymptomStepType> = ({
         </>
       )}
       <Grid container>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           <Button
             className={classes.margin}
             variant="contained"
@@ -223,6 +232,19 @@ export const SymptomStep: FC<SymptomStepType> = ({
           >
             I have no symptoms
           </Button>
+        </Grid>
+      </Grid>
+      <Grid container className={classes.marginTop}>
+        <Grid item xs={6}>
+          <IfFirebaseUnAuthed>
+            {() => (
+              <Button className={classes.margin} variant="contained">
+                <Link to="/login" className={classes.link}>
+                  Already have an account?
+                </Link>
+              </Button>
+            )}
+          </IfFirebaseUnAuthed>
         </Grid>
         <Grid container item xs={6} justify="flex-end">
           <Button

@@ -1,4 +1,4 @@
-import React, { useState, useContext, FC } from 'react';
+import React, { useState, useContext, FC, useReducer } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
 import {
   Dialog,
@@ -9,9 +9,10 @@ import {
   StepLabel,
   CircularProgress,
 } from '@material-ui/core';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { GlobalContext } from 'components';
 import {
   SymptomStep,
@@ -20,6 +21,8 @@ import {
   RegistrationStep,
 } from 'components/submission/steps';
 import { UserContext } from 'context';
+import { formReducer, initialFormState } from 'components/signup';
+import { signUp } from 'utils/firebase';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -35,12 +38,17 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
   const { dispatch } = useContext(GlobalContext);
+  const [registrationState, registrationDispatch] = useReducer(
+    formReducer,
+    initialFormState
+  );
 
   const history = useHistory();
 
   const steps = getSteps();
 
   const handleNext = () => {
+    // Next button on registration acts as signup
     setActiveStep(prevActiveStep => prevActiveStep + 1);
   };
 
@@ -64,24 +72,23 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         return true;
       case 2:
         return !formState.location;
+      case 3:
+        return !registrationState.captcha;
       default:
         return false;
     }
   };
 
-  const submitForm = () => {
-    if (user) {
-      setSubmitting(true);
-      user.getIdToken(true).then(idToken => {
+  const submitForm = (firebaseUser: firebase.User | null) => {
+    if (firebaseUser) {
+      firebaseUser.getIdToken(true).then(idToken => {
+        setSubmitting(true);
         postFormData(formState, idToken)
           .then((res: any) => {
-            setSubmitting(false);
             history.push('/');
             setSuccessConfOpen(true);
           })
           .catch((err: any) => {
-            setSubmitting(false);
-
             dispatch({
               type: 'TOGGLE_UI_ALERT',
               payload: {
@@ -90,11 +97,80 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
                 severity: 'error',
               },
             });
+            setSubmitting(false);
 
             history.push('/');
           });
       });
     }
+  };
+
+  const handleSignupError = (code: string, message: string) => {
+    switch (code) {
+      case 'auth/email-already-in-use':
+        registrationDispatch({
+          type: 'SET_FIELD',
+          payload: {
+            field: 'emailError',
+            value: 'That email is already in use',
+          },
+        });
+        break;
+      case 'auth/invalid-email':
+        registrationDispatch({
+          type: 'SET_FIELD',
+          payload: {
+            field: 'emailError',
+            value: 'Invalid email',
+          },
+        });
+        break;
+      // I don't know why this is an error in the first place
+      case 'auth/cancelled-popup-request':
+        break;
+      default:
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message,
+            severity: 'error',
+          },
+        });
+        break;
+    }
+  };
+
+  const handleSubmit = () => {
+    if (user) {
+      submitForm(user);
+    }
+    // hasn't registered yet
+    else {
+      signUp(
+        registrationState.email,
+        registrationState.password,
+        registrationState.password2
+      )
+        .then(() => {
+          setSubmitting(true);
+          const { currentUser } = firebase.auth();
+          submitForm(currentUser);
+        })
+        .catch(err => {
+          setSubmitting(false);
+          handleSignupError(err.code, err.message);
+        });
+    }
+  };
+
+  const isLastStep = () => {
+    return (
+      user &&
+      formState.location &&
+      formState.hasAgreedToTerms &&
+      activeStep === steps.length - 1
+    );
   };
 
   const displayStep = (step: number) => {
@@ -120,10 +196,15 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         );
       case 3:
         return (
-          <RegistrationStep formState={formState} dispatchForm={dispatchForm} />
+          <RegistrationStep
+            formState={formState}
+            dispatchForm={dispatchForm}
+            state={registrationState}
+            dispatch={registrationDispatch}
+          />
         );
       default:
-        return <></>;
+        return null;
     }
   };
 
@@ -152,7 +233,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         >
           Back
         </Button>
-        {activeStep < steps.length - 1 ? (
+        {activeStep < steps.length - 1 && !isLastStep() ? (
           <Button
             onClick={handleNext}
             color="primary"
@@ -162,7 +243,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           </Button>
         ) : (
           <Button
-            onClick={submitForm}
+            onClick={handleSubmit}
             color="primary"
             // can't submit until you've both logged in AND agreed to terms
             disabled={!formState.hasAgreedToTerms || submitting}
