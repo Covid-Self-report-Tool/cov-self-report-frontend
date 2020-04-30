@@ -128,7 +128,7 @@ export const SignupForm: FC = () => {
     try {
       await facebookLogin();
     } catch (err) {
-      await handleSignupError(err.code, err.message);
+      handleSignupError(err.code, err.message);
     }
   };
 
