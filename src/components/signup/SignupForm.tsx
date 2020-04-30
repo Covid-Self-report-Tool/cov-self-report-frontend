@@ -88,7 +88,7 @@ export const SignupForm: FC = () => {
     }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     dispatchForm({ type: 'RESET_FORM_ERRORS' });
     //resetErrors();
     if (state.password.length < 6) {
@@ -104,26 +104,31 @@ export const SignupForm: FC = () => {
     } else if (state.password !== state.password2) {
       setFormValue('passwordError2', 'Passwords do not match');
     } else {
-      // TODO: verify captcha on backend
-      signUp(state.email, state.password, state.captcha).catch(err => {
+      try {
+        await signUp(state.email, state.password, state.captcha);
+      } catch (err) {
         handleSignupError(err.code, err.message);
-      });
+      }
     }
   };
 
-  const handleGoogleLogin = (event: React.MouseEvent) => {
+  const handleGoogleLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
 
-    googleLogin().catch(err => {
+    try {
+      googleLogin();
+    } catch (err) {
       handleSignupError(err.code, err.message);
-    });
+    }
   };
 
-  const handleFacebookLogin = (event: React.MouseEvent) => {
+  const handleFacebookLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
-    facebookLogin().catch(err => {
+    try {
+      facebookLogin();
+    } catch (err) {
       handleSignupError(err.code, err.message);
-    });
+    }
   };
 
   return (
