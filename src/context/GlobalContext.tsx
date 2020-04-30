@@ -35,9 +35,7 @@ const reducer = (
         ...state,
         uiAlert: {
           ...state.uiAlert,
-          open: action.payload.open,
-          message: action.payload.message || state.uiAlert.message,
-          severity: action.payload.severity || state.uiAlert.severity,
+          ...action.payload,
         },
       };
     case 'TOGGLE_LAYER_VISIBILITY':

@@ -11,7 +11,7 @@ function Alert(props: AlertProps) {
 // TODO: restore for login/logout success/fail
 export const CustomSnackbar: FC = () => {
   const { state, dispatch } = useContext(GlobalContext);
-  const { open, message = '', severity } = state.uiAlert;
+  const { open, message = '', severity, duration } = state.uiAlert;
 
   const handleCloseInternal = (
     event?: React.SyntheticEvent,
@@ -21,17 +21,27 @@ export const CustomSnackbar: FC = () => {
       return;
     }
 
-    dispatch({
-      type: 'TOGGLE_UI_ALERT',
-      payload: {
-        open: false,
-      },
-    });
+    if (state.uiAlert.open) {
+      dispatch({
+        type: 'TOGGLE_UI_ALERT',
+        payload: {
+          open: false,
+          message: '',
+        },
+      });
+    }
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={4500} onClose={handleCloseInternal}>
-      <Alert severity={severity}>{message}</Alert>
+    <Snackbar
+      open={open}
+      autoHideDuration={duration || 4500}
+      onClose={handleCloseInternal}
+      key={message}
+    >
+      <Alert onClose={handleCloseInternal} severity={severity}>
+        {message}
+      </Alert>
     </Snackbar>
   );
 };
