@@ -16,25 +16,19 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import { Link } from 'react-router-dom';
 
 import { camelCaseToLabel } from 'utils/strings';
 import { UserContext } from 'context';
 import { Symptoms } from 'context/types';
-import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 // TODO: maybe fancy upgrade later:
 // https://github.com/mui-org/material-ui-pickers/releases/tag/v4.0.0-alpha.5
 
 const useStyles = makeStyles(theme => ({
-  margin: {
-    marginLeft: 25,
-    marginRight: 25,
-  },
   center: {
     paddingTop: 30,
     paddingLeft: 10,
   },
-  spacing: {
+  datePicker: {
     marginLeft: 5,
     marginRight: 5,
   },
@@ -178,7 +172,7 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                     </Grid>
                     <Grid item xs={4}>
                       <KeyboardDatePicker
-                        className={classes.spacing}
+                        className={classes.datePicker}
                         disableToolbar
                         variant="inline"
                         format="MM/dd/yyyy"
@@ -197,7 +191,7 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                     </Grid>
                     <Grid item xs={4}>
                       <KeyboardDatePicker
-                        className={classes.spacing}
+                        className={classes.datePicker}
                         disableToolbar
                         variant="inline"
                         format="MM/dd/yyyy"
@@ -220,32 +214,15 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
           </DialogContent>
         </>
       )}
-      <Grid container>
-        <Grid item xs={4}>
-          <Button
-            className={classes.margin}
-            variant="contained"
-            onClick={() => noSymptoms()}
-          >
+      <Grid container justify="center" spacing={2}>
+        <Grid item>
+          <Button size="small" variant="contained" onClick={() => noSymptoms()}>
             I have no symptoms
           </Button>
         </Grid>
-      </Grid>
-      <Grid container className={classes.marginTop}>
-        <Grid item xs={6}>
-          <IfFirebaseUnAuthed>
-            {() => (
-              <Button className={classes.margin} variant="contained">
-                <Link to="/login" className={classes.link}>
-                  Already have an account?
-                </Link>
-              </Button>
-            )}
-          </IfFirebaseUnAuthed>
-        </Grid>
-        <Grid container item xs={6} justify="flex-end">
+        <Grid item>
           <Button
-            className={classes.margin}
+            size="small"
             onClick={() => setShowDates(!showDates)}
             variant="outlined"
             disabled={!showDates && !hasSymptoms()}
