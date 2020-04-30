@@ -10,6 +10,25 @@ Need an `.env` file in root dir with auth keys, etc. Also stored in AWS as envir
 npm start
 ```
 
+## Conventions
+
+### File Structure
+
+- One component per file
+- One types.ts per directory
+- Shared functions go in utils
+- One index.ts per directory in components dir, that exports all other components. This allows us to do things like:
+
+```js
+import { Component1, Component2 } from 'components';
+```
+
+### Other
+
+- Functional components with React hooks
+- async/await over promises
+- types over interface, except for Component prop types (interface is okay here)
+
 ## Links
 
 ### Workflow
@@ -27,10 +46,10 @@ npm start
 
 ### Data
 
-#### Our API endpoints
+#### Our API Docs
 
-- [Countries prod](https://s0vnmyj6fg.execute-api.us-east-1.amazonaws.com/prod/countries)
-- [Countries dev](https://f1t0v67ydj.execute-api.us-east-1.amazonaws.com/dev/countries)
+- [Prod](https://s0vnmyj6fg.execute-api.us-east-1.amazonaws.com/prod/apidocs)
+- [Dev](https://f1t0v67ydj.execute-api.us-east-1.amazonaws.com/dev/apidocs)
 
 #### Other
 
@@ -80,24 +99,6 @@ This is not crazy important since all values are from geocoded sources (as oppos
 - BUT the actual spec only recommends 6, as does MapBox (at the most).
 
 So we can either POST as-is from the geocode result, or round down to the recommended, or round down even further to save space (we aren't showing data at super-close zooms anyway). If it doesn't affect how the backend schema and POST requests are structured, then let's use the untouched value from Google unless we need to start nickel-and-diming perf gains.
-
-#### User-submitted schema (WIP)
-
-```json
-{
-  "type": "Feature",
-  "geometry": {
-    "type": "Point",
-    "coordinates": [125.6, 10.1]
-  },
-  "properties": {
-    "date": "Dinagat Islands",
-    "testnest": {
-      "deeper": true
-    }
-  }
-}
-```
 
 ## AWS CloudWatch queries
 
