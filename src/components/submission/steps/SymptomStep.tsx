@@ -24,9 +24,28 @@ import { Symptoms } from 'context/types';
 // https://github.com/mui-org/material-ui-pickers/releases/tag/v4.0.0-alpha.5
 
 const useStyles = makeStyles(theme => ({
+  dialogTitle: {
+    padding: `4px ${theme.spacing(2)}px`,
+  },
   center: {
     paddingTop: 30,
     paddingLeft: 10,
+  },
+  checkbox: {
+    padding: 4,
+    [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(1),
+    },
+  },
+  dialogContent: {
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+    [theme.breakpoints.up('sm')]: {
+      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
+    },
+  },
+  firstPageBtnsWrap: {
+    marginTop: 4,
+    marginBottom: 4,
   },
   datePicker: {
     marginLeft: 5,
@@ -36,7 +55,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: 20,
   },
   link: {
-    color: theme.palette.grey['900'], // can't use theme here?
+    color: theme.palette.grey['900'],
   },
 }));
 
@@ -103,10 +122,10 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
     <>
       {!showDates ? (
         <>
-          <DialogTitle id="form-dialog-title">
+          <DialogTitle className={classes.dialogTitle} id="form-dialog-title">
             What are your symptoms?
           </DialogTitle>
-          <DialogContent>
+          <DialogContent dividers className={classes.dialogContent}>
             <Grid container>
               <Grid item xs={6}>
                 {firstHalfSymptoms.map((symptom, idx) => (
@@ -114,6 +133,8 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                     <FormControlLabel
                       control={
                         <Checkbox
+                          size="small"
+                          className={classes.checkbox}
                           checked={formState.symptoms[symptom].isPresent}
                           onChange={() =>
                             dispatchForm({
@@ -136,6 +157,8 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                     <FormControlLabel
                       control={
                         <Checkbox
+                          size="small"
+                          className={classes.checkbox}
                           checked={formState.symptoms[symptom].isPresent}
                           onChange={() =>
                             dispatchForm({
@@ -153,12 +176,40 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                 ))}
               </Grid>
             </Grid>
+            <Grid
+              container
+              justify="center"
+              className={classes.firstPageBtnsWrap}
+            >
+              <Grid item>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() => noSymptoms()}
+                >
+                  I have no symptoms
+                </Button>
+              </Grid>
+              <Grid item xs={1} />
+              <Grid item>
+                <Button
+                  size="small"
+                  onClick={() => setShowDates(!showDates)}
+                  variant="outlined"
+                  disabled={!showDates && !hasSymptoms()}
+                >
+                  Set Symptom Dates
+                </Button>
+              </Grid>
+            </Grid>
           </DialogContent>
         </>
       ) : (
         <>
-          <DialogTitle>When did you have these symptoms?</DialogTitle>
-          <DialogContent>
+          <DialogTitle className={classes.dialogTitle}>
+            When did you have these symptoms?
+          </DialogTitle>
+          <DialogContent dividers className={classes.dialogContent}>
             <Grid container>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 {getSymptoms().map((
@@ -211,26 +262,20 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                 ))}
               </MuiPickersUtilsProvider>
             </Grid>
+            <Grid container justify="center">
+              <Grid item>
+                <Button
+                  size="small"
+                  onClick={() => setShowDates(!showDates)}
+                  variant="outlined"
+                >
+                  Go Back to Symptoms
+                </Button>
+              </Grid>
+            </Grid>
           </DialogContent>
         </>
       )}
-      <Grid container justify="center" spacing={2}>
-        <Grid item>
-          <Button size="small" variant="contained" onClick={() => noSymptoms()}>
-            I have no symptoms
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            size="small"
-            onClick={() => setShowDates(!showDates)}
-            variant="outlined"
-            disabled={!showDates && !hasSymptoms()}
-          >
-            {showDates ? 'Go Back to Symptoms' : 'Set Symptom Dates'}
-          </Button>
-        </Grid>
-      </Grid>
     </>
   );
 };
