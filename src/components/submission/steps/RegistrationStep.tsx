@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import {
   DialogTitle,
   DialogContent,
@@ -11,10 +11,9 @@ import {
 } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
-import { SymptomForm, DispatchFormType } from 'context/types';
 import { SignupFields } from 'components/signup/SignupFields';
 import { initialFormStateType } from 'components/signup/types';
-import { googleLogin } from 'utils/firebase';
+import { UserContext } from 'context';
 
 const useStyles = makeStyles({
   marginTop: {
@@ -23,26 +22,28 @@ const useStyles = makeStyles({
 });
 
 type RegistrationStepType = {
-  formState: SymptomForm;
-  dispatchForm: DispatchFormType;
   state: initialFormStateType;
   dispatch: any;
+  handleGoogleLogin: (event: React.MouseEvent<HTMLElement>) => void;
+  handleFacebookLogin: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
 export const RegistrationStep: FC<RegistrationStepType> = ({
-  formState,
-  dispatchForm,
   state,
   dispatch,
+  handleGoogleLogin,
+  handleFacebookLogin,
 }) => {
   const classes = useStyles();
+  const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
+
   const [hasChosenRegistration, setHasChosenRegistration] = useState<Boolean>(
     false
   );
 
   return (
     <>
-      <DialogTitle>Register</DialogTitle>
+      <DialogTitle>Submit</DialogTitle>
       <DialogContent>
         <IfFirebaseUnAuthed>
           {() => (
@@ -60,10 +61,19 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                   <Grid item xs={12}>
                     <Button
                       variant="contained"
-                      onClick={() => googleLogin()}
+                      onClick={handleGoogleLogin}
                       className={classes.marginTop}
                     >
                       Google
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      onClick={handleFacebookLogin}
+                      className={classes.marginTop}
+                    >
+                      Facebook
                     </Button>
                   </Grid>
                 </Grid>

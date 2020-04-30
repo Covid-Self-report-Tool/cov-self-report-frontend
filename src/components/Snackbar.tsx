@@ -31,9 +31,7 @@ export const CustomSnackbar: FC = () => {
 
   return (
     <Snackbar open={open} autoHideDuration={4500} onClose={handleCloseInternal}>
-      <Alert onClose={handleCloseInternal} severity={severity}>
-        {message}
-      </Alert>
+      <Alert severity={severity}>{message}</Alert>
     </Snackbar>
   );
 };
