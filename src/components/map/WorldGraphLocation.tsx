@@ -21,7 +21,8 @@ import {
   indivMarkerIcon,
   setSymbology,
 } from 'utils/map';
-import { Polygons, GlobalContext } from 'components';
+import { GlobalContext } from 'components';
+import { Polygons } from 'components/map';
 import { useQuery } from 'react-query';
 import { getSubmittedCases } from 'utils/api';
 
