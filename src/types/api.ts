@@ -1,4 +1,4 @@
-import { IGeoJson } from 'types';
+import { IGeoJson } from 'components/map/types';
 
 export type GeoJSONCollection = {
   type: string;

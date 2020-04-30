@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 // @ts-ignore
 import GeoStats from 'geostats';
 
-import { GenericGeojsonType } from 'types';
+import { GenericGeojsonType } from 'components/map/types';
 import { SELF_REPORTED_STYLES } from 'config/map';
 const indivMarkerDiameter = SELF_REPORTED_STYLES.size;
 

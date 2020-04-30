@@ -6,13 +6,13 @@ import firebase from 'config/firebase';
 import { tickersConfig } from 'config/map';
 
 import {
-  WorldGraphLocation,
   TickerCards,
   GlobalContext,
   SharingPopoutMenu,
   SplashScreen,
   MapLayersPopout,
 } from 'components';
+import { WorldGraphLocation } from 'components/map';
 import { calculateTotals } from 'utils';
 import { useCountryTotals, useSubmitted } from 'utils/queries';
 
