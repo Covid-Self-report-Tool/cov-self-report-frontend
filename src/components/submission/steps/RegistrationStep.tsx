@@ -43,7 +43,7 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
 
   return (
     <>
-      <DialogTitle>Submission</DialogTitle>
+      <DialogTitle>Submit</DialogTitle>
       <DialogContent>
         <IfFirebaseUnAuthed>
           {() => (
