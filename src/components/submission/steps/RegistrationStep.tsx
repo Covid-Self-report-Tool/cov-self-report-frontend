@@ -1,4 +1,5 @@
 import React, { FC, useState, useContext } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   DialogTitle,
   DialogContent,
@@ -7,7 +8,6 @@ import {
   Link,
   Grid,
   Button,
-  makeStyles,
 } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
@@ -15,11 +15,17 @@ import { SignupFields } from 'components/signup/SignupFields';
 import { initialFormStateType } from 'components/signup/types';
 import { UserContext } from 'context';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
+  dialogTitle: {
+    padding: `4px ${theme.spacing(2)}px`,
+  },
+  link: {
+    color: theme.palette.info.main,
+  },
   marginTop: {
     marginTop: 20,
   },
-});
+}));
 
 type RegistrationStepType = {
   state: initialFormStateType;
@@ -43,8 +49,8 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
 
   return (
     <>
-      <DialogTitle>Submit</DialogTitle>
-      <DialogContent>
+      <DialogTitle className={classes.dialogTitle}>Submit</DialogTitle>
+      <DialogContent dividers>
         <IfFirebaseUnAuthed>
           {() => (
             <>
@@ -107,6 +113,7 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                 <span>
                   I agree to the{' '}
                   <Link
+                    className={classes.link}
                     href="/terms-of-service"
                     target="_blank"
                     rel="noopener noreferrer"
