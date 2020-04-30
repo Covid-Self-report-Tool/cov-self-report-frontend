@@ -1,5 +1,6 @@
 import React, { useState, useContext, FC, useReducer } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Dialog,
   DialogActions,
@@ -10,6 +11,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
@@ -28,11 +30,26 @@ const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
 };
 
+const useStyles = makeStyles(theme => ({
+  stepper: {
+    padding: `12px 4px ${theme.spacing(1)}px`,
+  },
+  haveAcctLink: {
+    color: theme.palette.info.main,
+    marginRight: 'auto',
+    marginLeft: theme.spacing(1),
+  },
+  dialogActionsBtn: {
+    minWidth: theme.spacing(6),
+  },
+}));
+
 interface ModalTypes {
   setSuccessConfOpen: React.Dispatch<boolean>;
 }
 
 export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
+  const classes = useStyles();
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -216,7 +233,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
 
   return (
     <Dialog open aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={activeStep} className={classes.stepper}>
         {steps.map(label => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: { optional?: React.ReactNode } = {};
@@ -229,10 +246,25 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       </Stepper>
       {displayStep(activeStep)}
       <DialogActions>
-        <Button to="/" component={RouteLink} color="primary">
+        <IfFirebaseUnAuthed>
+          {() => (
+            <RouteLink to="/login" className={classes.haveAcctLink}>
+              Already have an account?
+            </RouteLink>
+          )}
+        </IfFirebaseUnAuthed>
+        <Button
+          className={classes.dialogActionsBtn}
+          size="small"
+          to="/"
+          component={RouteLink}
+          color="primary"
+        >
           Cancel
         </Button>
         <Button
+          className={classes.dialogActionsBtn}
+          size="small"
           onClick={handleBack}
           color="primary"
           disabled={activeStep === 0 || submitting}
@@ -241,16 +273,22 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         </Button>
         {activeStep < steps.length - 1 && !isLastStep() ? (
           <Button
+            className={classes.dialogActionsBtn}
+            size="small"
             onClick={handleNext}
-            color="primary"
+            color="secondary"
+            variant="contained"
             disabled={isNextDisabled(activeStep)}
           >
             Next
           </Button>
         ) : (
           <Button
+            className={classes.dialogActionsBtn}
+            size="small"
             onClick={handleSubmit}
-            color="primary"
+            color="secondary"
+            variant="contained"
             // can't submit until you've both logged in AND agreed to terms
             disabled={!formState.hasAgreedToTerms || submitting}
           >
