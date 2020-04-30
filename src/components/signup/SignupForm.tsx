@@ -82,6 +82,7 @@ export const SignupForm: FC = () => {
             open: true,
             message,
             severity: 'error',
+            duration: 15000,
           },
         });
         break;
@@ -116,7 +117,7 @@ export const SignupForm: FC = () => {
     event.preventDefault();
 
     try {
-      googleLogin();
+      await googleLogin();
     } catch (err) {
       handleSignupError(err.code, err.message);
     }
@@ -125,9 +126,9 @@ export const SignupForm: FC = () => {
   const handleFacebookLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
-      facebookLogin();
+      await facebookLogin();
     } catch (err) {
-      handleSignupError(err.code, err.message);
+      await handleSignupError(err.code, err.message);
     }
   };
 
