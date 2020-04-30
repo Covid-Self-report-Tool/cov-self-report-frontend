@@ -16,7 +16,7 @@ export const initialState = {
     countries: true,
   },
   showSplash: false,
-  hasSeenSplash: false,
+  hasSeenSplash: !!localStorage.getItem('hasSeenSplash') || false,
   lastCountriesUpdate: null, // human-friendly timestamp of first country in JHU
 };
 
@@ -48,6 +48,7 @@ const reducer = (
       };
     case 'SHOW_SPLASH':
       if (action.payload === true) {
+        localStorage.setItem('hasSeenSplash', 'true');
         return {
           ...state,
           showSplash: action.payload,
