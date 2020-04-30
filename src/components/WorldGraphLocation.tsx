@@ -45,6 +45,9 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     left: 0,
     right: 0,
+    '& .leaflet-tooltip': {
+      padding: theme.spacing(2),
+    },
     // No one cares about zoom controls on small touch devices
     '& .leaflet-control-zoom': {
       [theme.breakpoints.down('sm')]: {
