@@ -31,6 +31,9 @@ const getSteps = () => {
 };
 
 const useStyles = makeStyles(theme => ({
+  stepper: {
+    padding: `12px 4px ${theme.spacing(1)}px`,
+  },
   haveAcctLink: {
     color: theme.palette.info.main,
     marginRight: 'auto',
@@ -229,7 +232,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
 
   return (
     <Dialog open aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={activeStep} className={classes.stepper}>
         {steps.map(label => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: { optional?: React.ReactNode } = {};
@@ -272,7 +275,8 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
             className={classes.dialogActionsBtn}
             size="small"
             onClick={handleNext}
-            color="primary"
+            color="secondary"
+            variant="contained"
             disabled={isNextDisabled(activeStep)}
           >
             Next
@@ -282,7 +286,8 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
             className={classes.dialogActionsBtn}
             size="small"
             onClick={handleSubmit}
-            color="primary"
+            color="secondary"
+            variant="contained"
             // can't submit until you've both logged in AND agreed to terms
             disabled={!formState.hasAgreedToTerms || submitting}
           >
