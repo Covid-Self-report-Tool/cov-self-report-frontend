@@ -84,7 +84,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       try {
         const idToken = await firebaseUser.getIdToken(true);
         setSubmitting(true);
-        const res = await postFormData(formState, idToken);
+        await postFormData(formState, idToken);
         history.push('/');
         setSuccessConfOpen(true);
       } catch (err) {
@@ -131,6 +131,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
             open: true,
             message,
             severity: 'error',
+            duration: 15000, // it's not actually 15 seconds, more like 6 or 7
           },
         });
         break;

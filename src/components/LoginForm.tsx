@@ -54,6 +54,9 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
             open: true,
             message,
             severity: 'error',
+            // I think this is a MUI bug that resets the autoHide timer under
+            // certain circumstances
+            duration: 15000, // it's not actually 15 seconds, more like 6 or 7
           },
         });
         break;
@@ -78,7 +81,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
           onLogin(resp);
         }
       } catch (err) {
-        handleLoginError(err.code, err.message);
+        await handleLoginError(err.code, err.message);
       }
     }
   };
@@ -92,7 +95,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
         onLogin(resp);
       }
     } catch (err) {
-      handleLoginError(err.code, err.message); // how to handle Google errors?
+      handleLoginError(err.code, err.message);
     }
   };
 
@@ -102,10 +105,10 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
     try {
       const resp = await facebookLogin();
       if (onLogin) {
-        onLogin(resp);
+        await onLogin(resp);
       }
     } catch (err) {
-      handleLoginError(err.code, err.message); // how to handle Google errors?
+      handleLoginError(err.code, err.message);
     }
   };
 
