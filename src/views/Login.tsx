@@ -5,13 +5,11 @@ import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    margin: '40px',
-  },
   link: {
-    color: theme.palette.grey['500'],
+    color: theme.palette.info.main,
   },
 }));
+
 export const Login = () => {
   const classes = useStyles();
   const history = useHistory();

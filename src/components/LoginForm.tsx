@@ -16,10 +16,10 @@ import { GlobalContext } from 'context';
 
 const useStyles = makeStyles(theme => ({
   link: {
-    color: theme.palette.grey['500'],
+    color: theme.palette.info.main,
   },
-  padding: {
-    padding: '20px',
+  paper: {
+    padding: 20,
   },
 }));
 
@@ -121,7 +121,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
   };
 
   return (
-    <Paper className={classes.padding}>
+    <Paper className={classes.paper}>
       <div>
         <Grid container spacing={8} alignItems="flex-end">
           <Grid item>
@@ -169,7 +169,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
           </Grid>
           <Grid item>
             <Link to="/verify_email" className={classes.link}>
-              Forgot password ?
+              Forgot password?
             </Link>
           </Grid>
         </Grid>

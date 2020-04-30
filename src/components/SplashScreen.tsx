@@ -1,58 +1,60 @@
 import React, { FC, useContext } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
-import {
-  createStyles,
-  Theme,
-  withStyles,
-  WithStyles,
-  makeStyles,
-} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Button,
   Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Grid,
   Link,
   IconButton,
   Typography,
 } from '@material-ui/core';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { GlobalContext } from 'context';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      margin: 0,
-      padding: `${theme.spacing(4)} ${theme.spacing(6)}`,
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
-    },
-  });
-
+// Styles for main parent component
 const useStyles = makeStyles(theme => ({
+  dialogTitle: {
+    margin: 0,
+    padding: `${theme.spacing(4)} ${theme.spacing(6)}`,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+  dialogContent: {
+    padding: `${theme.spacing(2)} ${theme.spacing(4)}`,
+  },
   symptomsBtn: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(3),
   },
+  dialogActions: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
 }));
 
-export interface DialogTitleProps extends WithStyles<typeof styles> {
+interface DialogTitleProps {
   id: string;
   children: React.ReactNode;
   onClose: () => void;
+  classes: {
+    [key: string]: string;
+  };
 }
 
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
+const Title: FC<DialogTitleProps> = props => {
   const { children, classes, onClose, ...other } = props;
+
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+    <DialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
         <IconButton
@@ -63,22 +65,9 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
           <CloseIcon />
         </IconButton>
       ) : null}
-    </MuiDialogTitle>
+    </DialogTitle>
   );
-});
-
-const DialogContent = withStyles((theme: Theme) => ({
-  root: {
-    padding: `${theme.spacing(2)} ${theme.spacing(4)}`,
-  },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles((theme: Theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
+};
 
 export const SplashScreen: FC = () => {
   const classes = useStyles();
@@ -102,10 +91,14 @@ export const SplashScreen: FC = () => {
         aria-labelledby="customized-dialog-title"
         open={state.showSplash}
       >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <Title
+          id="customized-dialog-title"
+          onClose={handleClose}
+          classes={classes}
+        >
           COVID-19 Self-reporting Tool
-        </DialogTitle>
-        <DialogContent dividers>
+        </Title>
+        <DialogContent dividers className={classes.dialogContent}>
           <Typography align="center" gutterBottom variant="h4">
             Have you experienced symptoms of COVID-19 in the last four months?
           </Typography>

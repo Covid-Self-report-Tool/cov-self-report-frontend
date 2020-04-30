@@ -13,12 +13,15 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
+  dialogTitle: {
+    padding: `4px ${theme.spacing(2)}px`,
+  },
   dropdown: {
     marginTop: 10,
   },
@@ -28,7 +31,10 @@ const useStyles = makeStyles({
   datePicker: {
     marginBottom: 20,
   },
-});
+  formLabel: {
+    marginTop: theme.spacing(1),
+  },
+}));
 
 type TestingStepType = {
   formState: SymptomForm;
@@ -72,8 +78,10 @@ export const TestingStep: FC<TestingStepType> = ({
 
   return (
     <>
-      <DialogTitle id="form-dialog-title">Test Results</DialogTitle>
-      <DialogContent>
+      <DialogTitle id="form-dialog-title" className={classes.dialogTitle}>
+        Test Results
+      </DialogTitle>
+      <DialogContent dividers>
         <Grid container>
           <FormControl>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -87,8 +95,11 @@ export const TestingStep: FC<TestingStepType> = ({
                 animateYearScrolling
               />
             </MuiPickersUtilsProvider>
-            <FormLabel>Have you been tested for CoVID-19?</FormLabel>
+            <FormLabel className={classes.formLabel}>
+              Have you been tested for CoVID-19?
+            </FormLabel>
             <RadioGroup
+              row
               value={String(formState.tested)}
               onChange={event => {
                 dispatchForm({
@@ -128,8 +139,11 @@ export const TestingStep: FC<TestingStepType> = ({
                 </Select>
               </Grid>
               <FormControl>
-                <FormLabel>Did you test positive?</FormLabel>
+                <FormLabel className={classes.formLabel}>
+                  Did you test positive?
+                </FormLabel>
                 <RadioGroup
+                  row
                   value={String(formState.testedPositive)}
                   onChange={event => {
                     dispatchForm({
@@ -153,8 +167,11 @@ export const TestingStep: FC<TestingStepType> = ({
           {formState.tested === false && (
             <Grid item xs={12}>
               <FormControl>
-                <FormLabel>Have you seen a physician?</FormLabel>
+                <FormLabel className={classes.formLabel}>
+                  Have you seen a physician?
+                </FormLabel>
                 <RadioGroup
+                  row
                   value={String(formState.seenPhysician)}
                   onChange={event => {
                     dispatchForm({
@@ -177,8 +194,11 @@ export const TestingStep: FC<TestingStepType> = ({
           )}
           {formState.seenPhysician === true && (
             <FormControl>
-              <FormLabel>What did your physician say?</FormLabel>
+              <FormLabel className={classes.formLabel}>
+                What did your physician say?
+              </FormLabel>
               <RadioGroup
+                row
                 value={String(formState.doctorDiagnosis)}
                 onChange={handlePhysicianDiagnosis}
               >
