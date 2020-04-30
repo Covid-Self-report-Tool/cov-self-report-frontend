@@ -1,4 +1,5 @@
 import React, { FC, useContext } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { DialogTitle, DialogContent, TextField } from '@material-ui/core';
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -10,7 +11,14 @@ import 'date-fns';
 import { Location } from 'context/types';
 import { UserContext } from 'context';
 
+const useStyles = makeStyles(theme => ({
+  dialogTitle: {
+    padding: `4px ${theme.spacing(2)}px`,
+  },
+}));
+
 export const LocationDetailsStep: FC = () => {
+  const classes = useStyles();
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
 
   const handleSelectAddress = (newAddress: string) => {
@@ -55,8 +63,10 @@ export const LocationDetailsStep: FC = () => {
 
   return (
     <div>
-      <DialogTitle>Where do you live?</DialogTitle>
-      <DialogContent>
+      <DialogTitle className={classes.dialogTitle}>
+        Where do you live?
+      </DialogTitle>
+      <DialogContent dividers>
         <PlacesAutocomplete
           value={formState.address}
           onChange={value =>

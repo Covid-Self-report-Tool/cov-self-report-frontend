@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   firstPageBtnsWrap: {
-    marginTop: 4,
+    marginTop: theme.spacing(1),
     marginBottom: 4,
   },
   datePicker: {
@@ -184,7 +184,8 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
               <Grid item>
                 <Button
                   size="small"
-                  variant="contained"
+                  color="primary"
+                  variant="outlined"
                   onClick={() => noSymptoms()}
                 >
                   I have no symptoms
@@ -195,7 +196,8 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                 <Button
                   size="small"
                   onClick={() => setShowDates(!showDates)}
-                  variant="outlined"
+                  color="secondary"
+                  variant="contained"
                   disabled={!showDates && !hasSymptoms()}
                 >
                   Set Symptom Dates
