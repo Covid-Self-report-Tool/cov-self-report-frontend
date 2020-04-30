@@ -1,23 +1,18 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { DialogTitle, DialogContent, TextField } from '@material-ui/core';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
 import { grey } from '@material-ui/core/colors';
-
-import { SymptomForm, Location, DispatchFormType } from 'context/types';
 import 'date-fns';
 
-type LocationDetailsStepType = {
-  formState: SymptomForm;
-  dispatchForm: DispatchFormType;
-};
+import { Location } from 'context/types';
+import { UserContext } from 'context';
 
-export const LocationDetailsStep: FC<LocationDetailsStepType> = ({
-  formState,
-  dispatchForm,
-}) => {
+export const LocationDetailsStep: FC = () => {
+  const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
+
   const handleSelectAddress = (newAddress: string) => {
     geocodeByAddress(newAddress)
       .then((results: any) => {

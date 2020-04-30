@@ -22,7 +22,7 @@ import {
 } from 'components/submission/steps';
 import { UserContext } from 'context';
 import { formReducer, initialFormState } from 'components/signup';
-import { signUp } from 'utils/firebase';
+import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -79,29 +79,25 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
-  const submitForm = (firebaseUser: firebase.User | null) => {
+  const submitForm = async (firebaseUser: firebase.User | null) => {
     if (firebaseUser) {
-      firebaseUser.getIdToken(true).then(idToken => {
+      try {
+        const idToken = await firebaseUser.getIdToken(true);
         setSubmitting(true);
-        postFormData(formState, idToken)
-          .then((res: any) => {
-            history.push('/');
-            setSuccessConfOpen(true);
-          })
-          .catch((err: any) => {
-            dispatch({
-              type: 'TOGGLE_UI_ALERT',
-              payload: {
-                open: true,
-                message: 'Something went wrong. Your entry was not submitted.',
-                severity: 'error',
-              },
-            });
-            setSubmitting(false);
-
-            history.push('/');
-          });
-      });
+        const res = await postFormData(formState, idToken);
+        history.push('/');
+        setSuccessConfOpen(true);
+      } catch (err) {
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message: 'Something went wrong. Your entry was not submitted.',
+            severity: 'error',
+          },
+        });
+        setSubmitting(false);
+      }
     }
   };
 
@@ -141,26 +137,46 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
-  const handleSubmit = () => {
-    if (user) {
-      submitForm(user);
+  const handleGoogleLogin = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    try {
+      await googleLogin();
+    } catch (err) {
+      handleSignupError(err.code, err.message);
     }
-    // hasn't registered yet
-    else {
-      signUp(
-        registrationState.email,
-        registrationState.password,
-        registrationState.password2
-      )
-        .then(() => {
-          setSubmitting(true);
-          const { currentUser } = firebase.auth();
-          submitForm(currentUser);
-        })
-        .catch(err => {
-          setSubmitting(false);
-          handleSignupError(err.code, err.message);
-        });
+  };
+
+  const handleFacebookLogin = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    try {
+      await facebookLogin();
+    } catch (err) {
+      handleSignupError(err.code, err.message);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (user) {
+        await submitForm(user);
+      }
+      // hasn't registered yet
+      else {
+        await signUp(
+          registrationState.email,
+          registrationState.password,
+          registrationState.password2
+        );
+
+        setSubmitting(true);
+        const { currentUser } = firebase.auth();
+        await submitForm(currentUser);
+      }
+    } catch (err) {
+      setSubmitting(false);
+      handleSignupError(err.code, err.message);
     }
   };
 
@@ -176,31 +192,20 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const displayStep = (step: number) => {
     switch (step) {
       case 0:
-        return (
-          <SymptomStep
-            formState={formState}
-            dispatchForm={dispatchForm}
-            setActiveStep={setActiveStep}
-          />
-        );
+        return <SymptomStep setActiveStep={setActiveStep} />;
       case 1:
         return (
           <TestingStep formState={formState} dispatchForm={dispatchForm} />
         );
       case 2:
-        return (
-          <LocationDetailsStep
-            formState={formState}
-            dispatchForm={dispatchForm}
-          />
-        );
+        return <LocationDetailsStep />;
       case 3:
         return (
           <RegistrationStep
-            formState={formState}
-            dispatchForm={dispatchForm}
             state={registrationState}
             dispatch={registrationDispatch}
+            handleFacebookLogin={handleFacebookLogin}
+            handleGoogleLogin={handleGoogleLogin}
           />
         );
       default:

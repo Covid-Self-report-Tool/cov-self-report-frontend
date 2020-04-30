@@ -2,6 +2,12 @@ import firebase from 'firebase/app';
 import { DispatchFormType } from 'context/types';
 import { History } from 'history';
 
+export enum loginTypes {
+  'GOOGLE',
+  'FACEBOOK',
+  'EMAIL',
+}
+
 export const signUp = async (
   email: string,
   password: string,
@@ -18,10 +24,9 @@ export const logOut = async (history: History, dispatch: DispatchFormType) => {
   await firebase
     .app()
     .auth()
-    .signOut()
-    .then(() => {
-      dispatch({ type: 'RESET_USER_DATA' });
-    });
+    .signOut();
+
+  dispatch({ type: 'RESET_USER_DATA' });
   history.push('/');
 };
 

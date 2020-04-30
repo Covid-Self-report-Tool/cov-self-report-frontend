@@ -1,7 +1,7 @@
 import React, { FC, useReducer, useContext } from 'react';
 import { Paper, Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { signUp, googleLogin } from 'utils/firebase';
+import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 
 import { GlobalContext } from 'components';
 import { initialFormStateType, actionType } from 'components/signup/types';
@@ -119,6 +119,13 @@ export const SignupForm: FC = () => {
     });
   };
 
+  const handleFacebookLogin = (event: React.MouseEvent) => {
+    event.preventDefault();
+    facebookLogin().catch(err => {
+      handleSignupError(err.code, err.message);
+    });
+  };
+
   return (
     <Paper className={classes.padding}>
       <>
@@ -140,6 +147,14 @@ export const SignupForm: FC = () => {
             onClick={handleGoogleLogin}
           >
             Login with Google
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            style={{ textTransform: 'none', marginRight: '20px' }}
+            onClick={handleFacebookLogin}
+          >
+            Login with Facebook
           </Button>
         </Grid>
       </>
