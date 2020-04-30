@@ -2,12 +2,6 @@ import firebase from 'firebase/app';
 import { DispatchFormType } from 'context/types';
 import { History } from 'history';
 
-export enum loginTypes {
-  'GOOGLE',
-  'FACEBOOK',
-  'EMAIL',
-}
-
 export const signUp = async (
   email: string,
   password: string,
