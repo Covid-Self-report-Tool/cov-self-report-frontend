@@ -18,6 +18,20 @@ const themeNonResponsiveFont = createMuiTheme({
       // Roboto to textful pages like <About>.
       root: { fontFamily: "'Roboto', sans-serif" },
     },
+    MuiDialog: {
+      // Outside boundary of all dialogs
+      paper: {
+        margin: 12,
+      },
+      // e.g. splash screen
+      paperScrollPaper: {
+        maxHeight: 'calc(100% - 24px)',
+      },
+      paperFullWidth: {
+        maxHeight: 'calc(100% - 24px)',
+        width: 'calc(100% - 16px)',
+      },
+    },
   },
   palette: {
     type: 'dark',
