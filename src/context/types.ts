@@ -11,6 +11,7 @@ export type AlertPayloadType = {
   open: boolean;
   message?: string;
   severity?: Color;
+  duration?: number | null; // null means the error doesn't auto hide
 };
 
 export type StoreActionType =

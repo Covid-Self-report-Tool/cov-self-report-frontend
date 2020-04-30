@@ -7,8 +7,10 @@ import { Breadcrumb, GlobalContext } from 'components';
 const ErrorTriggerBtns: FC = () => {
   const { dispatch } = useContext(GlobalContext);
 
-  const handleBSurlClick = (event: React.MouseEvent) => {
-    triggerBadRequest().catch(() => {
+  const handleBSurlClick = async () => {
+    try {
+      await triggerBadRequest();
+    } catch {
       dispatch({
         type: 'TOGGLE_UI_ALERT',
         payload: {
@@ -17,11 +19,13 @@ const ErrorTriggerBtns: FC = () => {
           severity: 'error',
         },
       });
-    });
+    }
   };
 
-  const handleBadHelpClick = (event: React.MouseEvent) => {
-    getHtmlFromS3('not-real.html').catch(() => {
+  const handleBadHelpClick = async () => {
+    try {
+      await getHtmlFromS3('not-real.html');
+    } catch (err) {
       dispatch({
         type: 'TOGGLE_UI_ALERT',
         payload: {
@@ -30,7 +34,7 @@ const ErrorTriggerBtns: FC = () => {
           severity: 'error',
         },
       });
-    });
+    }
   };
 
   return (
