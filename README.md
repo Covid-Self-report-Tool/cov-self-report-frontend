@@ -14,20 +14,22 @@ npm start
 
 ### File Structure
 
-- One component per file
-- One types.ts per directory
+- One component per file with the same name as the file
+- One `types.ts` per directory
 - Shared functions go in utils
-- One index.ts per directory in components dir, that exports all other components. This allows us to do things like:
+- One index.ts per directory in `components` directory, that exports all other components. This allows us to do things like:
 
 ```js
 import { Component1, Component2 } from 'components';
 ```
 
-### Other
+### Other Conventions
 
 - Functional components with React hooks
-- async/await over promises
-- types over interface, except for Component prop types (interface is okay here)
+- useContext + useReducer used sparingly, only for shared **UI** state
+- react-query for all backend API calls (queries should go in `utils/queries.ts`)
+- `async`/`await` over Promises
+- `type` over `interface`, except for component prop types
 
 ## Links
 
