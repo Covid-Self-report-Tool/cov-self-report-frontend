@@ -81,7 +81,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
           onLogin(resp);
         }
       } catch (err) {
-        await handleLoginError(err.code, err.message);
+        handleLoginError(err.code, err.message);
       }
     }
   };
