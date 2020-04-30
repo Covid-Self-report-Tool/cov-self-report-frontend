@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { GeoJSON as NonReactGeoJSON } from 'leaflet';
-import { Popup, Polygon } from 'react-leaflet';
+import { Polygon, Tooltip } from 'react-leaflet';
 
 import { CountryRow, IGeometry } from 'types';
 import { prettyPrint } from 'utils';
@@ -26,11 +26,16 @@ interface PolygonsTypes {
   features: PolygonFeature[];
 }
 
-const PolygonPopup: FC<CountryRow> = props => (
-  <Popup maxWidth={450}>
+const PolygonTooltip: FC<CountryRow> = props => (
+  <Tooltip
+    opacity={1}
+    permanent={props.country_name === 'United States of America'}
+  >
     {props.country_name ? (
       <div style={{ width: 225 }}>
-        <h2>{props.country_name}</h2>
+        <h2 style={{ whiteSpace: 'pre-wrap', marginTop: 0 }}>
+          {props.country_name}
+        </h2>
         <h3 style={{ marginBottom: 5 }}>Totals</h3>
         <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
           <li>
@@ -62,7 +67,7 @@ const PolygonPopup: FC<CountryRow> = props => (
         <b>No Data Available</b>
       </>
     )}
-  </Popup>
+  </Tooltip>
 );
 
 export const Polygons: FC<PolygonsTypes> = ({ features }) => (
@@ -99,7 +104,7 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
             weight,
           }}
         >
-          <PolygonPopup {...properties} />
+          <PolygonTooltip {...properties} />
         </Polygon>
       );
     })}
