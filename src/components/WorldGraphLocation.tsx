@@ -95,8 +95,9 @@ const SubmittedCases: FC<SubmittedType> = ({ data }) => {
     <MarkerClusterGroup
       showCoverageOnHover={false}
       iconCreateFunction={createClusterCustomIcon}
-      disableClusteringAtZoom={8}
-      maxClusterRadius={60}
+      disableClusteringAtZoom={10}
+      spiderfyOnMaxZoom
+      maxClusterRadius={5}
     >
       {submissions.map((selfReportedItem: PositionType, i: number) => (
         <Marker
