@@ -79,7 +79,7 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
         color,
         fillColor,
         fill = true,
-        fillOpacity = 1, // L default = 0.2
+        fillOpacity = 0.75, // L default = 0.2
         opacity = 1, // line opacity
         stroke = true, // line color
         weight = 1, // L default = 3
