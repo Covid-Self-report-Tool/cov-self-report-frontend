@@ -147,19 +147,36 @@ export const WorldGraphLocation: FC<WorldGraphProps> = ({
     state.activeCountrySymbKey;
   const styles = useStyles();
   const theme = useTheme();
-  const bigGuy = useMediaQuery(theme.breakpoints.up('sm'));
-  // TODO: preserve on route change, and use bounds instead
-  const initMapCenter = bigGuy ? { lat: 34, lng: -5 } : { lat: 10, lng: -90 };
+  const smallToMid = useMediaQuery(theme.breakpoints.up('sm'));
+  const midsizeAndUp = useMediaQuery(theme.breakpoints.up('md'));
+  const huge = useMediaQuery(theme.breakpoints.up('xl'));
 
   // @ts-ignore // TODO: remove this shame
   const polySymb = countriesSymbology[activeCountrySymbKey];
 
+  let center = { lat: 0, lng: -90 };
+  let zoom = 2;
+
+  if (smallToMid) {
+    center = { lat: 0, lng: -75 };
+    zoom = 3;
+  }
+
+  if (midsizeAndUp) {
+    center = { lat: 34, lng: 15 };
+    zoom = 2;
+  }
+
+  if (huge) {
+    center = { lat: 24, lng: 5 };
+    zoom = 3;
+  }
+
   return (
     <Map
-      center={initMapCenter}
-      zoom={bigGuy ? 3 : 2}
+      center={center}
+      zoom={zoom}
       className={styles.theMapItself}
-      minZoom={2}
       zoomControl={false}
     >
       <MapboxTileLayer tilesetId="dark-v9" />
