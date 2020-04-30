@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import {
   Paper,
   Grid,
@@ -10,7 +10,9 @@ import {
 import { Link } from 'react-router-dom';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { googleLogin, login } from 'utils/firebase';
+
+import { googleLogin, login, facebookLogin } from 'utils/firebase';
+import { GlobalContext } from 'context';
 
 const useStyles = makeStyles(theme => ({
   link: {
@@ -27,72 +29,84 @@ type LoginFormType = {
 
 export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
   const classes = useStyles();
+  const { dispatch } = useContext(GlobalContext);
+
   const [email, setEmail] = useState<string>('');
-  const [emailError, setEmailError] = useState<boolean>(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [passwordError, setPasswordError] = useState<boolean>(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
 
   const handleLoginError = (code: string, message: string) => {
     switch (code) {
       case 'auth/wrong-password':
-        setPasswordError(true);
         setPasswordErrorMessage('Invalid password');
         break;
       case 'auth/user-not-found':
-        setEmailError(true);
         setEmailErrorMessage('That username does not exist');
         break;
       case 'auth/invalid-email':
-        setEmailError(true);
         setEmailErrorMessage('Invalid email');
         break;
       default:
-        alert(message); // change to flash message
+        dispatch({
+          type: 'TOGGLE_UI_ALERT',
+          payload: {
+            open: true,
+            message,
+            severity: 'error',
+          },
+        });
         break;
     }
   };
 
   const resetErrors = () => {
-    setEmailError(false);
-    setPasswordError(false);
     setEmailErrorMessage('');
     setPasswordErrorMessage('');
   };
 
-  const handleLogin = (event: React.MouseEvent) => {
+  const handleLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
 
     resetErrors();
     if (password.length < 6) {
-      setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long');
     } else {
-      login(email, password)
-        .then(resp => {
-          if (onLogin) {
-            onLogin(resp);
-          }
-        })
-        .catch(err => {
-          handleLoginError(err.code, err.message);
-        });
+      try {
+        const resp = await login(email, password);
+        if (onLogin) {
+          onLogin(resp);
+        }
+      } catch (err) {
+        handleLoginError(err.code, err.message);
+      }
     }
   };
 
   const handleGoogleLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
 
-    googleLogin()
-      .then(resp => {
-        if (onLogin) {
-          onLogin(resp);
-        }
-      })
-      .catch(err => {
-        handleLoginError(err.code, err.message); // how to handle Google errors?
-      });
+    try {
+      const resp = await googleLogin();
+      if (onLogin) {
+        onLogin(resp);
+      }
+    } catch (err) {
+      handleLoginError(err.code, err.message); // how to handle Google errors?
+    }
+  };
+
+  const handleFacebookLogin = async (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    try {
+      const resp = await facebookLogin();
+      if (onLogin) {
+        onLogin(resp);
+      }
+    } catch (err) {
+      handleLoginError(err.code, err.message); // how to handle Google errors?
+    }
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +131,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
               type="email"
               value={email}
               onChange={handleEmailChange}
-              error={emailError}
+              error={!!emailErrorMessage}
               helperText={emailErrorMessage}
               fullWidth
               autoFocus
@@ -136,7 +150,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
               type="password"
               value={password}
               onChange={handlePasswordChange}
-              error={passwordError}
+              error={!!passwordErrorMessage}
               helperText={passwordErrorMessage}
               fullWidth
               required
@@ -168,10 +182,18 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
           <Button
             variant="outlined"
             color="primary"
-            style={{ textTransform: 'none' }}
+            style={{ textTransform: 'none', marginRight: '20px' }}
             onClick={handleGoogleLogin}
           >
             Login with Google
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            style={{ textTransform: 'none' }}
+            onClick={handleFacebookLogin}
+          >
+            Login with Facebook
           </Button>
         </Grid>
       </div>

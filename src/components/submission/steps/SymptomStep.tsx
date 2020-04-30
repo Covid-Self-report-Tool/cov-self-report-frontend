@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import {
   DialogTitle,
   DialogContent,
@@ -19,7 +19,8 @@ import {
 import { Link } from 'react-router-dom';
 
 import { camelCaseToLabel } from 'utils/strings';
-import { SymptomForm, Symptoms, DispatchFormType } from 'context/types';
+import { UserContext } from 'context';
+import { Symptoms } from 'context/types';
 import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 // TODO: maybe fancy upgrade later:
 // https://github.com/mui-org/material-ui-pickers/releases/tag/v4.0.0-alpha.5
@@ -46,17 +47,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type SymptomStepType = {
-  formState: SymptomForm;
-  dispatchForm: DispatchFormType;
   setActiveStep: Function;
 };
 
-export const SymptomStep: FC<SymptomStepType> = ({
-  formState,
-  dispatchForm,
-  setActiveStep,
-}) => {
+export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
   const classes = useStyles();
+  const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
+
   // This is to create a grid layout, split into two groups
   const allSymptoms = Object.keys(Symptoms) as Array<keyof typeof Symptoms>;
   const halfwayThrough = Math.floor(allSymptoms.length / 2);

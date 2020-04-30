@@ -3,13 +3,15 @@ import { queryCache } from 'react-query';
 import { BACKEND_URL, CLOUD_HTML_BASE_URL } from 'config';
 import { SymptomForm } from 'context/types';
 import { IGeoJson, CountryRow } from 'types';
-import { GeoJSONCollection } from 'types/api';
 import { htmlPages } from 'views';
 
 const superagent = require('superagent');
 
-export const postFormData = (formData: SymptomForm, authorization: string) => {
-  return superagent
+export const postFormData = async (
+  formData: SymptomForm,
+  authorization: string
+) => {
+  await superagent
     .post(`${BACKEND_URL}/self_report`)
     .set('Authorization', authorization)
     .send(formData);
@@ -23,8 +25,8 @@ export const getUserData = (authorization: string) => {
 };
 
 // TODO: switch to topojson or vector tiles for some perf gains
-export const getGeoJSONCountries = (): GeoJSONCollection =>
-  require('data/countries.min.json');
+export const getGeoJSONCountries = async () =>
+  await require('data/countries.min.json');
 
 export const getCountryData = async () => {
   return superagent
