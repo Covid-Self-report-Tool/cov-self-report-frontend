@@ -18,6 +18,7 @@ export interface GenericGeojsonType {
   properties: {};
   bbox?: number[];
 }
+
 export type PositionType = [number, number];
 
 export type MapboxType = {
@@ -26,4 +27,21 @@ export type MapboxType = {
 
 export type SubmittedType = {
   data: PositionType[];
+};
+
+export type MapProps = {
+  data: any[]; // TODO: type this
+  submittedFeats: PositionType[];
+};
+
+// TODO: extend the existing type in `SymptomForm`?
+export type SelfReportedType = {
+  address: string;
+  city: string | null;
+  country: string | null;
+  county: string | null;
+  date: string | null;
+  lat: number;
+  lng: number;
+  state: string | null;
 };
