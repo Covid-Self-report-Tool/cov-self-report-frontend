@@ -47,5 +47,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # Project
-cypress.env.json
 serviceAccount.json
+
+# Cypress
+cypress/videos/*
+cypress/screenshots/*
+videos
+screenshots

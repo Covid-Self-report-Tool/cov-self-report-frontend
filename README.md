@@ -15,13 +15,19 @@ npm start
 This uses Cypress and [cypress-firebase](https://github.com/prescottprue/cypress-firebase) for integration tests.
 You will need to get a `serviceAccount.json` containing your firebase service account credentials
 in your root directory for the login flow to work.
-You will also need a `cypress.env.json` with Cypress specific variables, although we should
-probably just combine these with our normal env variables eventually
 
-To run Cypress test runner, first start the server (`npm start`) in a separate terminal and then run:
+You will need to start the Node server (`npm start`) to run tests.
+
+To run tests in headless mode:
 
 ```
-npm run cypress:open
+npm run cy:run
+```
+
+To run the Cypress test runner:
+
+```
+npm run cy:open
 ```
 
 For cypress tests, add the following property to your HTML elements to be easier to find them:
