@@ -12,7 +12,7 @@ import {
   SplashScreen,
   MapLayersPopout,
 } from 'components';
-import { WorldGraphLocation } from 'components/map';
+import { Map } from 'components/map';
 import { calculateTotals } from 'utils';
 import { useCountryTotals, useSubmitted } from 'utils/queries';
 
@@ -65,10 +65,7 @@ export const Home: FC = () => {
           Terms of service
         </Link>
       </Box>
-      <WorldGraphLocation
-        data={countryTotals || []}
-        submittedFeats={submissions}
-      />
+      <Map data={countryTotals || []} submittedFeats={submissions} />
       <TickerCards
         config={tickersConfig}
         data={{
