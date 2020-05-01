@@ -1,3 +1,5 @@
+// This doesn't work for some reason, it's following this:
+// https://github.com/hibiken/react-places-autocomplete/issues/189
 const setupGoogleMock = () => {
   /*** Mock Google Maps JavaScript API ***/
   const google = {
@@ -46,17 +48,18 @@ const setupGoogleMock = () => {
 };
 
 describe('symptoms form test', () => {
+  afterEach(() => {
+    cy.logout();
+  });
+
   it('goes through the submission form and sees success modal', () => {
     cy.visit('/', {
       onBeforeLoad(win) {
-        //debugger;
         if (win.window.google) {
           cy.stub(win.window, 'google').returns(setupGoogleMock());
         }
       },
     });
-
-    // App.start();
 
     cy.server();
 
@@ -87,8 +90,6 @@ describe('symptoms form test', () => {
       cy.stub(window.window, 'google').returns(setupGoogleMock()); //, setupGoogleMock()['maps']['places']['AutocompletionService'];
     });
 
-    // cy.login(Cypress.env('TEST_UID'));
-
     cy.on('window:before:load', win => {
       debugger;
 
@@ -111,8 +112,20 @@ describe('symptoms form test', () => {
 
     cy.get('[data-cy=register-password2-field]').type('password');
 
-    cy.get('[data-cy=submit-button]').should('be.disabled');
+    cy.login(Cypress.env('TEST_UID'));
 
-    cy.get('[data-cy=has-agreed-to-terms').click();
+    // it's enabled because on login, this account has already agreed to terms
+    // cy.get('[data-cy=submit-button]').should('be.disabled');
+
+    // this needs to be conditional and check if it's already checked
+    // cy.get('[data-cy=has-agreed-to-terms')
+    //   .wait(1000)
+    //   .click();
+
+    cy.get('[data-cy=submit-button]').should('be.enabled');
+
+    cy.get('[data-cy=submit-button]').click();
+
+    cy.get('[data-cy=successful-submission]').click();
   });
 });

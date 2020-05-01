@@ -1,5 +1,4 @@
 {
   "baseUrl": "http://localhost:3000",
-  "blacklistHosts": "https://maps.googleapis.com",
-  "pluginsFile": "cypress/plugins/index.js"
+  "blacklistHosts": "https://maps.googleapis.com"
 }
