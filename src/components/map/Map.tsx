@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 0,
     '& .leaflet-tooltip': {
-      padding: theme.spacing(2),
+      padding: '16px 12px',
     },
     // No one cares about zoom controls on small touch devices
     '& .leaflet-control-zoom': {
