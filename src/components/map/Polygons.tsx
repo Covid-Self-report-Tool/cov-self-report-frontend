@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { GeoJSON as NonReactGeoJSON } from 'leaflet';
-import { Popup, Polygon } from 'react-leaflet';
+import { Polygon } from 'react-leaflet';
 
-import { CountryRow, IGeometry } from 'types';
-import { prettyPrint } from 'utils';
+import { IGeometry } from './types';
+import { CountryRow } from 'types';
+import { PolygonTooltip } from './PolygonTooltip';
 
 interface PolygonProperties extends CountryRow {
   style: {
@@ -26,45 +27,6 @@ interface PolygonsTypes {
   features: PolygonFeature[];
 }
 
-const PolygonPopup: FC<CountryRow> = props => (
-  <Popup maxWidth={450}>
-    {props.country_name ? (
-      <div style={{ width: 225 }}>
-        <h2>{props.country_name}</h2>
-        <h3 style={{ marginBottom: 5 }}>Totals</h3>
-        <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
-          <li>
-            <b>Confirmed:</b> {prettyPrint(props.total_confirmed)}
-          </li>
-          <li>
-            <b>Deaths:</b> {prettyPrint(props.total_deaths)}
-          </li>
-          <li>
-            <b>Recovered:</b> {prettyPrint(props.total_recovered)}
-          </li>
-        </ul>
-        <h3 style={{ marginBottom: 5 }}>Day changes</h3>
-        <ul style={{ paddingLeft: 5, margin: 0, listStyleType: 'none' }}>
-          <li>
-            <b>Confirmed:</b> {prettyPrint(props.new_confirmed)}
-          </li>
-          <li>
-            <b>Dead:</b> {prettyPrint(props.new_deaths)}
-          </li>
-          <li>
-            <b>Recovered:</b> {prettyPrint(props.new_recovered)}
-          </li>
-        </ul>
-      </div>
-    ) : (
-      <>
-        <h2>{props.NAME_LONG}</h2>
-        <b>No Data Available</b>
-      </>
-    )}
-  </Popup>
-);
-
 export const Polygons: FC<PolygonsTypes> = ({ features }) => (
   <>
     {features.map(({ geometry, properties }: PolygonFeature, i: number) => {
@@ -79,7 +41,7 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
         color,
         fillColor,
         fill = true,
-        fillOpacity = 1, // L default = 0.2
+        fillOpacity = 0.75, // L default = 0.2
         opacity = 1, // line opacity
         stroke = true, // line color
         weight = 1, // L default = 3
@@ -99,7 +61,7 @@ export const Polygons: FC<PolygonsTypes> = ({ features }) => (
             weight,
           }}
         >
-          <PolygonPopup {...properties} />
+          <PolygonTooltip {...properties} />
         </Polygon>
       );
     })}

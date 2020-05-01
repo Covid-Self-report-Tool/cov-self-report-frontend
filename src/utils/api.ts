@@ -2,7 +2,8 @@ import { queryCache } from 'react-query';
 
 import { BACKEND_URL, CLOUD_HTML_BASE_URL } from 'config';
 import { SymptomForm } from 'context/types';
-import { IGeoJson, CountryRow } from 'types';
+import { CountryRow } from 'types';
+import { IGeoJson } from 'components/map/types';
 import { htmlPages } from 'views';
 
 const superagent = require('superagent');
