@@ -53,20 +53,66 @@ describe('symptoms form test', () => {
   });
 
   it('goes through the submission form and sees success modal', () => {
-    cy.visit('/', {
-      onBeforeLoad(win) {
-        if (win.window.google) {
-          cy.stub(win.window, 'google').returns(setupGoogleMock());
-        }
-      },
-    });
-
     cy.server();
 
     cy.route({
       method: 'GET',
       url: 'https://maps.googleapis.com/maps/api/place/js/*',
       response: [],
+    });
+
+    cy.route({
+      method: 'GET',
+      url: `${Cypress.env('BACKEND_URL')}/countries`,
+      response: {
+        data: {
+          countries: [
+            {
+              country_code: 'US',
+              country_name: 'United States of America',
+              country_slug: 'united-states',
+              date: '2020-05-01T20:25:06Z',
+              new_confirmed: 29324,
+              new_deaths: 2027,
+              new_recovered: 33227,
+              total_confirmed: 1067883,
+              total_deaths: 62952,
+              total_recovered: 153947,
+            },
+          ],
+        },
+        error: null,
+      },
+    });
+
+    cy.route({
+      method: 'GET',
+      url: `${Cypress.env('BACKEND_URL')}/self_report`,
+      response: {
+        data: {
+          locations: [
+            {
+              address: 'Missoula, Montana',
+              lat: 0,
+              lng: 0,
+              city: 'Missoula',
+              state: 'Montana',
+              country: 'USA',
+              county: null,
+              date: null,
+            },
+          ],
+        },
+        error: null,
+      },
+    });
+
+    cy.visit('/', {
+      onBeforeLoad(win) {
+        if (win.window.google) {
+          cy.stub(win.window, 'google').returns(setupGoogleMock());
+        }
+      },
     });
 
     cy.get('[data-cy=add-symptoms-splash]').click();
@@ -89,14 +135,6 @@ describe('symptoms form test', () => {
       }); //, setupGoogleMock()['maps']['places']['AutocompletionService'];
       cy.stub(window.window, 'google').returns(setupGoogleMock()); //, setupGoogleMock()['maps']['places']['AutocompletionService'];
     });
-
-    cy.on('window:before:load', win => {
-      debugger;
-
-      //Object.defineProperty(win.window, 'google', setupGoogleMock());
-    });
-
-    console.log(window);
 
     cy.get('[data-cy=location]').type('Berkeley, CA, USA');
 
