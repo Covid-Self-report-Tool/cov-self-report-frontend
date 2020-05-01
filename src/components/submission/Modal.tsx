@@ -207,6 +207,13 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     );
   };
 
+  const canSubmit = () => {
+    if (user) {
+      return formState.hasAgreedToTerms;
+    }
+    return formState.hasAgreedToTerms && registrationState.captcha;
+  };
+
   const displayStep = (step: number) => {
     switch (step) {
       case 0:
@@ -289,8 +296,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
             onClick={handleSubmit}
             color="secondary"
             variant="contained"
-            // can't submit until you've both logged in AND agreed to terms
-            disabled={!formState.hasAgreedToTerms || submitting}
+            disabled={!canSubmit() || submitting}
           >
             {!submitting ? 'Submit' : <CircularProgress />}
           </Button>
