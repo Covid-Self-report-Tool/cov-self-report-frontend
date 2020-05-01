@@ -52,7 +52,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "cypress:open": "GCLOUD_PROJECT=c19maps-37544 cypress open"
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": "airbnb"

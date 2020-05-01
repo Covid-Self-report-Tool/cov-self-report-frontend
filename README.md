@@ -18,7 +18,7 @@ in your root directory for the login flow to work.
 You will also need a `cypress.env.json` with Cypress specific variables, although we should
 probably just combine these with our normal env variables eventually
 
-To run Cypress test runner:
+To run Cypress test runner, first start the server (`npm start`) in a separate terminal and then run:
 
 ```
 npm run cypress:open
@@ -30,7 +30,7 @@ For cypress tests, add the following property to your HTML elements to be easier
 data-cy=example_element
 ```
 
-This is more stable/maintainable than using classes or IDs.
+This is more stable/maintainable than using classes or IDs and assures that they don't change.
 
 ## Conventions
 
