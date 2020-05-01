@@ -48,4 +48,4 @@ yarn-error.log*
 
 # Project
 cypress.env.json
-firebaseCreds.json
+serviceAccount.json

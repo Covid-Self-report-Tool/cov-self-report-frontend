@@ -10,6 +10,28 @@ Need an `.env` file in root dir with auth keys, etc. Also stored in AWS as envir
 npm start
 ```
 
+## Testing
+
+This uses Cypress and firebase-cypress for integration tests
+You will need to get a `serviceAccount.json` containing your firebase service account crednetials
+in your root directory for the login flow to work.
+You will also need a `cypress.env.json` with Cypress specific variables, although we should
+probably just combine these with our normal env variables eventually
+
+To run Cypress test runner:
+
+```
+npm run cypress:open
+```
+
+For cypress tests, add the following property to your HTML elements to be easier to find them:
+
+```
+data-cy=example_element
+```
+
+This is more stable/maintainable than using classes or IDs.
+
 ## Conventions
 
 ### File Structure
