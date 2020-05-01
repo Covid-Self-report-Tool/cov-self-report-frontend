@@ -74,6 +74,7 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
             label="Email"
             type="email"
             name="email"
+            data-cy="register-email-field"
             value={state.email}
             onChange={handleChange}
             error={!!state.emailError}
@@ -94,6 +95,7 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
             label="Password"
             type="password"
             name="password"
+            data-cy="register-password-field"
             value={state.password}
             onChange={handleChange}
             fullWidth
@@ -113,6 +115,7 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
             label="Confirm Password"
             type="password"
             name="password2"
+            data-cy="register-password2-field"
             value={state.password2}
             onChange={handleChange}
             fullWidth

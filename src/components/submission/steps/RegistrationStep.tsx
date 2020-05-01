@@ -59,6 +59,7 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                   <Grid item xs={12}>
                     <Button
                       variant="contained"
+                      data-cy="register-email"
                       onClick={() => setHasChosenRegistration(true)}
                     >
                       Email
@@ -103,6 +104,7 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                 <Checkbox
                   name="checkedB"
                   color="primary"
+                  data-cy="has-agreed-to-terms"
                   checked={!!formState.hasAgreedToTerms}
                   onChange={() => {
                     dispatchForm({ type: 'TOGGLE_AGREED' });

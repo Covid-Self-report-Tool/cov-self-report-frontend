@@ -112,6 +112,7 @@ export const SplashScreen: FC = () => {
             <Button
               variant="contained"
               color="secondary"
+              data-cy="add-symptoms-splash"
               to="/self-report"
               component={RouteLink}
               onClick={handleClose}
