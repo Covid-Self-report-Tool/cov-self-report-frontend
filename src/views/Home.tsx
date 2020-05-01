@@ -6,13 +6,13 @@ import firebase from 'config/firebase';
 import { tickersConfig } from 'config/map';
 
 import {
-  WorldGraphLocation,
   TickerCards,
   GlobalContext,
   SharingPopoutMenu,
   SplashScreen,
   MapLayersPopout,
 } from 'components';
+import { Map } from 'components/map';
 import { calculateTotals } from 'utils';
 import { useCountryTotals, useSubmitted } from 'utils/queries';
 
@@ -65,10 +65,7 @@ export const Home: FC = () => {
           Terms of service
         </Link>
       </Box>
-      <WorldGraphLocation
-        data={countryTotals || []}
-        submittedFeats={submissions}
-      />
+      <Map data={countryTotals || []} submittedFeats={submissions} />
       <TickerCards
         config={tickersConfig}
         data={{
