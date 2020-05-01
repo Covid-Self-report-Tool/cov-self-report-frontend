@@ -108,8 +108,16 @@ export const TestingStep: FC<TestingStepType> = ({
                 });
               }}
             >
-              <FormControlLabel control={<Radio value="true" />} label="Yes" />
-              <FormControlLabel control={<Radio value="false" />} label="No" />
+              <FormControlLabel
+                data-cy="tested-covid-yes"
+                control={<Radio value="true" />}
+                label="Yes"
+              />
+              <FormControlLabel
+                data-cy="tested-covid-no"
+                control={<Radio value="false" />}
+                label="No"
+              />
             </RadioGroup>
           </FormControl>
           {formState.tested && (
@@ -181,11 +189,15 @@ export const TestingStep: FC<TestingStepType> = ({
                   }}
                 >
                   <FormControlLabel
-                    control={<Radio value="true" />}
+                    control={
+                      <Radio data-cy="seen-physician-yes" value="true" />
+                    }
                     label="Yes"
                   />
                   <FormControlLabel
-                    control={<Radio value="false" />}
+                    control={
+                      <Radio data-cy="seen-physician-no" value="false" />
+                    }
                     label="No"
                   />
                 </RadioGroup>

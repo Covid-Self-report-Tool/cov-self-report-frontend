@@ -45,3 +45,7 @@ yarn-error.log*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Project
+cypress.env.json
+firebaseCreds.json
