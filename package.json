@@ -52,7 +52,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "cypress:open": "cypress open"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "eslintConfig": {
     "extends": "airbnb"
@@ -83,6 +84,7 @@
     "@types/recharts": "^1.8.9",
     "@types/superagent": "^4.1.7",
     "cypress": "^4.5.0",
+    "cypress-dotenv": "^1.2.1",
     "cypress-firebase": "^1.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^17.1.1",

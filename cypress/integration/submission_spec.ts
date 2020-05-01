@@ -63,7 +63,7 @@ describe('symptoms form test', () => {
 
     cy.route({
       method: 'GET',
-      url: `${Cypress.env('BACKEND_URL')}/countries`,
+      url: `${Cypress.env('REACT_APP_BACKEND_URL')}/countries`,
       response: {
         data: {
           countries: [
@@ -87,7 +87,7 @@ describe('symptoms form test', () => {
 
     cy.route({
       method: 'GET',
-      url: `${Cypress.env('BACKEND_URL')}/self_report`,
+      url: `${Cypress.env('REACT_APP_BACKEND_URL')}/self_report`,
       response: {
         data: {
           locations: [
@@ -114,6 +114,10 @@ describe('symptoms form test', () => {
         }
       },
     });
+
+    debugger;
+
+    console.log(Cypress.env());
 
     cy.get('[data-cy=add-symptoms-splash]').click();
 
