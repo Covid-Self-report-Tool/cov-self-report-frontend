@@ -12,8 +12,8 @@ npm start
 
 ## Testing
 
-This uses Cypress and firebase-cypress for integration tests
-You will need to get a `serviceAccount.json` containing your firebase service account crednetials
+This uses Cypress and [cypress-firebase](https://github.com/prescottprue/cypress-firebase) for integration tests
+You will need to get a `serviceAccount.json` containing your firebase service account credentials
 in your root directory for the login flow to work.
 You will also need a `cypress.env.json` with Cypress specific variables, although we should
 probably just combine these with our normal env variables eventually
@@ -26,8 +26,8 @@ npm run cypress:open
 
 For cypress tests, add the following property to your HTML elements to be easier to find them:
 
-```
-data-cy=example_element
+```html
+<div data-cy="example_element"></div>
 ```
 
 This is more stable/maintainable than using classes or IDs and assures that they don't change.
