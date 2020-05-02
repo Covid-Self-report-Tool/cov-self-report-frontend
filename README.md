@@ -10,6 +10,34 @@ Need an `.env` file in root dir with auth keys, etc. Also stored in AWS as envir
 npm start
 ```
 
+## Testing
+
+This uses Cypress and [cypress-firebase](https://github.com/prescottprue/cypress-firebase) for integration tests.
+You will need to get a `serviceAccount.json` containing your firebase service account credentials
+in your root directory for the login flow to work.
+
+You will need to start the Node server (`npm start`) to run tests.
+
+To run tests in headless mode:
+
+```
+npm run cy:run
+```
+
+To run the Cypress test runner:
+
+```
+npm run cy:open
+```
+
+For cypress tests, add the following property to your HTML elements to be easier to find them:
+
+```html
+<div data-cy="example_element"></div>
+```
+
+This is more stable/maintainable than using classes or IDs and assures that they don't change.
+
 ## Conventions
 
 ### File Structure

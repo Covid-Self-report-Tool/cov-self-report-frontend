@@ -282,6 +282,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           <Button
             className={classes.dialogActionsBtn}
             size="small"
+            data-cy="next-button"
             onClick={handleNext}
             color="secondary"
             variant="contained"
@@ -296,6 +297,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
             onClick={handleSubmit}
             color="secondary"
             variant="contained"
+            data-cy="submit-button"
             disabled={!canSubmit() || submitting}
           >
             {!submitting ? 'Submit' : <CircularProgress />}

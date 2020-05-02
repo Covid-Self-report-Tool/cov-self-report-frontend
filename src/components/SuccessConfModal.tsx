@@ -55,7 +55,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
   return (
     <Dialog
       open={open}
-      // open={true}
+      data-cy="successful-submission"
       transitionDuration={{ enter: 900, exit: 400 }}
       TransitionComponent={Transition}
       onClose={handleClose}

@@ -92,6 +92,7 @@ export const LocationDetailsStep: FC = () => {
           }) => (
             <div>
               <TextField
+                data-cy="location"
                 {...getInputProps({
                   placeholder: 'Search Places ...',
                   className: 'location-search-input',
@@ -99,7 +100,7 @@ export const LocationDetailsStep: FC = () => {
               />
               <div className="autocomplete-dropdown-container">
                 {loading && <div>Loading...</div>}
-                {suggestions.map(suggestion => {
+                {suggestions.map((suggestion, idx) => {
                   const className = suggestion.active
                     ? 'suggestion-item--active'
                     : 'suggestion-item';
@@ -109,6 +110,7 @@ export const LocationDetailsStep: FC = () => {
                     : { backgroundColor: '#424242', cursor: 'pointer' };
                   return (
                     <div
+                      data-cy={`location-suggestion`}
                       {...getSuggestionItemProps(suggestion, {
                         className,
                         style,
