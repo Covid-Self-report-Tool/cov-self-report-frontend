@@ -1,3 +1,4 @@
+import { signUp } from '../../src/utils/firebase';
 // This doesn't work for some reason, it's following this:
 // https://github.com/hibiken/react-places-autocomplete/issues/189
 const setupGoogleMock = () => {
@@ -107,17 +108,28 @@ describe('symptoms form test', () => {
       },
     });
 
+    cy.route({
+      method: 'POST',
+      url: `${Cypress.env('REACT_APP_BACKEND_URL')}/self_report`,
+      response: {
+        data: {
+          message: 'Saved user data',
+        },
+        error: null,
+      },
+    }).as('post');
+
     cy.visit('/', {
       onBeforeLoad(win) {
+        // need to test that this works
+        // cy.stub('signUp', () => {
+        //   console.log('called creation');
+        // });
         if (win.window.google) {
           cy.stub(win.window, 'google').returns(setupGoogleMock());
         }
       },
     });
-
-    debugger;
-
-    console.log(Cypress.env());
 
     cy.get('[data-cy=add-symptoms-splash]').click();
 
@@ -132,7 +144,6 @@ describe('symptoms form test', () => {
     global.window.google = setupGoogleMock();
 
     cy.window().then(window => {
-      // debugger;
       global.window.google = setupGoogleMock();
       cy.stub(window.google.maps.places, 'AutocompleteService').returns(() => {
         predictions: [];
@@ -168,6 +179,20 @@ describe('symptoms form test', () => {
 
     cy.get('[data-cy=submit-button]').click();
 
-    cy.get('[data-cy=successful-submission]').click();
+    cy.get('[data-cy=successful-submission]');
+
+    cy.get('@post')
+      .its('request.body')
+      .then(body => {
+        expect(body).to.include({
+          address: 'Berkeley, CA, USA',
+          email: 'dev@covidselfreport.org',
+          tested: false,
+          seenPhysician: false,
+          hasAgreedToTerms: true,
+        });
+
+        expect(Object.keys(body)).to.include('symptoms', 'location');
+      });
   });
 });
