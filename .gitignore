@@ -45,3 +45,12 @@ yarn-error.log*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Project
+serviceAccount.json
+
+# Cypress
+cypress/videos/*
+cypress/screenshots/*
+videos
+screenshots
