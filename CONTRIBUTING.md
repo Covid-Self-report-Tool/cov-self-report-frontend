@@ -19,11 +19,16 @@ flags](https://www.martinfowler.com/articles/feature-toggles.html) to work on
 this incrementally. If you are making a long, complicated PR, it is likely that
 you will be asked to break it into more focused pieces.
 
+### Rebasing
+
+Avoid rebasing and force-pushing once you've opened a pull request. This rewrites history
+and makes it more difficult for the person reviewing your code to see active changes.
+
 ## Branches
 
-Branch names should start with first letter of first name + last name or some
-combination of those, followed by a forward slash, and a descriptive message
-that explains the intention of the branch. Words should be separated by hyphens.
+Branch names should start with first letter of first name + last name, followed
+by a forward slash, and a descriptive message that explains the intention of the
+branch. Words should be separated by hyphens.
 
 The important part is to use a consistent identifier as the first part of the
 branch name that makes it easy to tell who made the branch at a glance.
