@@ -1,5 +1,4 @@
-export const MAPBOX_API_KEY =
-  'pk.eyJ1IjoiYWJvb2QxMDE2IiwiYSI6ImNrOG5mZWwyODB4eXYzbHBoaXoyMzVpMTIifQ.-NSMo7xsq7Rmq0t0JyizGg';
+export const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 export const CLOUD_HTML_BASE_URL =
   'https://raw.githubusercontent.com/abettermap/c19-self-report-content/master';
 
