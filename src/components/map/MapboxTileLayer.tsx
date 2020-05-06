@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { TileLayer } from 'react-leaflet';
 
 import { MapboxType } from './types';
-import { MAPBOX_API_KEY as accessToken } from 'config';
+import { MAPBOX_TOKEN as accessToken } from 'config';
 
 export const MapboxTileLayer: FC<MapboxType> = ({ tilesetId }) => {
   const baseUrl = 'https://api.mapbox.com/styles/v1/mapbox';
