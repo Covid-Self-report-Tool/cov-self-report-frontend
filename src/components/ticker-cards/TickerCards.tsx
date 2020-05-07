@@ -2,10 +2,14 @@ import React, { FC } from 'react';
 import { Grid, Paper, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { TickerInfoType, RequiredKeys } from 'types';
-import { CurrentTotalsTypes } from 'context/types';
+import {
+  RequiredTotalsKeys,
+  TickerTitleTypes,
+  TickerCard,
+  TickerCardTypes,
+} from './types';
 import { prettyPrint } from 'utils';
-import { TickerInfoPopover, LegendSymbol, LegendSymbolTypes } from 'components';
+import { TickerInfoPopover, LegendSymbol } from 'components/ticker-cards';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,32 +59,6 @@ const useStyles = makeStyles(theme => ({
     },
   },
 }));
-
-type RequiredTotalsKeys = RequiredKeys<CurrentTotalsTypes>;
-
-type TickerTitleTypes = {
-  heading: string;
-  renderLegendSymbol: () => React.ReactNode;
-};
-
-type TickerCard = Omit<TickerTitleTypes, 'renderLegendSymbol'> & {
-  // Some render() props so as not to pass down data through so many levels, and
-  // add more options than just `children` would.
-  renderTitle: () => React.ReactNode;
-  renderPopover: () => React.ReactNode;
-  number?: number;
-};
-
-type TickerConfigTypes = {
-  [key in RequiredTotalsKeys & string]: TickerInfoType & {
-    symbol: LegendSymbolTypes;
-  };
-};
-
-type TickerCardTypes = {
-  data: CurrentTotalsTypes; // individual totals combined into single object
-  config: TickerConfigTypes;
-};
 
 const CardTitle: FC<TickerTitleTypes> = ({ heading, renderLegendSymbol }) => {
   const classes = useStyles();

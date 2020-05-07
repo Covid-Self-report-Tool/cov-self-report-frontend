@@ -19,12 +19,6 @@ export type CountryRow = {
   NAME_LONG?: string;
 };
 
-export type TickerInfoType = {
-  heading: string;
-  defText: string;
-  omitLastUpdated?: boolean; // e.g. don't need to show time for self-reported
-};
-
 // Handy utility to get only the required keys of an object type. This allows a
 // someOtherObj[key] to ensure only existing keys are used.
 // CRED: https://stackoverflow.com/a/50830054/1048518
