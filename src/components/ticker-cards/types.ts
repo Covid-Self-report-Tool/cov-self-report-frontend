@@ -19,6 +19,7 @@ export type TickerCard = Omit<TickerTitleTypes, 'renderLegendSymbol'> & {
   // add more options than just `children` would.
   renderTitle: () => React.ReactNode;
   renderPopover: () => React.ReactNode;
+  renderSymbolBar: () => React.ReactNode;
   number?: number;
 };
 
@@ -40,5 +41,10 @@ export type LegendSymbolTypes = {
   size?: string | number;
   borderWidth?: number;
   alwaysShow?: boolean;
+  globalStateKey?: string; // super gross, fragile
+};
+
+export type LegendSymbolBarTypes = {
+  colorStops?: string[];
   globalStateKey?: string; // super gross, fragile
 };
