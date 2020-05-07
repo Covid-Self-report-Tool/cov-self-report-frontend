@@ -126,9 +126,16 @@ export const TickerCards: FC<TickerCardTypes> = ({ data, config }) => {
                 omitLastUpdated={omitLastUpdated}
               />
             )}
-            renderSymbolBar={() => (
-              <LegendSymbolBar globalStateKey={symbol.globalStateKey} />
-            )}
+            renderSymbolBar={() =>
+              symbol.colorStops.length ? (
+                <LegendSymbolBar
+                  globalStateKey={symbol.globalStateKey}
+                  colorStops={symbol.colorStops}
+                />
+              ) : (
+                <div />
+              )
+            }
           />
         );
       })}
