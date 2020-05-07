@@ -23,10 +23,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.common.white,
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 4,
     overflow: 'auto',
-    padding: theme.spacing(1),
-    paddingTop: theme.spacing(2),
+    height: '100%', // fill the grid
+    justifyContent: 'center',
+    // Little more on the top so the "i" btn doesn't cover the card heading
+    padding: `${theme.spacing(2)}px ${theme.spacing(1)}px 4px`,
     position: 'relative',
     [theme.breakpoints.up('md')]: {
       marginBottom: theme.spacing(1),
@@ -42,6 +43,7 @@ const useStyles = makeStyles(theme => ({
   tickerVal: {
     color: theme.palette.common.black,
     fontSize: '1.9rem',
+    marginBottom: 'auto', // make flexbox align nicely
     [theme.breakpoints.up('md')]: {
       fontSize: '2.3rem',
     },
@@ -50,11 +52,12 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     zIndex: 400,
     [theme.breakpoints.down('sm')]: {
-      bottom: 16, // above attribution
+      bottom: 20, // above attribution
       display: 'grid',
-      gridColumnGap: 8,
+      gridColumnGap: 6,
+      gridRowGap: 6,
       gridTemplateColumns: 'repeat(2, 1fr)',
-      right: 8,
+      right: 6,
       width: 250,
     },
     [theme.breakpoints.up('md')]: {
@@ -91,7 +94,7 @@ const NotifierCard: FC<TickerCard> = props => {
         <Typography component="h4" variant="h4" className={classes.tickerVal}>
           {number ? prettyPrint(number) : <CircularProgress size={30} />}
         </Typography>
-        {renderSymbolBar()}
+        <div style={{ minHeight: 24 }}>{renderSymbolBar()}</div>
         {renderPopover()}
       </Paper>
     </Grid>
