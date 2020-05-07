@@ -42,9 +42,10 @@ export type LegendSymbolTypes = {
   borderWidth?: number;
   alwaysShow?: boolean;
   globalStateKey?: string; // super gross, fragile
+  colorStops: string[];
 };
 
 export type LegendSymbolBarTypes = {
-  colorStops?: string[];
+  colorStops: string[];
   globalStateKey?: string; // super gross, fragile
 };

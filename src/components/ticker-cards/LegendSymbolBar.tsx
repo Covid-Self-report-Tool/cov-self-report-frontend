@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const LegendSymbolBar: FC<LegendSymbolBarTypes> = ({
-  colorStops = ['red', 'green', 'blue'],
+  colorStops,
   globalStateKey,
 }) => {
   const classes = useStyles();
@@ -37,7 +37,7 @@ export const LegendSymbolBar: FC<LegendSymbolBarTypes> = ({
         <>
           <Box display="flex" justifyContent="center">
             <Box
-              width="90%"
+              width="100%"
               height={4}
               style={{
                 backgroundImage: `linear-gradient(to right, ${colorStops.join(
