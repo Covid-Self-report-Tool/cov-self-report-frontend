@@ -10,16 +10,16 @@ const useStyles = makeStyles(theme => ({
     fontSize: 12,
     display: 'flex',
     justifyContent: 'space-between',
-    color: theme.palette.common.black,
+    color: theme.palette.background.default,
     '& > *': {
       lineHeight: 1,
       marginTop: 4,
     },
   },
   setSymbLink: {
-    fontSize: 12,
+    fontSize: 14,
     color: theme.palette.info.main,
-    textDecoration: 'underline',
+    display: 'block',
   },
 }));
 
@@ -43,7 +43,8 @@ export const LegendSymbolBar: FC<LegendSymbolBarTypes> = ({
           <Box display="flex" justifyContent="center">
             <Box
               width="100%"
-              height={4}
+              height={6}
+              borderRadius={2}
               style={{
                 backgroundImage: `linear-gradient(to right, ${colorStops.join(
                   ', '
