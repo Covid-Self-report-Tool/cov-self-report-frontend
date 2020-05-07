@@ -9,7 +9,11 @@ import {
   TickerCardTypes,
 } from './types';
 import { prettyPrint } from 'utils';
-import { TickerInfoPopover, LegendSymbol } from 'components/ticker-cards';
+import {
+  TickerInfoPopover,
+  LegendSymbol,
+  LegendSymbolBar,
+} from 'components/ticker-cards';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     marginBottom: 4,
     overflow: 'auto',
-    paddingBottom: theme.spacing(1),
+    padding: theme.spacing(1),
     paddingTop: theme.spacing(2),
     position: 'relative',
     [theme.breakpoints.up('md')]: {
@@ -78,7 +82,7 @@ const CardTitle: FC<TickerTitleTypes> = ({ heading, renderLegendSymbol }) => {
 
 const NotifierCard: FC<TickerCard> = props => {
   const classes = useStyles();
-  const { number, renderTitle, renderPopover } = props;
+  const { number, renderTitle, renderPopover, renderSymbolBar } = props;
 
   return (
     <Grid item className={classes.root}>
@@ -87,6 +91,7 @@ const NotifierCard: FC<TickerCard> = props => {
         <Typography component="h4" variant="h4" className={classes.tickerVal}>
           {number ? prettyPrint(number) : <CircularProgress size={30} />}
         </Typography>
+        {renderSymbolBar()}
         {renderPopover()}
       </Paper>
     </Grid>
@@ -120,6 +125,9 @@ export const TickerCards: FC<TickerCardTypes> = ({ data, config }) => {
                 defText={defText}
                 omitLastUpdated={omitLastUpdated}
               />
+            )}
+            renderSymbolBar={() => (
+              <LegendSymbolBar globalStateKey={symbol.globalStateKey} />
             )}
           />
         );
