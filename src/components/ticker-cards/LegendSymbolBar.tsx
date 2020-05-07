@@ -28,8 +28,13 @@ export const LegendSymbolBar: FC<LegendSymbolBarTypes> = ({
   globalStateKey,
 }) => {
   const classes = useStyles();
-  const { state } = useContext(GlobalContext);
+  const { state, dispatch } = useContext(GlobalContext);
   const active = state.activeCountrySymbKey === globalStateKey;
+
+  const handleClick = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    dispatch({ type: 'SET_COUNTRY_SYMBOLOGY', payload: globalStateKey });
+  };
 
   return (
     <>
@@ -52,7 +57,7 @@ export const LegendSymbolBar: FC<LegendSymbolBarTypes> = ({
           </Box>
         </>
       ) : (
-        <Link href="#" className={classes.setSymbLink}>
+        <Link href="#" className={classes.setSymbLink} onClick={handleClick}>
           Show
         </Link>
       )}
