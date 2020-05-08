@@ -3,7 +3,6 @@ export * from 'components/BackToTopBtn';
 export * from 'components/CountryTable';
 export * from 'components/Dashboard';
 export * from 'components/LoginForm';
-export * from 'components/MapLayersPopout';
 export * from 'components/MobileOffCanvasNav';
 export * from 'components/ShareButtons';
 export * from 'components/SharingPopoutMenu';

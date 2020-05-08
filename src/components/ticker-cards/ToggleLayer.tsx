@@ -1,16 +1,12 @@
 import React, { FC, useContext } from 'react';
 import { Link } from '@material-ui/core';
 
+import { ToggleLayerTypes } from './types';
 import { GlobalContext } from 'components';
-
-type ToggleLayerTypes = {
-  className: string;
-  visibilityKey: string;
-};
 
 export const ToggleLayer: FC<ToggleLayerTypes> = ({
   className,
-  visibilityKey = 'selfReported',
+  visibilityKey,
 }) => {
   const { state, dispatch } = useContext(GlobalContext);
 
