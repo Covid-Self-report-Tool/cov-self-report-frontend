@@ -57,8 +57,7 @@ export type InitialStateType = {
   uiAlert: AlertPayloadType;
 };
 
-// TODO: restore usage in global dispatch provider
-export type ContextDispatchType = React.Dispatch<StoreActionType>;
+export type GlobalContextDispatchType = React.Dispatch<StoreActionType>;
 
 export type Location = {
   lat: number;
