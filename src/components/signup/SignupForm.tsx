@@ -89,9 +89,9 @@ export const SignupForm: FC = () => {
     }
   };
 
-  const handleSignup = async () => {
+  const handleEmailSignup = async () => {
     dispatchForm({ type: 'RESET_FORM_ERRORS' });
-    //resetErrors();
+
     if (state.password.length < 6) {
       setFormValue(
         'passwordError',
@@ -141,7 +141,7 @@ export const SignupForm: FC = () => {
             variant="outlined"
             color="primary"
             style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleSignup}
+            onClick={handleEmailSignup}
             disabled={!Boolean(state.captcha)}
           >
             Sign Up

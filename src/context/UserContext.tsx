@@ -14,6 +14,7 @@ import { SymptomForm, SubmissionFormAction } from 'context/types';
 import { onAuthStateChange } from 'utils/firebase';
 import { GlobalContext } from 'components';
 
+// TODO: mv into src/context/types.ts
 export const initialUserState: SymptomForm = {
   symptoms: {
     fever: { isPresent: false, startDate: null, endDate: null },
@@ -53,6 +54,7 @@ export const initialUserState: SymptomForm = {
   hasAgreedToTerms: false,
 };
 
+// TODO: mv into src/context/reducers.ts
 const reducer = (
   state: SymptomForm,
   action: SubmissionFormAction
