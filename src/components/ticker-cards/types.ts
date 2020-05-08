@@ -55,3 +55,9 @@ export type SetCountriesSymbTypes = {
   className: string;
   globalStateKey: string;
 };
+
+export type ToggleLayerTypes = {
+  // TODO: use `keyof` to restrict possible values appropriately
+  visibilityKey: string;
+  className: string;
+};

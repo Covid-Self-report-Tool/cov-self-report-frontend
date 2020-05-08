@@ -112,6 +112,7 @@ export const TickerCards: FC<TickerCardTypes> = ({ data, config }) => {
 
   return (
     <div className={classes.tickerCardsWrap}>
+      {/* TODO: use `keyof` to restrict possible values appropriately */}
       {Object.keys(config).map((key: string) => {
         const { heading, defText, symbol, omitLastUpdated } = config[
           key as RequiredTotalsKeys
