@@ -13,6 +13,7 @@ import {
   TickerInfoPopover,
   LegendSymbol,
   LegendSymbolBar,
+  ToggleLayer,
 } from 'components/ticker-cards';
 
 const useStyles = makeStyles(theme => ({
@@ -64,6 +65,11 @@ const useStyles = makeStyles(theme => ({
       right: theme.spacing(2),
       top: 115, // past top bar (except on tweeners like iPhone landscape)
     },
+  },
+  tickerFooterLink: {
+    fontSize: '0.9rem',
+    color: theme.palette.info.main,
+    display: 'block',
   },
 }));
 
@@ -130,13 +136,17 @@ export const TickerCards: FC<TickerCardTypes> = ({ data, config }) => {
               />
             )}
             renderSymbolBar={() =>
-              symbol.colorStops.length ? (
+              symbol.colorStops.length && symbol.globalStateKey ? (
                 <LegendSymbolBar
+                  footerLinkClassName={classes.tickerFooterLink}
                   globalStateKey={symbol.globalStateKey}
                   colorStops={symbol.colorStops}
                 />
               ) : (
-                <div />
+                <ToggleLayer
+                  visibilityKey={key}
+                  className={classes.tickerFooterLink}
+                />
               )
             }
           />
