@@ -41,11 +41,17 @@ export type LegendSymbolTypes = {
   size?: string | number;
   borderWidth?: number;
   alwaysShow?: boolean;
-  globalStateKey?: string; // super gross, fragile
+  globalStateKey?: string;
   colorStops: string[];
 };
 
 export type LegendSymbolBarTypes = {
   colorStops: string[];
-  globalStateKey?: string; // super gross, fragile
+  footerLinkClassName: string;
+  globalStateKey: string;
+};
+
+export type SetCountriesSymbTypes = {
+  className: string;
+  globalStateKey: string;
 };

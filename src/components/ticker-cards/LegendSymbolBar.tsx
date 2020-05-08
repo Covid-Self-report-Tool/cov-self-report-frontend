@@ -4,6 +4,7 @@ import { Box, Link } from '@material-ui/core';
 
 import { LegendSymbolBarTypes } from './types';
 import { GlobalContext } from 'components';
+import { SetCountriesSymb } from 'components/ticker-cards';
 
 const useStyles = makeStyles(theme => ({
   barLabels: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles(theme => ({
       marginTop: 4,
     },
   },
-  setSymbLink: {
+  tickerFooterLink: {
     fontSize: 14,
     color: theme.palette.info.main,
     display: 'block',
@@ -58,9 +59,10 @@ export const LegendSymbolBar: FC<LegendSymbolBarTypes> = ({
           </Box>
         </>
       ) : (
-        <Link href="#" className={classes.setSymbLink} onClick={handleClick}>
-          Show
-        </Link>
+        <SetCountriesSymb
+          className={classes.tickerFooterLink}
+          globalStateKey={globalStateKey}
+        />
       )}
     </>
   );
