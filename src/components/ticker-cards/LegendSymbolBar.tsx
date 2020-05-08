@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Link } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 import { LegendSymbolBarTypes } from './types';
 import { GlobalContext } from 'components';
@@ -29,13 +29,8 @@ export const LegendSymbolBar: FC<LegendSymbolBarTypes> = ({
   globalStateKey,
 }) => {
   const classes = useStyles();
-  const { state, dispatch } = useContext(GlobalContext);
+  const { state } = useContext(GlobalContext);
   const active = state.activeCountrySymbKey === globalStateKey;
-
-  const handleClick = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    dispatch({ type: 'SET_COUNTRY_SYMBOLOGY', payload: globalStateKey });
-  };
 
   return (
     <>
