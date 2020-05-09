@@ -54,3 +54,8 @@ cypress/videos/*
 cypress/screenshots/*
 videos
 screenshots
+
+# IDE
+.idea/*
+.vscode/*
+.iml
