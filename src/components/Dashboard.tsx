@@ -27,12 +27,10 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
       {isHome ? (
         children
       ) : (
-        <>
-          <Container component="main" className={classes.content}>
-            {children}
-            <BackToTopBtn />
-          </Container>
-        </>
+        <Container component="main" className={classes.content}>
+          {children}
+          <BackToTopBtn />
+        </Container>
       )}
       <MobileOffCanvasNav
         drawerOpen={drawerOpen}
