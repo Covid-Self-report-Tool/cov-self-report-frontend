@@ -13,7 +13,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { logOut } from 'utils/firebase';
-import { UserContext } from 'context';
+import { UserContext, GlobalContext } from 'context';
 
 const useStyles = makeStyles(theme => ({
   // Kind of a fight to prevent hover stuff on the non-clickable info
@@ -37,7 +37,8 @@ const useStyles = makeStyles(theme => ({
 export function UserPopoverMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const history = useHistory();
-  const { dispatch } = useContext(UserContext);
+  const { dispatch: globalDispatch } = useContext(GlobalContext);
+  const { dispatch: userDispatch } = useContext(UserContext);
   const classes = useStyles();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -93,7 +94,7 @@ export function UserPopoverMenu() {
         <MenuItem
           onClick={() => {
             handleClose();
-            logOut(history, dispatch);
+            logOut(history, userDispatch, globalDispatch);
           }}
         >
           <ExitToAppIcon fontSize="small" className={classes.exitIcon} />

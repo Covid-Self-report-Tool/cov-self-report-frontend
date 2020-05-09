@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
+// eslint-disable-next-line
 import { attachCustomCommands } from 'cypress-firebase';
 
 const firebaseConfig = {

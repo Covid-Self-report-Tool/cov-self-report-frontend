@@ -1,5 +1,10 @@
 module.exports = {
-  extends: ['airbnb', 'plugin:prettier/recommended', 'prettier/react'],
+  extends: [
+    'airbnb',
+    'plugin:prettier/recommended',
+    'prettier/react',
+    'plugin:cypress/recommended',
+  ],
   parser: 'babel-eslint',
   env: {
     browser: true,
