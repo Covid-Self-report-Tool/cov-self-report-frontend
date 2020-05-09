@@ -15,7 +15,9 @@ import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
-import { GlobalContext } from 'components';
+import { isValidUserAgent } from 'utils';
+import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
+import { GlobalContext, UnsupportedBrowserMsg } from 'components';
 import {
   SymptomStep,
   TestingStep,
@@ -24,7 +26,6 @@ import {
 } from 'components/submission/steps';
 import { UserContext } from 'context';
 import { formReducer, initialFormState } from 'components/signup';
-import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -61,8 +62,11 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   );
 
   const history = useHistory();
-
   const steps = getSteps();
+
+  if (!isValidUserAgent()) {
+    return <UnsupportedBrowserMsg />;
+  }
 
   const handleNext = () => {
     // Next button on registration acts as signup
@@ -96,7 +100,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
-  const submitForm = async (firebaseUser: firebase.User | null) => {
+  const submitSymptomsForm = async (firebaseUser: firebase.User | null) => {
     if (firebaseUser) {
       try {
         const idToken = await firebaseUser.getIdToken(true);
@@ -178,7 +182,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const handleSubmit = async () => {
     try {
       if (user) {
-        await submitForm(user);
+        await submitSymptomsForm(user);
       }
       // hasn't registered yet
       else {
@@ -190,7 +194,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
 
         setSubmitting(true);
         const { currentUser } = firebase.auth();
-        await submitForm(currentUser);
+        await submitSymptomsForm(currentUser);
       }
     } catch (err) {
       setSubmitting(false);
