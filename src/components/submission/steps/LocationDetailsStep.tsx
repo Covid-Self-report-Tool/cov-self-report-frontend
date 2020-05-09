@@ -94,7 +94,7 @@ export const LocationDetailsStep: FC = () => {
               <TextField
                 data-cy="location"
                 {...getInputProps({
-                  placeholder: 'Search Places ...',
+                  placeholder: 'Enter your city ...',
                   className: 'location-search-input',
                 })}
               />
