@@ -2,9 +2,8 @@
 name: Bug report
 about: Something did not work the way it should
 title: " \U0001F41BBug -- ISSUE_TITLE_HERE"
-labels: ''
+labels: "type: bug", "status: unreviewed"
 assignees: ''
-
 ---
 
 <!-- 
