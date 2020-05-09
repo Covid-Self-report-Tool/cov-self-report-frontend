@@ -9,22 +9,28 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     justifyContent: 'center',
     textAlign: 'center',
-    padding: `${theme.spacing(4)}px ${theme.spacing(2)}px `,
+    padding: `${theme.spacing(4)}px ${theme.spacing(3)}px `,
   },
 }));
 
 export const UnsupportedBrowserMsg: FC = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [, setOpen] = useState(true);
+  const [open, setOpen] = useState(true);
 
   const handleClose = () => {
     setOpen(false);
-    history.goBack();
+    history.push('/');
   };
 
   return (
-    <Dialog open aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      aria-labelledby="form-dialog-title"
+      fullWidth
+      maxWidth="sm"
+      onClose={handleClose}
+    >
       <div className={classes.browserMessage}>
         <Typography align="center" gutterBottom variant="h4">
           Unsupported Browser
@@ -34,7 +40,7 @@ export const UnsupportedBrowserMsg: FC = () => {
           such as Safari or Google Chrome.
         </p>
         <Button color="secondary" variant="contained" onClick={handleClose}>
-          Close
+          Exit to map
         </Button>
       </div>
     </Dialog>
