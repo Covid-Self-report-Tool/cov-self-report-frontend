@@ -7,10 +7,40 @@ guidelines](CONTRIBUTING.md) first.
 
 ## Local setup
 
-Ask a [repository admin](##administrators) for the necessary `.env` file and
-store in the project root directory. This file will contain all the necessary
-external API keys. It is possible to develop without these but a lot of the
-functionality and tests will be broken.
+First, copy over the sample.env file to .env
+
+```bash
+mv sample.env .env
+```
+
+You will need a few API keys for the map, geocoder, authentication, and database
+to work correctly. Luckily as of this writing, they are all free for development
+purposes.
+
+### Mapbox
+
+Sign up on [Mapbox](https://account.mapbox.com/auth/signup/) and copy your
+access token into the `REACT_APP_MABPOX_TOKEN` variable in the `.env` file. This
+is required for the map to render correctly.
+
+### Google Places API
+
+Create a [Google Developer](https://developers.google.com/) account and get an
+API key. Make sure both the Places API and Geocoder API is selected. Set this
+api key to the `REACT_APP_GOOGLE_MAPS_API_KEY` variable in the `.env` file.
+
+### Firebase
+
+Create a [Firebase account](https://firebase.google.com) and a new project. You
+will only need the Authentication part of Firebase. Copy over the client
+Javascript SDK variables into the `# Firebase` section of your `.env` file.
+
+### Backend
+
+Finally, setup the [API
+backend](https://github.com/Covid-Self-report-Tool/cov-self-report-backend) and
+run it in the background. Set the `REACT_APP_BACKEND_URL` to the local URL that
+it's running under (most likely `http://localhost:8000`).
 
 ## Development
 
@@ -24,9 +54,12 @@ This uses Cypress and
 [cypress-firebase](https://github.com/prescottprue/cypress-firebase) for
 integration tests. You will need to get a `serviceAccount.json` containing your
 firebase service account credentials in your root directory for the login flow
-to work.
+to work. You can get this from the Firebase account you created.
 
-You will need to start the Node server (`npm start`) to run tests.
+Then, create a test account and copy the UID into the `CYPRESS_TEST_UID` in your
+`.env` file.
+
+Start the Node server (`npm start`) in the background before running tests.
 
 To run tests in headless mode:
 
@@ -73,34 +106,11 @@ import { Component1, Component2 } from 'components';
 - `async`/`await` over Promises
 - `type` over `interface`, except for component prop types
 
-## Links
-
-### Workflow
-
-- [AWS CodeCommit
-  repos](https://us-east-1.console.aws.amazon.com/codesuite/codecommit/repositories)
-- [AWS Amplify
-  console](https://console.aws.amazon.com/amplify/home?region=us-east-1)
-- [Jira project](https://cmu-covid.atlassian.net/browse/COV)
-- [Google Drive website
-  content](https://drive.google.com/drive/folders/1kq-gfqbckws7O9_Md7QhycbsYTxnxZnH)
-  (includes instructions for updating About HTML files)
-
-### Deploys
-
-- [Production](https://www.covidselfreport.org/)
-- [Non-CMU Amplify prod deploy](https://master.d3detajy1g4axn.amplifyapp.com/)
-  (as of 4/15/20)
-- [Non-CMU Amplify all
-  deploys](https://console.aws.amazon.com/amplify/home?region=us-east-1#/d3detajy1g4axn)
-  (as of 4/15/20)
-
 ### Data
 
-#### Our API Docs
+#### Backend API
 
-- [Prod](https://s0vnmyj6fg.execute-api.us-east-1.amazonaws.com/prod/apidocs)
-- [Dev](https://f1t0v67ydj.execute-api.us-east-1.amazonaws.com/dev/apidocs)
+- [Swagger Docs](https://api.covidselfreport.org/apidocs)
 
 #### Other
 
@@ -109,12 +119,6 @@ import { Component1, Component2 } from 'components';
   docs](https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest)
   (currently scraping the `/summary` route and adding to DynamoDB daily, the
   joining on the fly to countries geojson client-side)
-- [MD data source of About
-  content](https://drive.google.com/file/d/1wk_GNkU-hJZBeh6ic5ZkOoJgVAsrMsSO/view?usp=sharing)
-  ~~(Guneeta is editing, Jason converts to HTML and commits it)~~
-- [HTML content repo](https://github.com/abettermap/c19-self-report-content):
-  will be pointing our requests to this instead of S3. Guneeta is going to edit
-  or delegate to new helper.
 - [JHU
   Counties](https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer)
   with geojson + totals, or non-geojson time series. May be useful for scraping.
@@ -195,7 +199,11 @@ parse @message '[*]\t*\t*\t* - - [*] "* * *" * * "*" "*" *' as eventType, stampy
 | display eventType, @timestamp, requestType, path, statusCode, ip
 ```
 
-## Administrators
+## Admins
 
 - [Gabriel Abud](https://github.com/Buuntu)
 - [Jason Lampel](https://github.com/abettermap)
+
+## Contributors
+
+- [Jot Samra](https://github.com/ajsamra)
