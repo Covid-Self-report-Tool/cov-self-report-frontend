@@ -77,8 +77,6 @@ import { Component1, Component2 } from 'components';
 
 ### Workflow
 
-- [AWS CodeCommit
-  repos](https://us-east-1.console.aws.amazon.com/codesuite/codecommit/repositories)
 - [AWS Amplify
   console](https://console.aws.amazon.com/amplify/home?region=us-east-1)
 - [Jira project](https://cmu-covid.atlassian.net/browse/COV)
@@ -89,18 +87,13 @@ import { Component1, Component2 } from 'components';
 ### Deploys
 
 - [Production](https://www.covidselfreport.org/)
-- [Non-CMU Amplify prod deploy](https://master.d3detajy1g4axn.amplifyapp.com/)
-  (as of 4/15/20)
-- [Non-CMU Amplify all
-  deploys](https://console.aws.amazon.com/amplify/home?region=us-east-1#/d3detajy1g4axn)
-  (as of 4/15/20)
 
 ### Data
 
 #### Our API Docs
 
-- [Prod](https://s0vnmyj6fg.execute-api.us-east-1.amazonaws.com/prod/apidocs)
-- [Dev](https://f1t0v67ydj.execute-api.us-east-1.amazonaws.com/dev/apidocs)
+- [Prod](https://api.covidselfreport.org/apidocs)
+- [Dev](https://dev.api.covidselfreport.org/apidocs)
 
 #### Other
 
