@@ -20,7 +20,6 @@ import {
   Signup,
   About,
   Models,
-  Logout,
   List,
   TermsOfService,
   PrivacyPolicy,
@@ -81,11 +80,6 @@ const Routes: FC = () => {
                 ) : (
                   <Redirect to="/"></Redirect>
                 )}
-              </Route>
-              <Route path="/logout">
-                <SimpleModal title="Logout">
-                  <Logout />
-                </SimpleModal>
               </Route>
               <Route path="/verify_email">
                 <SimpleModal title="Forgot password">

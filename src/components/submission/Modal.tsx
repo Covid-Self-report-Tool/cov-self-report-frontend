@@ -100,7 +100,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
-  const submitForm = async (firebaseUser: firebase.User | null) => {
+  const submitSymptomsForm = async (firebaseUser: firebase.User | null) => {
     if (firebaseUser) {
       try {
         const idToken = await firebaseUser.getIdToken(true);
@@ -182,7 +182,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const handleSubmit = async () => {
     try {
       if (user) {
-        await submitForm(user);
+        await submitSymptomsForm(user);
       }
       // hasn't registered yet
       else {
@@ -194,7 +194,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
 
         setSubmitting(true);
         const { currentUser } = firebase.auth();
-        await submitForm(currentUser);
+        await submitSymptomsForm(currentUser);
       }
     } catch (err) {
       setSubmitting(false);

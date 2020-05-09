@@ -1,4 +1,5 @@
 import React, { FC, useReducer, useContext } from 'react';
+import { useHistory } from 'react-router';
 import { Paper, Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
@@ -59,6 +60,7 @@ export const formReducer = (
 window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
+  const history = useHistory();
   const { dispatch } = useContext(GlobalContext);
   const classes = useStyles();
   const [state, dispatchForm] = useReducer(formReducer, initialFormState);
@@ -89,9 +91,23 @@ export const SignupForm: FC = () => {
     }
   };
 
-  const handleSignup = async () => {
+  // Generic success handler: show user success alert, go to home route
+  const handleSignupSuccess = () => {
+    history.push('/');
+
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Signup successful!',
+        severity: 'success',
+      },
+    });
+  };
+
+  const handleEmailSignup = async () => {
     dispatchForm({ type: 'RESET_FORM_ERRORS' });
-    //resetErrors();
+
     if (state.password.length < 6) {
       setFormValue(
         'passwordError',
@@ -107,26 +123,31 @@ export const SignupForm: FC = () => {
     } else {
       try {
         await signUp(state.email, state.password, state.captcha);
+        handleSignupSuccess();
       } catch (err) {
         handleSignupError(err.code, err.message);
       }
     }
   };
 
+  // Technically signup OR login
   const handleGoogleLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
 
     try {
       await googleLogin();
+      handleSignupSuccess();
     } catch (err) {
       handleSignupError(err.code, err.message);
     }
   };
 
+  // Technically signup OR login
   const handleFacebookLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
       await facebookLogin();
+      handleSignupSuccess();
     } catch (err) {
       handleSignupError(err.code, err.message);
     }
@@ -141,7 +162,7 @@ export const SignupForm: FC = () => {
             variant="outlined"
             color="primary"
             style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleSignup}
+            onClick={handleEmailSignup}
             disabled={!Boolean(state.captcha)}
           >
             Sign Up
