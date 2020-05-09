@@ -15,7 +15,9 @@ import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
-import { GlobalContext } from 'components';
+import { isValidUserAgent } from 'utils';
+import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
+import { GlobalContext, UnsupportedBrowserMsg } from 'components';
 import {
   SymptomStep,
   TestingStep,
@@ -24,7 +26,6 @@ import {
 } from 'components/submission/steps';
 import { UserContext } from 'context';
 import { formReducer, initialFormState } from 'components/signup';
-import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -61,8 +62,11 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   );
 
   const history = useHistory();
-
   const steps = getSteps();
+
+  if (isValidUserAgent()) {
+    return <UnsupportedBrowserMsg />;
+  }
 
   const handleNext = () => {
     // Next button on registration acts as signup

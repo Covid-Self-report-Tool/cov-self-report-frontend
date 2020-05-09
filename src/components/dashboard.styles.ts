@@ -49,10 +49,4 @@ export const useStyles = makeStyles(theme => ({
   fixedHeight: {
     height: 240,
   },
-  browserMessage: {
-    paddingTop: theme.spacing(8),
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 }));
