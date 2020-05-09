@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { DispatchFormType } from 'context/types';
+import { DispatchFormType, GlobalContextDispatchType } from 'context/types';
 import { History } from 'history';
 
 export const signUp = async (
@@ -14,14 +14,30 @@ export const signUp = async (
     .createUserWithEmailAndPassword(email, password);
 };
 
-export const logOut = async (history: History, dispatch: DispatchFormType) => {
+export const logOut = async (
+  history: History,
+  userDispatch: DispatchFormType,
+  globalDispatch: GlobalContextDispatchType
+) => {
   await firebase
     .app()
     .auth()
     .signOut();
 
-  dispatch({ type: 'RESET_USER_DATA' });
+  userDispatch({ type: 'RESET_USER_DATA' });
+
+  // Go home
   history.push('/');
+
+  // Show success msg to user
+  globalDispatch({
+    type: 'TOGGLE_UI_ALERT',
+    payload: {
+      open: true,
+      message: 'You are now logged out',
+      severity: 'success',
+    },
+  });
 };
 
 export const login = async (email: string, password: string) => {
