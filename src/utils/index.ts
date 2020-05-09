@@ -24,15 +24,18 @@ export const prettyPrint = (value: number) => {
  */
 export const isValidUserAgent = () => {
   const USER_AGENT = navigator.userAgent;
+  const supportedAgents = [
+    'Chrome',
+    'CriOS',
+    'Firefox',
+    'FxiOS',
+    'Safari',
+    'MSIE',
+    'Trident',
+  ];
 
-  return USER_AGENT.indexOf("Chrome") !== -1
-      || USER_AGENT.indexOf("CriOS") !== -1
-      || USER_AGENT.indexOf("Firefox") !== -1
-      || USER_AGENT.indexOf("FxiOS") !== -1
-      || USER_AGENT.indexOf("Safari") !== -1
-      || USER_AGENT.indexOf("MSIE") !== -1
-      || USER_AGENT.indexOf("Trident") !== -1;
-}
+  return supportedAgents.includes(USER_AGENT);
+};
 
 // For the ticker card totals...
 export const calculateTotals = (

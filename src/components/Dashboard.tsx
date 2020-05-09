@@ -44,21 +44,20 @@ export const Dashboard: FC<DashboardTypes> = ({ children }) => {
         </MobileOffCanvasNav>
       </div>
     );
-  } else {
-    return (
-      <div className={classes.browserMessage}>
-        <Typography align="center" gutterBottom variant="h4">
-          COVID Self-Reporting Tool
-        </Typography>
-        <Typography align="center" gutterBottom variant="body1">
-          Please open the COVID Self-Reporting Tool in one of our supported
-          browsers.
-        </Typography>
-        <Typography align="center" gutterBottom variant="body2">
-          Supported Browsers: Google Chrome, Safari, Mozilla Firefox, Internet
-          Explorer
-        </Typography>
-      </div>
-    );
   }
+  return (
+    <div className={classes.browserMessage}>
+      <Typography align="center" gutterBottom variant="h4">
+        COVID Self-Reporting Tool
+      </Typography>
+      <Typography align="center" gutterBottom variant="body1">
+        Please open the COVID Self-Reporting Tool in one of our supported
+        browsers.
+      </Typography>
+      <Typography align="center" gutterBottom variant="body2">
+        Supported Browsers: Google Chrome, Safari, Mozilla Firefox, Internet
+        Explorer
+      </Typography>
+    </div>
+  );
 };
