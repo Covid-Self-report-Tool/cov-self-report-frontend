@@ -43,6 +43,7 @@ export type CountryData = {
   date: Date;
 };
 
+// TODO: use `keyof` to restrict possible values appropriately in Tickers
 export type LayerVisibilityTypes = {
   selfReported: boolean;
   countries: boolean;

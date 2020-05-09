@@ -62,6 +62,7 @@ export const tickersConfig = {
       borderColor: SELF_REPORTED_STYLES.borderColor,
       fillColor: SELF_REPORTED_STYLES.fillColor,
       isCircular: true,
+      colorStops: [],
     },
   },
   recovered: {
@@ -71,6 +72,7 @@ export const tickersConfig = {
     symbol: {
       globalStateKey: 'total_recovered',
       fillColor: '#41ab5d',
+      colorStops: countriesSymbology.total_recovered.palette,
     },
   },
   confirmed: {
@@ -80,6 +82,7 @@ export const tickersConfig = {
     symbol: {
       globalStateKey: 'total_confirmed',
       fillColor: '#5699a0',
+      colorStops: countriesSymbology.total_confirmed.palette,
     },
   },
   deaths: {
@@ -89,6 +92,7 @@ export const tickersConfig = {
     symbol: {
       globalStateKey: 'total_deaths',
       fillColor: '#ef3b2c',
+      colorStops: countriesSymbology.total_deaths.palette,
     },
   },
 };

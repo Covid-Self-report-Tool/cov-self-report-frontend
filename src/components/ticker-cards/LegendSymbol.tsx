@@ -1,17 +1,8 @@
 import React, { FC, useContext } from 'react';
 import { Box } from '@material-ui/core';
 
+import { LegendSymbolTypes } from './types';
 import { GlobalContext } from 'components';
-
-export type LegendSymbolTypes = {
-  fillColor: string;
-  borderColor?: string;
-  isCircular?: boolean; // default to square
-  size?: string | number;
-  borderWidth?: number;
-  alwaysShow?: boolean;
-  globalStateKey?: string; // super gross, fragile
-};
 
 export const LegendSymbol: FC<LegendSymbolTypes> = ({
   fillColor,
