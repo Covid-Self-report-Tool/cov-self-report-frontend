@@ -64,7 +64,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const history = useHistory();
   const steps = getSteps();
 
-  if (isValidUserAgent()) {
+  if (!isValidUserAgent()) {
     return <UnsupportedBrowserMsg />;
   }
 

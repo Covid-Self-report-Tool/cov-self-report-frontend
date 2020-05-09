@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Container, Typography } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 
 import { SiteNavBtns, BackToTopBtn, MobileOffCanvasNav } from 'components';
 import { TopBar } from 'components/top-bar';

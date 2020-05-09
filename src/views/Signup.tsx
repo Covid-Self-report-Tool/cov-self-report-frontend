@@ -1,7 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { SignupForm } from 'components/signup';
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { isValidUserAgent } from 'utils';
+import { UnsupportedBrowserMsg } from 'components';
+import { SignupForm } from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
   link: {
@@ -11,6 +14,10 @@ const useStyles = makeStyles(theme => ({
 
 export const Signup = () => {
   const classes = useStyles();
+
+  if (!isValidUserAgent()) {
+    return <UnsupportedBrowserMsg />;
+  }
 
   return (
     <>
