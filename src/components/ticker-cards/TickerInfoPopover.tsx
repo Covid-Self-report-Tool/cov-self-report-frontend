@@ -11,7 +11,7 @@ import {
 import InfoIcon from '@material-ui/icons/Info';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { TickerInfoType } from 'types';
+import { TickerInfoType } from './types';
 import { prettyDate } from 'utils/dates';
 import { useQuery } from 'react-query';
 import { getCountryGeoJSONData } from 'utils/api';
