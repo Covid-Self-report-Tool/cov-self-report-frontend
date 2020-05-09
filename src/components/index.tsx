@@ -11,7 +11,5 @@ export * from 'components/SiteNavBtns';
 export * from 'components/Snackbar';
 export * from 'components/SplashScreen';
 export * from 'components/SuccessConfModal';
-export * from 'components/TickerCards';
-export * from 'components/TickerInfoPopover';
 export * from 'components/UnsupportedBrowserMsg';
 export * from 'context/GlobalContext';
