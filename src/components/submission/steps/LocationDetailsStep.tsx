@@ -15,6 +15,9 @@ const useStyles = makeStyles(theme => ({
   dialogTitle: {
     padding: `4px ${theme.spacing(2)}px`,
   },
+  dialogText: {
+    padding: `4px ${theme.spacing(2)}px`,
+  },
 }));
 
 export const LocationDetailsStep: FC = () => {
@@ -64,7 +67,7 @@ export const LocationDetailsStep: FC = () => {
   return (
     <div>
       <DialogTitle className={classes.dialogTitle}>
-        Where do you live?
+        Where were you when your symptoms began?
       </DialogTitle>
       <DialogContent dividers>
         <PlacesAutocomplete
@@ -94,7 +97,9 @@ export const LocationDetailsStep: FC = () => {
               <TextField
                 data-cy="location"
                 {...getInputProps({
-                  placeholder: 'Search Places ...',
+                  helperText:
+                    'If you experienced no symptoms, use current city',
+                  placeholder: 'Enter your city ...',
                   className: 'location-search-input',
                 })}
               />
