@@ -3,7 +3,7 @@
 ## Contributing
 
 If you are interested in contributing to our project, read our [contributing
-guidelines](CONTRIBUTING.md) first.
+guidelines](https://github.com/Covid-Self-report-Tool/.github/blob/master/CONTRIBUTING.md) first.
 
 ## Local setup
 
