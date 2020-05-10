@@ -92,7 +92,6 @@ export const TestingStep: FC<TestingStepType> = ({
                 onChange={handleBirthDate}
                 maxDate={new Date()}
                 label="Birth Month/Year"
-                animateYearScrolling
               />
             </MuiPickersUtilsProvider>
             <FormLabel className={classes.formLabel}>
