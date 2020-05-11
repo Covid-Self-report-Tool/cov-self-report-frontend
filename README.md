@@ -1,4 +1,4 @@
-# COVID-19 Self Reporting Tool ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Dependabot Status](https://img.shields.io/badge/Dependabot-active-brightgreen.svg)
+# COVID-19 Self Reporting Tool [![license](https://img.shields.io/github/license/peaceiris/actions-gh-pages.svg)](LICENSE) [![Dependabot Status](https://img.shields.io/badge/Dependabot-active-brightgreen.svg)](https://dependabot.com)
 
 A website to track global self reported cases and predict future outbreaks. See
 our [About page](https://www.covidselfreport.org/about) for more background on
