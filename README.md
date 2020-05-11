@@ -137,30 +137,6 @@ import { Component1, Component2 } from 'components';
 - [NYT US
   cases](https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html)
 
-### Fixes
-
-- [AWS Amplify react-router
-  issue](https://github.com/aws-amplify/amplify-js/issues/2498#issuecomment-455162939)
-- [Use env vars in React
-  app](https://create-react-app.dev/docs/adding-custom-environment-variables/#referencing-environment-variables-in-the-html)
-
-### Handy tools
-
-- [HTML to Markdown converter](https://markdowntohtml.com/) even puts `id` tags
-  in, easy for linking to with `href` later...
-- [Facebook Sharing
-  Debugger](https://developers.facebook.com/tools/debug/?q=https%3A%2F%2Fwww.covidselfreport.org%2F)
-  is suuuuper handy for seeing why share previews aren't working.
-- [Mapshaper](https://mapshaper.org/) for simplifying/optimizing spatial data in
-  a web GUI.
-- [DynamoDB Geo](https://github.com/rh389/dynamodb-geo.js) later if we want to
-  do spatial queries in Dynamo.
-- [HTML Cleaner](https://html-cleaner.com/) works pretty well for converting
-  Gdocs or Word into HTML sans all the cruft. Need to play w/the "Cleaning
-  options" a bit though.
-- [Livestream: Refactoring to
-  react-query](https://www.youtube.com/watch?v=eEKn8UJfYgc)
-
 ## Data notes
 
 ### Dummy data
