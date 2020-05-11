@@ -186,19 +186,6 @@ super-close zooms anyway). If it doesn't affect how the backend schema and POST
 requests are structured, then let's use the untouched value from Google unless
 we need to start nickel-and-diming perf gains.
 
-## AWS CloudWatch queries
-
-### Parsed `INFO` with response code
-
-```
-parse @message '[*]\t*\t*\t* - - [*] "* * *" * * "*" "*" *' as eventType, stampy, someId, ip, someTimezone, requestType, path, protocol, statusCode, bytes, referrer, userAgent, unknown
-| filter eventType = 'INFO'
-| filter requestType = 'POST'
-| filter path = '/self_report'
-| filter statusCode >= 400
-| display eventType, @timestamp, requestType, path, statusCode, ip
-```
-
 ## Admins
 
 - [Gabriel Abud](https://github.com/Buuntu)
