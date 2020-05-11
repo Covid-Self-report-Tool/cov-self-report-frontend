@@ -1,9 +1,14 @@
-# COVID-19 Untested Tracker
+# COVID-19 Self Reporting Tool ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Dependabot Status](https://img.shields.io/badge/Dependabot-active-brightgreen.svg)
+
+A website to track global self reported cases and predict future outbreaks. See
+our [About page](https://www.covidselfreport.org/about) for more background on
+the project.
 
 ## Contributing
 
 If you are interested in contributing to our project, read our [contributing
-guidelines](https://github.com/Covid-Self-report-Tool/.github/blob/master/CONTRIBUTING.md) first.
+guidelines](https://github.com/Covid-Self-report-Tool/.github/blob/master/CONTRIBUTING.md)
+first.
 
 ## Local setup
 
