@@ -21,17 +21,17 @@ export const UnsupportedBrowserMsg: FC = () => {
   React.useEffect(() => {
     navigator.registerProtocolHandler(
       'web+safarita',
-      'https://pr-29.d3pqoo7mq9yhwf.amplifyapp.com/?src=%s',
+      'https://pr-33.d3pqoo7mq9yhwf.amplifyapp.com/?src=%s',
       'Safari'
     );
     navigator.registerProtocolHandler(
       'web+chromer',
-      'https://pr-29.d3pqoo7mq9yhwf.amplifyapp.com/?orig=%s',
+      'https://pr-33.d3pqoo7mq9yhwf.amplifyapp.com/?orig=%s',
       'Chrome'
     );
     navigator.registerProtocolHandler(
       'web+googchrome',
-      'https://pr-29.d3pqoo7mq9yhwf.amplifyapp.com/?tester=%s',
+      'https://pr-33.d3pqoo7mq9yhwf.amplifyapp.com/?tester=%s',
       'Google Chrome'
     );
     // debugger;
