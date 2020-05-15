@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useContext } from 'react';
+import React, { FC, useEffect, useContext, useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Grid, TextField, InputAdornment } from '@material-ui/core';
 import { AccountCircle, Https } from '@material-ui/icons';
@@ -6,7 +6,6 @@ import { AccountCircle, Https } from '@material-ui/icons';
 import firebase from 'config/firebase';
 import { initialFormStateType } from 'components/signup/types';
 import { GlobalContext } from 'context';
-import { AcctReqExplain } from 'components/signup';
 
 declare global {
   interface Window {
@@ -23,10 +22,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 type SignupFieldsType = {
   dispatch: any;
   state: initialFormStateType;
+  renderSignupBtns: () => React.ReactNode;
+  showEmailFields: Boolean;
 };
 
-export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
+export const SignupFields: FC<SignupFieldsType> = ({
+  state,
+  dispatch,
+  showEmailFields,
+  renderSignupBtns,
+}) => {
   const classes = useStyles();
+  const [showSignupBtns, setShowSignupBtns] = useState(false);
   const { dispatch: dispatchGlobal } = useContext(GlobalContext);
 
   const setFormValue = (field: string, value: string) => {
@@ -66,12 +73,13 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
 
   return (
     <>
-      <AcctReqExplain />
       <Grid container justify="center">
         <Grid item>
           <div className={classes.marginTop} id="recaptcha"></div>
         </Grid>
       </Grid>
+      {renderSignupBtns()}
+      {/* {Boolean(state.captcha) && showEmailFields && ( */}
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <TextField

@@ -6,7 +6,7 @@ import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 import { SignupFields } from 'components/signup/SignupFields';
 import { initialFormStateType } from 'components/signup/types';
 import { UserContext } from 'context';
-import { AgreeToTerms } from 'components/signup/AgreeToTerms';
+import { AgreeToTerms, AcctReqExplain } from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
   dialogTitle: {
@@ -35,50 +35,36 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
 }) => {
   const classes = useStyles();
   const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
+  const [hasChosenEmailReg, setHasChosenEmailReg] = useState<Boolean>(false);
 
-  const [hasChosenRegistration, setHasChosenRegistration] = useState<Boolean>(
-    false
+  const SignupBtns: FC = () => (
+    <Grid container spacing={1} justify="center">
+      <Grid item>
+        <Button
+          variant="contained"
+          data-cy="register-email"
+          onClick={() => setHasChosenEmailReg(true)}
+        >
+          Email
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" onClick={handleGoogleLogin}>
+          Google
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" onClick={handleFacebookLogin}>
+          Facebook
+        </Button>
+      </Grid>
+    </Grid>
   );
 
   return (
     <>
       <DialogTitle className={classes.dialogTitle}>Submit</DialogTitle>
       <DialogContent dividers>
-        <IfFirebaseUnAuthed>
-          {() => (
-            <>
-              {!hasChosenRegistration ? (
-                <Grid container spacing={1} justify="center">
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      data-cy="register-email"
-                      onClick={() => setHasChosenRegistration(true)}
-                    >
-                      Email
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button variant="contained" onClick={handleGoogleLogin}>
-                      Google
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button variant="contained" onClick={handleFacebookLogin}>
-                      Facebook
-                    </Button>
-                  </Grid>
-                </Grid>
-              ) : (
-                <Grid container>
-                  <Grid item xs={12} style={{ overflow: 'hidden' }}>
-                    <SignupFields state={state} dispatch={dispatch} />
-                  </Grid>
-                </Grid>
-              )}
-            </>
-          )}
-        </IfFirebaseUnAuthed>
         <IfFirebaseAuthed>
           {({ user }) => <span>Logged in as {user.email}</span>}
         </IfFirebaseAuthed>
@@ -91,6 +77,25 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
             />
           </Grid>
         </Grid>
+        {formState.hasAgreedToTerms && (
+          <IfFirebaseUnAuthed>
+            {() => (
+              <>
+                <Grid container>
+                  <Grid item xs={12} style={{ overflow: 'hidden' }}>
+                    <SignupFields
+                      state={state}
+                      dispatch={dispatchForm}
+                      showEmailFields={hasChosenEmailReg}
+                      renderSignupBtns={() => <SignupBtns />}
+                    />
+                  </Grid>
+                </Grid>
+                <AcctReqExplain />
+              </>
+            )}
+          </IfFirebaseUnAuthed>
+        )}
       </DialogContent>
     </>
   );

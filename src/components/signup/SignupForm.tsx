@@ -1,4 +1,4 @@
-import React, { FC, useReducer, useContext } from 'react';
+import React, { FC, useReducer, useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Paper, Grid, Button } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -7,6 +7,7 @@ import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'components';
 import { initialFormStateType, actionType } from 'components/signup/types';
 import { SignupFields } from './SignupFields';
+import { AcctReqExplain } from 'components/signup/AcctReqExplain';
 
 const useStyles = makeStyles((theme: Theme) => ({
   padding: {
@@ -63,6 +64,7 @@ export const SignupForm: FC = () => {
   const history = useHistory();
   const { dispatch } = useContext(GlobalContext);
   const classes = useStyles();
+  const [showEmailFields, setShowEmailFields] = useState(false);
   const [state, dispatchForm] = useReducer(formReducer, initialFormState);
 
   const setFormValue = (field: string, value: string) => {
@@ -106,6 +108,8 @@ export const SignupForm: FC = () => {
   };
 
   const handleEmailSignup = async () => {
+    setShowEmailFields(true);
+
     dispatchForm({ type: 'RESET_FORM_ERRORS' });
 
     if (state.password.length < 6) {
@@ -153,44 +157,60 @@ export const SignupForm: FC = () => {
     }
   };
 
+  const SignupBtns: FC = () => (
+    <Grid container justify="center" style={{ marginTop: 16 }} spacing={1}>
+      <Grid item>
+        <Button
+          variant="outlined"
+          color="primary"
+          size="small"
+          onClick={handleEmailSignup}
+          disabled={!Boolean(state.captcha)}
+        >
+          Sign Up with Email
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button
+          variant="outlined"
+          color="primary"
+          size="small"
+          onClick={handleGoogleLogin}
+          disabled={!Boolean(state.captcha)}
+        >
+          Login with Google
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button
+          variant="outlined"
+          color="primary"
+          size="small"
+          onClick={handleFacebookLogin}
+          disabled={!Boolean(state.captcha)}
+        >
+          Login with Facebook
+        </Button>
+      </Grid>
+      <Grid item>
+        <AcctReqExplain />
+      </Grid>
+    </Grid>
+  );
+
+  // if (!Boolean(state.captcha)) {
+  //   return <SignupFields state={state} dispatch={dispatchForm} recaptchaOnly />;
+  // }
+
   return (
     <Paper className={classes.padding}>
-      <>
-        <SignupFields state={state} dispatch={dispatchForm} />
-        <Grid container justify="center" style={{ marginTop: 16 }} spacing={1}>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              onClick={handleEmailSignup}
-              disabled={!Boolean(state.captcha)}
-            >
-              Sign Up
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              onClick={handleGoogleLogin}
-            >
-              Login with Google
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              onClick={handleFacebookLogin}
-            >
-              Login with Facebook
-            </Button>
-          </Grid>
-        </Grid>
-      </>
+      <SignupFields
+        state={state}
+        dispatch={dispatchForm}
+        showEmailFields={showEmailFields}
+        renderSignupBtns={() => <SignupBtns />}
+      />
+      {/* {Boolean(state.captcha) && showEmailFields} */}
     </Paper>
   );
 };
