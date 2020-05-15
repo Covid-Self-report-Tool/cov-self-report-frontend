@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   DialogTitle,
   DialogContent,
-  Checkbox,
-  FormControlLabel,
   Link,
   Grid,
   Button,
@@ -14,6 +12,7 @@ import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 import { SignupFields } from 'components/signup/SignupFields';
 import { initialFormStateType } from 'components/signup/types';
 import { UserContext } from 'context';
+import { AgreeToTerms } from 'components/signup/AgreeToTerms';
 
 const useStyles = makeStyles(theme => ({
   dialogTitle: {
@@ -99,32 +98,10 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
         </IfFirebaseAuthed>
         <Grid container>
           <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="checkedB"
-                  color="primary"
-                  data-cy="has-agreed-to-terms"
-                  checked={!!formState.hasAgreedToTerms}
-                  onChange={() => {
-                    dispatchForm({ type: 'TOGGLE_AGREED' });
-                  }}
-                />
-              }
-              label={
-                <span>
-                  I agree to the{' '}
-                  <Link
-                    className={classes.link}
-                    href="/terms-of-service"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Terms of service
-                  </Link>
-                  .
-                </span>
-              }
+            <AgreeToTerms
+              hasAgreedToTerms={formState.hasAgreedToTerms}
+              dispatchForm={dispatchForm}
+              classes={{ link: classes.link }}
             />
           </Grid>
           <Grid item xs={12}>
