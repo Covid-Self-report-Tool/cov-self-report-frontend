@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type SignupFieldsType = {
+type EmailSignupFieldsType = {
   dispatch: any;
   state: initialFormStateType;
   renderSignupBtns: () => React.ReactNode;
   showEmailFields: Boolean;
 };
 
-export const SignupFields: FC<SignupFieldsType> = ({
+export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
   state,
   dispatch,
   showEmailFields,

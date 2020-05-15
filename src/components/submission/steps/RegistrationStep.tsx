@@ -3,10 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { DialogTitle, DialogContent, Grid, Button } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
-import { SignupFields } from 'components/signup/SignupFields';
 import { initialFormStateType } from 'components/signup/types';
 import { UserContext } from 'context';
-import { AgreeToTerms, AcctReqExplain } from 'components/signup';
+import {
+  AgreeToTerms,
+  AcctReqExplain,
+  EmailSignupFields,
+} from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
   dialogTitle: {
@@ -83,7 +86,7 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
               <>
                 <Grid container>
                   <Grid item xs={12} style={{ overflow: 'hidden' }}>
-                    <SignupFields
+                    <EmailSignupFields
                       state={state}
                       dispatch={dispatchForm}
                       showEmailFields={hasChosenEmailReg}

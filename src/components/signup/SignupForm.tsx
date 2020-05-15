@@ -6,8 +6,7 @@ import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 
 import { GlobalContext } from 'components';
 import { initialFormStateType, actionType } from 'components/signup/types';
-import { SignupFields } from './SignupFields';
-import { AcctReqExplain } from 'components/signup/AcctReqExplain';
+import { AcctReqExplain, EmailSignupFields } from 'components/signup';
 
 const useStyles = makeStyles((theme: Theme) => ({
   padding: {
@@ -204,7 +203,7 @@ export const SignupForm: FC = () => {
 
   return (
     <Paper className={classes.padding}>
-      <SignupFields
+      <EmailSignupFields
         state={state}
         dispatch={dispatchForm}
         showEmailFields={showEmailFields}
