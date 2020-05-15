@@ -17,7 +17,6 @@ import { UserProvider } from 'context';
 import { Modal } from 'components/submission';
 import {
   Home,
-  Signup,
   About,
   Models,
   List,
@@ -25,6 +24,7 @@ import {
   PrivacyPolicy,
   SecretSnackground,
   Login,
+  Signup,
 } from 'views';
 import firebase from 'config/firebase';
 import { VerifyEmail } from 'views/VerifyEmail';
@@ -73,13 +73,7 @@ const Routes: FC = () => {
               </Dashboard>
               {/* None of the modals need to be inside Dashboard */}
               <Route path="/login">
-                {!user && !loading ? (
-                  <SimpleModal title="Login">
-                    <Login />
-                  </SimpleModal>
-                ) : (
-                  <Redirect to="/"></Redirect>
-                )}
+                {!user && !loading ? <Login /> : <Redirect to="/"></Redirect>}
               </Route>
               <Route path="/verify_email">
                 <SimpleModal title="Forgot password">
@@ -90,9 +84,7 @@ const Routes: FC = () => {
                 <Modal setSuccessConfOpen={setSuccessConfOpen} />
               </Route>
               <Route path="/signup">
-                <SimpleModal title="Sign up">
-                  <Signup />
-                </SimpleModal>
+                <Signup />
               </Route>
             </Router>
           </ThemeProvider>

@@ -157,32 +157,38 @@ export const SignupForm: FC = () => {
     <Paper className={classes.padding}>
       <>
         <SignupFields state={state} dispatch={dispatchForm} />
-        <Grid container justify="center" style={{ marginTop: '20px' }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleEmailSignup}
-            disabled={!Boolean(state.captcha)}
-          >
-            Sign Up
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleGoogleLogin}
-          >
-            Login with Google
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleFacebookLogin}
-          >
-            Login with Facebook
-          </Button>
+        <Grid container justify="center" style={{ marginTop: 16 }} spacing={1}>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={handleEmailSignup}
+              disabled={!Boolean(state.captcha)}
+            >
+              Sign Up
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={handleGoogleLogin}
+            >
+              Login with Google
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={handleFacebookLogin}
+            >
+              Login with Facebook
+            </Button>
+          </Grid>
         </Grid>
       </>
     </Paper>

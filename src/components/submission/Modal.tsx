@@ -37,8 +37,9 @@ const useStyles = makeStyles(theme => ({
   },
   haveAcctLink: {
     color: theme.palette.info.main,
+    textDecoration: 'none',
     marginRight: 'auto',
-    marginLeft: theme.spacing(1),
+    marginLeft: 4,
   },
   dialogActionsBtn: {
     minWidth: theme.spacing(6),
@@ -51,6 +52,7 @@ interface ModalTypes {
 
 export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const classes = useStyles();
+  const history = useHistory();
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -60,13 +62,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     formReducer,
     initialFormState
   );
-
-  const history = useHistory();
   const steps = getSteps();
-
-  if (!isValidUserAgent()) {
-    return <UnsupportedBrowserMsg />;
-  }
 
   const handleNext = () => {
     // Next button on registration acts as signup

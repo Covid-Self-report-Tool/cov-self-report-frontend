@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   marginTop: {
     marginTop: theme.spacing(1),
   },
-  margin: {
-    margin: theme.spacing(1),
-  },
 }));
 
 type SignupFieldsType = {
@@ -88,7 +85,6 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
             error={!!state.emailError}
             helperText={state.emailError}
             fullWidth
-            autoFocus
             required
             variant="outlined"
             InputProps={{

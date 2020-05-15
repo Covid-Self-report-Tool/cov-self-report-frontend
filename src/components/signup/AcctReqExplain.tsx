@@ -55,7 +55,7 @@ export const AcctReqExplain: FC = () => {
               in.
             </small>
           </p>
-          <Typography variant="h5">Is my data safe?</Typography>
+          <Typography variant="h5">Is my info safe?</Typography>
           <p>
             <small className="simpler-font">
               Your data will remain anonymous and public. Neither Google,

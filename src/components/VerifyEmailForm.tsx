@@ -96,7 +96,6 @@ export const VerifyEmailForm: FC<VerifyEmailType> = ({ afterVerification }) => {
               error={emailError}
               helperText={emailErrorMessage}
               fullWidth
-              autoFocus
               required
             />
           </Grid>

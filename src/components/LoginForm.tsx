@@ -17,6 +17,7 @@ import { GlobalContext } from 'context';
 const useStyles = makeStyles(theme => ({
   link: {
     color: theme.palette.info.main,
+    textDecoration: 'none',
   },
   paper: {
     padding: 20,
@@ -137,7 +138,6 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
               error={!!emailErrorMessage}
               helperText={emailErrorMessage}
               fullWidth
-              autoFocus
               required
             />
           </Grid>
@@ -174,30 +174,36 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
           </Grid>
         </Grid>
         <Grid container justify="center" style={{ marginTop: '10px' }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleGoogleLogin}
-          >
-            Login with Google
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none' }}
-            onClick={handleFacebookLogin}
-          >
-            Login with Facebook
-          </Button>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              style={{ textTransform: 'none', marginRight: '20px' }}
+              onClick={handleLogin}
+            >
+              Login
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              style={{ textTransform: 'none', marginRight: '20px' }}
+              onClick={handleGoogleLogin}
+            >
+              Login with Google
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              style={{ textTransform: 'none' }}
+              onClick={handleFacebookLogin}
+            >
+              Login with Facebook
+            </Button>
+          </Grid>
         </Grid>
       </div>
     </Paper>
