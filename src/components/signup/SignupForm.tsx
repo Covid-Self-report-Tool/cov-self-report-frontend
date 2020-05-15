@@ -1,18 +1,18 @@
 import React, { FC, useReducer, useContext } from 'react';
 import { useHistory } from 'react-router';
 import { Paper, Grid, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 
 import { GlobalContext } from 'components';
 import { initialFormStateType, actionType } from 'components/signup/types';
 import { SignupFields } from './SignupFields';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   padding: {
-    padding: '20px',
+    padding: theme.spacing(2),
   },
-});
+}));
 
 declare global {
   interface Window {

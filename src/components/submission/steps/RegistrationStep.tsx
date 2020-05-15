@@ -1,12 +1,6 @@
 import React, { FC, useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  DialogTitle,
-  DialogContent,
-  Link,
-  Grid,
-  Button,
-} from '@material-ui/core';
+import { DialogTitle, DialogContent, Grid, Button } from '@material-ui/core';
 import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
 
 import { SignupFields } from 'components/signup/SignupFields';
@@ -54,8 +48,8 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
           {() => (
             <>
               {!hasChosenRegistration ? (
-                <Grid container>
-                  <Grid item xs={12}>
+                <Grid container spacing={1} justify="center">
+                  <Grid item>
                     <Button
                       variant="contained"
                       data-cy="register-email"
@@ -64,21 +58,13 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                       Email
                     </Button>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      onClick={handleGoogleLogin}
-                      className={classes.marginTop}
-                    >
+                  <Grid item>
+                    <Button variant="contained" onClick={handleGoogleLogin}>
                       Google
                     </Button>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      onClick={handleFacebookLogin}
-                      className={classes.marginTop}
-                    >
+                  <Grid item>
+                    <Button variant="contained" onClick={handleFacebookLogin}>
                       Facebook
                     </Button>
                   </Grid>
@@ -103,15 +89,6 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
               dispatchForm={dispatchForm}
               classes={{ link: classes.link }}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Link
-              href="/privacy-policy"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View privacy policy
-            </Link>
           </Grid>
         </Grid>
       </DialogContent>

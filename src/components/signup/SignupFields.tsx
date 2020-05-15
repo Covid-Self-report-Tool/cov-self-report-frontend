@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useContext } from 'react';
-import { Grid, TextField, makeStyles } from '@material-ui/core';
-import { Face, Fingerprint } from '@material-ui/icons';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Grid, TextField, InputAdornment } from '@material-ui/core';
+import { AccountCircle, Https } from '@material-ui/icons';
 
 import firebase from 'config/firebase';
 import { initialFormStateType } from 'components/signup/types';
 import { GlobalContext } from 'context';
+import { AcctReqExplain } from 'components/signup';
 
 declare global {
   interface Window {
@@ -12,11 +14,15 @@ declare global {
   }
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   marginTop: {
-    marginTop: 20,
+    marginTop: theme.spacing(1),
   },
-});
+  margin: {
+    margin: theme.spacing(1),
+  },
+}));
+
 type SignupFieldsType = {
   dispatch: any;
   state: initialFormStateType;
@@ -24,7 +30,6 @@ type SignupFieldsType = {
 
 export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
   const classes = useStyles();
-
   const { dispatch: dispatchGlobal } = useContext(GlobalContext);
 
   const setFormValue = (field: string, value: string) => {
@@ -64,11 +69,14 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
 
   return (
     <>
-      <Grid container spacing={8} alignItems="flex-end">
+      <AcctReqExplain />
+      <Grid container justify="center">
         <Grid item>
-          <Face />
+          <div className={classes.marginTop} id="recaptcha"></div>
         </Grid>
-        <Grid item md sm xs>
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
           <TextField
             id="email"
             label="Email"
@@ -82,14 +90,17 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
             fullWidth
             autoFocus
             required
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
-      </Grid>
-      <Grid container spacing={8} alignItems="flex-end">
-        <Grid item>
-          <Fingerprint />
-        </Grid>
-        <Grid item md sm xs>
+        <Grid item xs={12} sm={6} className={classes.marginTop}>
           <TextField
             id="password"
             label="Password"
@@ -102,14 +113,17 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
             required
             error={!!state.passwordError}
             helperText={state.passwordError}
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Https />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
-      </Grid>
-      <Grid container spacing={8} alignItems="flex-end">
-        <Grid item>
-          <Fingerprint />
-        </Grid>
-        <Grid item md sm xs>
+        <Grid item xs={12} sm={6} className={classes.marginTop}>
           <TextField
             id="password2"
             label="Confirm Password"
@@ -122,11 +136,16 @@ export const SignupFields: FC<SignupFieldsType> = ({ state, dispatch }) => {
             required
             error={!!state.passwordError2}
             helperText={state.passwordError2}
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Https />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
-      </Grid>
-      <Grid container justify="center">
-        <div className={classes.marginTop} id="recaptcha"></div>
       </Grid>
     </>
   );
