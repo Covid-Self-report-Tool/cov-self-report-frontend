@@ -1,14 +1,14 @@
 import React, { FC, useState, useContext } from 'react';
 import {
-  Paper,
   Grid,
   TextField,
   Button,
   FormControlLabel,
   Checkbox,
+  InputAdornment,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { Face, Fingerprint } from '@material-ui/icons';
+import { AccountCircle, Https, Facebook, Email } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { googleLogin, login, facebookLogin } from 'utils/firebase';
@@ -18,6 +18,9 @@ const useStyles = makeStyles(theme => ({
   link: {
     color: theme.palette.info.main,
     textDecoration: 'none',
+  },
+  marginTop: {
+    marginTop: theme.spacing(1),
   },
   paper: {
     padding: 20,
@@ -122,90 +125,108 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <div>
-        <Grid container spacing={8} alignItems="flex-end">
-          <Grid item>
-            <Face />
-          </Grid>
-          <Grid item md sm xs>
-            <TextField
-              id="username"
-              label="Username"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              error={!!emailErrorMessage}
-              helperText={emailErrorMessage}
-              fullWidth
-              required
-            />
-          </Grid>
+    <>
+      <Grid container spacing={2} justify="center">
+        <Grid item xs={10} sm={7} className={classes.marginTop}>
+          <TextField
+            id="username"
+            label="Username"
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            error={!!emailErrorMessage}
+            helperText={emailErrorMessage}
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
+          />
         </Grid>
-        <Grid container spacing={8} alignItems="flex-end">
-          <Grid item>
-            <Fingerprint />
-          </Grid>
-          <Grid item md sm xs>
-            <TextField
-              id="username"
-              label="Password"
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-              error={!!passwordErrorMessage}
-              helperText={passwordErrorMessage}
-              fullWidth
-              required
-            />
-          </Grid>
+        <Grid item xs={10} sm={7} className={classes.marginTop}>
+          <TextField
+            id="username"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            error={!!passwordErrorMessage}
+            helperText={passwordErrorMessage}
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Https />
+                </InputAdornment>
+              ),
+            }}
+          />
         </Grid>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <FormControlLabel
-              control={<Checkbox color="primary" />}
-              label="Remember me"
-            />
-          </Grid>
-          <Grid item>
-            <Link to="/verify_email" className={classes.link}>
-              Forgot password?
-            </Link>
-          </Grid>
+        <Grid item>
+          <FormControlLabel
+            control={<Checkbox color="primary" />}
+            label="Remember me"
+          />
+          <Link to="/verify_email" className={classes.link}>
+            Forgot password?
+          </Link>
         </Grid>
-        <Grid container justify="center" style={{ marginTop: '10px' }}>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{ textTransform: 'none', marginRight: '20px' }}
-              onClick={handleLogin}
-            >
-              Login
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{ textTransform: 'none', marginRight: '20px' }}
-              onClick={handleGoogleLogin}
-            >
-              Login with Google
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{ textTransform: 'none' }}
-              onClick={handleFacebookLogin}
-            >
-              Login with Facebook
-            </Button>
-          </Grid>
+      </Grid>
+      <Grid
+        container
+        justify="center"
+        className={classes.marginTop}
+        spacing={1}
+      >
+        <Grid item xs={12} sm="auto" style={{ textAlign: 'center' }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={handleLogin}
+            startIcon={<Email />}
+            disabled={!email || !password}
+          >
+            Login with email
+          </Button>
         </Grid>
-      </div>
-    </Paper>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            onClick={handleGoogleLogin}
+            startIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 210 210"
+                className="MuiSvgIcon-root"
+              >
+                <path d="M0 105a105.1 105.1 0 01169-83.2l-24.4 31.7a65 65 0 1022.2 71.5H105V85h105v20a105.1 105.1 0 01-210 0z" />
+              </svg>
+            }
+          >
+            Google login
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            style={{ textTransform: 'none' }}
+            startIcon={<Facebook />}
+            onClick={handleFacebookLogin}
+          >
+            Facebook login
+          </Button>
+        </Grid>
+      </Grid>
+    </>
   );
 };

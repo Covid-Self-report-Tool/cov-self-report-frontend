@@ -26,6 +26,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: 'auto',
     marginLeft: 4,
   },
+  dialogContent: {
+    padding: `${theme.spacing(3)}px 10px`,
+    [theme.breakpoints.up('sm')]: {
+      padding: `${theme.spacing(4)}px ${theme.spacing(3)}px`,
+    },
+  },
+  actionBtn: {
+    minWidth: 40,
+  },
 }));
 
 export const SimpleModal: FC<SimpleModalTypes> = ({
@@ -49,7 +58,9 @@ export const SimpleModal: FC<SimpleModalTypes> = ({
       onClose={handleClose}
     >
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent dividers className={classes.dialogContent}>
+        {children}
+      </DialogContent>
       <DialogActions>
         {leftSideLink ? (
           <RouteLink
@@ -60,17 +71,17 @@ export const SimpleModal: FC<SimpleModalTypes> = ({
           </RouteLink>
         ) : null}
         <Button
+          className={classes.actionBtn}
           onClick={() => history.goBack()}
           color="primary"
-          variant="outlined"
           size="small"
         >
           Back
         </Button>
         <Button
+          className={classes.actionBtn}
           onClick={() => history.push('/')}
           color="primary"
-          variant="outlined"
           size="small"
         >
           Exit to map

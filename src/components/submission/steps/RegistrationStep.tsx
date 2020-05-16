@@ -91,6 +91,16 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
                       dispatch={dispatchForm}
                       showEmailFields={hasChosenEmailReg}
                       renderSignupBtns={() => <SignupBtns />}
+                      renderEmailSignupBtn={() => (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {}}
+                          disabled={!Boolean(state.captcha)}
+                        >
+                          Sign up
+                        </Button>
+                      )}
                     />
                   </Grid>
                 </Grid>

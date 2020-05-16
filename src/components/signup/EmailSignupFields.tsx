@@ -23,6 +23,7 @@ type EmailSignupFieldsType = {
   dispatch: any;
   state: initialFormStateType;
   renderSignupBtns: () => React.ReactNode;
+  renderEmailSignupBtn: () => React.ReactNode;
   showEmailFields: Boolean;
 };
 
@@ -31,9 +32,10 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
   dispatch,
   showEmailFields,
   renderSignupBtns,
+  renderEmailSignupBtn,
 }) => {
   const classes = useStyles();
-  const [showSignupBtns, setShowSignupBtns] = useState(false);
+  const [captchaClicked, setCaptchaClicked] = useState(false);
   const { dispatch: dispatchGlobal } = useContext(GlobalContext);
 
   const setFormValue = (field: string, value: string) => {
@@ -51,6 +53,7 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
         {
           callback: (response: any) => {
             setFormValue('captcha', response);
+            setCaptchaClicked(true);
           },
           'expired-callback': () => {
             window.recaptchaVerifier.clear();
@@ -73,15 +76,20 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
 
   return (
     <>
-      <Grid container justify="center">
-        <Grid item>
-          <div className={classes.marginTop} id="recaptcha"></div>
-        </Grid>
-      </Grid>
-      {renderSignupBtns()}
-      {/* {Boolean(state.captcha) && showEmailFields && ( */}
-      <Grid container spacing={1}>
-        <Grid item xs={12}>
+      <div
+        id="recaptcha"
+        style={{ display: !captchaClicked ? 'block' : 'none' }}
+      />
+      <div style={{ display: captchaClicked ? 'block' : 'none' }}>
+        {renderSignupBtns()}
+      </div>
+      <Grid
+        container
+        spacing={2}
+        style={{ display: showEmailFields ? 'flex' : 'none' }}
+        justify="center"
+      >
+        <Grid item xs={12} sm={10} className={classes.marginTop}>
           <TextField
             id="email"
             label="Email"
@@ -104,7 +112,7 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} className={classes.marginTop}>
+        <Grid item xs={12} sm={5} className={classes.marginTop}>
           <TextField
             id="password"
             label="Password"
@@ -127,7 +135,7 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} className={classes.marginTop}>
+        <Grid item xs={12} sm={5} className={classes.marginTop}>
           <TextField
             id="password2"
             label="Confirm Password"
@@ -150,7 +158,16 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             }}
           />
         </Grid>
+        <Grid
+          item
+          xs={8}
+          className={classes.marginTop}
+          style={{ textAlign: 'center' }}
+        >
+          {renderEmailSignupBtn()}
+        </Grid>
       </Grid>
+      <Grid container justify="center"></Grid>
     </>
   );
 };

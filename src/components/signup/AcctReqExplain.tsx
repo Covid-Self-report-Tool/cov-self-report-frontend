@@ -34,7 +34,7 @@ export const AcctReqExplain: FC = () => {
         onClick={handleClick}
         className={classes.link}
       >
-        Why do I need to sign up?
+        <small>Why do I need to sign up?</small>
       </Link>
       <Popover
         id="long-menu"
@@ -43,7 +43,7 @@ export const AcctReqExplain: FC = () => {
         onClose={handleClose}
         classes={{ paper: classes.popover }}
         transformOrigin={{
-          vertical: 'top',
+          vertical: 'center',
           horizontal: 'left',
         }}
       >
@@ -55,7 +55,7 @@ export const AcctReqExplain: FC = () => {
               in.
             </small>
           </p>
-          <Typography variant="h5">Is my info safe?</Typography>
+          <Typography variant="h6">Is my info safe?</Typography>
           <p>
             <small className="simpler-font">
               Your data will remain anonymous and public. Neither Google,
