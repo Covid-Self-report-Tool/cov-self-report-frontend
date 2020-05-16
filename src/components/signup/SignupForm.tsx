@@ -149,8 +149,12 @@ export const SignupForm: FC = () => {
 
   const SignupBtns: FC = () => (
     <>
-      <Typography variant="h5">Choose a signup method</Typography>
-      <AcctReqExplain />
+      <Typography variant="h5">
+        Choose a signup method
+        <small>
+          <AcctReqExplain />
+        </small>
+      </Typography>
       <Grid container justify="center" style={{ marginTop: 16 }} spacing={1}>
         <Grid item>
           <Button

@@ -6,6 +6,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   link: {
     color: theme.palette.info.main,
   },
+  tinyText: {
+    fontSize: '0.85rem',
+  },
   popover: {
     maxWidth: 320,
   },
@@ -32,9 +35,9 @@ export const AcctReqExplain: FC = () => {
         aria-haspopup="true"
         href="#"
         onClick={handleClick}
-        className={classes.link}
+        className={`${classes.link} ${classes.tinyText}`}
       >
-        <small>Why do I need to sign up?</small>
+        Why do I need to sign up?
       </Link>
       <Popover
         id="long-menu"
