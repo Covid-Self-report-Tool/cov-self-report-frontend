@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Button,
   Dialog,
@@ -17,27 +17,22 @@ import CloseIcon from '@material-ui/icons/Close';
 import { GlobalContext } from 'context';
 
 // Styles for main parent component
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   dialogTitle: {
-    margin: 0,
-    padding: `${theme.spacing(4)} ${theme.spacing(6)}`,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
     color: theme.palette.grey[500],
-  },
-  dialogContent: {
-    padding: `${theme.spacing(2)} ${theme.spacing(4)}`,
+    padding: 0,
   },
   symptomsBtn: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(3),
   },
-  dialogActions: {
-    margin: 0,
-    padding: theme.spacing(1),
+  exitToMapBtn: {
+    marginLeft: 'auto',
   },
 }));
 
@@ -54,17 +49,15 @@ const Title: FC<DialogTitleProps> = props => {
   const { children, classes, onClose, ...other } = props;
 
   return (
-    <DialogTitle disableTypography className={classes.root} {...other}>
+    <DialogTitle disableTypography {...other} className={classes.dialogTitle}>
       <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
+      <IconButton
+        aria-label="close"
+        className={classes.closeButton}
+        onClick={onClose}
+      >
+        <CloseIcon />
+      </IconButton>
     </DialogTitle>
   );
 };
@@ -98,7 +91,7 @@ export const SplashScreen: FC = () => {
         >
           COVID-19 Self-reporting Tool
         </Title>
-        <DialogContent dividers className={classes.dialogContent}>
+        <DialogContent dividers>
           <Typography align="center" gutterBottom variant="h4">
             Have you experienced symptoms of COVID-19 in the last four months?
           </Typography>
@@ -128,7 +121,11 @@ export const SplashScreen: FC = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            onClick={handleClose}
+            color="primary"
+            className={classes.exitToMapBtn}
+          >
             View symptoms map
           </Button>
         </DialogActions>

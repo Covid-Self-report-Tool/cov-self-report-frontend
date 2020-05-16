@@ -32,17 +32,14 @@ const getSteps = () => {
 };
 
 const useStyles = makeStyles(theme => ({
+  // TODO: allow horizontal scrolling in stepper but not in the rest of modal
   stepper: {
     padding: `12px 4px ${theme.spacing(1)}px`,
   },
-  haveAcctLink: {
+  link: {
+    // TODO: make this a CSS class since it's used in 10+ places
     color: theme.palette.info.main,
     textDecoration: 'none',
-    marginRight: 'auto',
-    marginLeft: 4,
-  },
-  dialogActionsBtn: {
-    minWidth: theme.spacing(6),
   },
 }));
 
@@ -255,22 +252,15 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       <DialogActions>
         <IfFirebaseUnAuthed>
           {() => (
-            <RouteLink to="/login" className={classes.haveAcctLink}>
+            <RouteLink to="/login" className={classes.link}>
               Already have an account?
             </RouteLink>
           )}
         </IfFirebaseUnAuthed>
-        <Button
-          className={classes.dialogActionsBtn}
-          size="small"
-          to="/"
-          component={RouteLink}
-          color="primary"
-        >
+        <Button size="small" to="/" component={RouteLink} color="primary">
           Cancel
         </Button>
         <Button
-          className={classes.dialogActionsBtn}
           size="small"
           onClick={handleBack}
           color="primary"
@@ -280,7 +270,6 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         </Button>
         {activeStep < steps.length - 1 && !isLastStep() ? (
           <Button
-            className={classes.dialogActionsBtn}
             size="small"
             data-cy="next-button"
             onClick={handleNext}
@@ -292,7 +281,6 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           </Button>
         ) : (
           <Button
-            className={classes.dialogActionsBtn}
             size="small"
             onClick={handleSubmit}
             color="secondary"

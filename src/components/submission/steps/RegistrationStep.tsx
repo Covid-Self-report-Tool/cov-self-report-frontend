@@ -13,20 +13,11 @@ import {
 } from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
-  dialogTitle: {
-    padding: `4px ${theme.spacing(2)}px`,
-  },
   link: {
     color: theme.palette.info.main,
   },
   marginTop: {
     marginTop: 20,
-  },
-  dialogContent: {
-    padding: `${theme.spacing(3)}px 10px`,
-    [theme.breakpoints.up('sm')]: {
-      padding: `${theme.spacing(4)}px ${theme.spacing(3)}px`,
-    },
   },
 }));
 
@@ -90,8 +81,8 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
 
   return (
     <>
-      <DialogTitle className={classes.dialogTitle}>Submit</DialogTitle>
-      <DialogContent dividers className={classes.dialogContent}>
+      <DialogTitle>Submit</DialogTitle>
+      <DialogContent dividers>
         <IfFirebaseAuthed>
           {({ user }) => <span>Logged in as {user.email}</span>}
         </IfFirebaseAuthed>

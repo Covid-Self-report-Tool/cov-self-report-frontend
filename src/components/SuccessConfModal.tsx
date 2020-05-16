@@ -36,10 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 0,
       lineHeight: 0,
     },
-    dialogContent: {
-      '& a': {
-        color: theme.palette.info.main,
-      },
+    link: {
+      color: theme.palette.info.main,
     },
   })
 );
@@ -65,7 +63,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
       <DialogTitle id="alert-dialog-slide-title">
         Submission sent successfully
       </DialogTitle>
-      <DialogContent dividers className={classes.dialogContent}>
+      <DialogContent dividers>
         <Typography variant="h2" align="center" className={classes.iconWrap}>
           <CheckCircleRoundedIcon className={classes.icon} fontSize="inherit" />
         </Typography>
@@ -80,6 +78,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
             this with friends who are unwell. Send us your{' '}
             <a
               target="_blank"
+              className={classes.link}
               rel="noopener noreferrer"
               href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
             >
@@ -91,6 +90,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
             To get support and learn more about COVID-19, please visit the{' '}
             <a
               target="_blank"
+              className={classes.link}
               rel="noopener noreferrer"
               href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
             >

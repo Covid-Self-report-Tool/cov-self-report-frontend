@@ -23,14 +23,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   leftSideActionsLink: {
     color: theme.palette.info.main,
     textDecoration: 'none',
-    marginRight: 'auto',
-    marginLeft: 4,
-  },
-  dialogContent: {
-    padding: `${theme.spacing(3)}px 10px`,
-    [theme.breakpoints.up('sm')]: {
-      padding: `${theme.spacing(4)}px ${theme.spacing(3)}px`,
-    },
   },
   actionBtn: {
     minWidth: 40,
@@ -56,11 +48,10 @@ export const SimpleModal: FC<SimpleModalTypes> = ({
       open={open}
       aria-labelledby="form-dialog-title"
       onClose={handleClose}
+      fullWidth
     >
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-      <DialogContent dividers className={classes.dialogContent}>
-        {children}
-      </DialogContent>
+      <DialogContent dividers>{children}</DialogContent>
       <DialogActions>
         {leftSideLink ? (
           <RouteLink
