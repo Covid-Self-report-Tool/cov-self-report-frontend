@@ -1,12 +1,11 @@
 import React, { FC, useReducer, useContext, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Grid, Button, Typography } from '@material-ui/core';
-import { Facebook, Email } from '@material-ui/icons';
+import { Button } from '@material-ui/core';
 
 import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'components';
 import { initialFormStateType, actionType } from 'components/signup/types';
-import { AcctReqExplain, EmailSignupFields } from 'components/signup';
+import { EmailSignupFields, SignupLoginBtns } from 'components/signup';
 
 declare global {
   interface Window {
@@ -147,65 +146,6 @@ export const SignupForm: FC = () => {
     }
   };
 
-  const SignupBtns: FC = () => (
-    <>
-      <Typography variant="h5">
-        Choose a signup method
-        <small>
-          <AcctReqExplain />
-        </small>
-      </Typography>
-      <Grid container justify="center" style={{ marginTop: 16 }} spacing={1}>
-        <Grid item>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            disabled={!Boolean(state.captcha)}
-            startIcon={<Email />}
-            onClick={() => {
-              setShowEmailFields(true);
-            }}
-          >
-            Email
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            onClick={handleGoogleLogin}
-            disabled={!Boolean(state.captcha)}
-            startIcon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 210 210"
-                className="MuiSvgIcon-root"
-              >
-                <path d="M0 105a105.1 105.1 0 01169-83.2l-24.4 31.7a65 65 0 1022.2 71.5H105V85h105v20a105.1 105.1 0 01-210 0z" />
-              </svg>
-            }
-          >
-            Google
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            onClick={handleFacebookLogin}
-            disabled={!Boolean(state.captcha)}
-            startIcon={<Facebook />}
-          >
-            Facebook
-          </Button>
-        </Grid>
-      </Grid>
-    </>
-  );
-
   const SignupWithEmailBtn: FC = () => (
     <Button
       variant="contained"
@@ -218,12 +158,29 @@ export const SignupForm: FC = () => {
     </Button>
   );
 
+  const btnsConfig = {
+    email: {
+      onClick: () => {
+        setShowEmailFields(true);
+      },
+      disabled: !Boolean(state.captcha),
+    },
+    google: {
+      onClick: handleGoogleLogin,
+      disabled: !Boolean(state.captcha),
+    },
+    facebook: {
+      onClick: handleFacebookLogin,
+      disabled: !Boolean(state.captcha),
+    },
+  };
+
   return (
     <EmailSignupFields
       state={state}
       dispatch={dispatchForm}
       showEmailFields={showEmailFields}
-      renderSignupBtns={() => <SignupBtns />}
+      renderSignupBtns={() => <SignupLoginBtns config={btnsConfig} />}
       renderEmailSignupBtn={() => <SignupWithEmailBtn />}
     />
   );
