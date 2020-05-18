@@ -43,6 +43,7 @@ export const SignupLoginBtn: FC<SignupLoginBtnConfig> = ({
 }) => {
   let btnText = '';
   let startIcon = null;
+  let cypressDataAttrib = '';
 
   switch (type) {
     case 'google':
@@ -56,12 +57,14 @@ export const SignupLoginBtn: FC<SignupLoginBtnConfig> = ({
     default:
       btnText = 'Email';
       startIcon = <Email />;
+      cypressDataAttrib = 'register-email';
       break;
   }
 
   return (
     <Button
       variant="outlined"
+      data-cy={cypressDataAttrib}
       size="small"
       disabled={disabled}
       startIcon={startIcon}
