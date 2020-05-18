@@ -1,12 +1,5 @@
 import React, { FC, useState, useContext } from 'react';
-import {
-  Grid,
-  TextField,
-  Button,
-  FormControlLabel,
-  Checkbox,
-  InputAdornment,
-} from '@material-ui/core';
+import { Grid, TextField, Button, InputAdornment } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { AccountCircle, Https, Facebook, Email } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -167,11 +160,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
             }}
           />
         </Grid>
-        <Grid item>
-          <FormControlLabel
-            control={<Checkbox color="primary" />}
-            label="Remember me"
-          />
+        <Grid item xs={10} sm={7}>
           <Link to="/verify_email" className={classes.link}>
             Forgot password?
           </Link>
@@ -182,8 +171,9 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
         justify="center"
         className={classes.marginTop}
         spacing={1}
+        style={{ textAlign: 'center' }}
       >
-        <Grid item xs={12} sm="auto" style={{ textAlign: 'center' }}>
+        <Grid item xs={12} sm="auto">
           <Button
             variant="contained"
             color="secondary"
