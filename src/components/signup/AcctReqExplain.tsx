@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Box, Typography, Link, Popover } from '@material-ui/core';
+
+import { GlobalContext } from 'components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
@@ -15,9 +17,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const AcctReqExplain: FC = () => {
+  const { dispatch } = useContext(GlobalContext);
+  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const classes = useStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -30,15 +33,33 @@ export const AcctReqExplain: FC = () => {
 
   return (
     <Box marginBottom={1}>
-      <Link
-        aria-label="account reason explanation"
-        aria-haspopup="true"
-        href="#"
-        onClick={handleClick}
-        className={`${classes.link} ${classes.tinyText}`}
-      >
-        Why do I need to sign up?
-      </Link>
+      <div className={classes.tinyText}>
+        <Link
+          aria-label="account reason explanation"
+          aria-haspopup="true"
+          href="#"
+          onClick={handleClick}
+          className={classes.link}
+        >
+          Why do I need to sign up?
+        </Link>{' '}
+        Already have an account?{' '}
+        <Link
+          href="#"
+          className={classes.link}
+          onClick={(e: React.MouseEvent) => {
+            e.preventDefault();
+
+            dispatch({
+              type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+              payload: 'login',
+            });
+          }}
+        >
+          Sign in.
+        </Link>
+        .
+      </div>
       <Popover
         id="long-menu"
         anchorEl={anchorEl}

@@ -14,6 +14,8 @@ export type AlertPayloadType = {
   duration?: number | null; // null means the error doesn't auto hide
 };
 
+export type LoginSignupModalType = 'login' | 'signup' | null;
+
 export type StoreActionType =
   | {
       type: 'TOGGLE_UI_ALERT';
@@ -24,6 +26,10 @@ export type StoreActionType =
       payload: keyof CountriesFieldsForTotals;
     }
   | { type: 'TOGGLE_LAYER_VISIBILITY'; payload: keyof LayerVisibilityTypes }
+  | {
+      type: 'TOGGLE_LOGIN_SIGNUP_MODAL';
+      payload: LoginSignupModalType;
+    }
   | { type: 'SHOW_SPLASH'; payload: boolean };
 
 export type CurrentTotalsTypes = {
@@ -56,6 +62,7 @@ export type InitialStateType = {
   showSplash: boolean;
   hasSeenSplash: boolean;
   uiAlert: AlertPayloadType;
+  loginSignupModal: LoginSignupModalType;
 };
 
 export type GlobalContextDispatchType = React.Dispatch<StoreActionType>;

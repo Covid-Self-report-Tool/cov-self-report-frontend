@@ -1,11 +1,17 @@
 import React, { FC, useState, useContext } from 'react';
-import { Grid, TextField, Button, InputAdornment } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import {
+  Grid,
+  TextField,
+  Button,
+  InputAdornment,
+  Link,
+} from '@material-ui/core';
 import { AccountCircle, Https, Facebook, Email } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { googleLogin, login, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'context';
+import { SimpleModal, VerifyEmailForm } from 'components';
 
 const useStyles = makeStyles(theme => ({
   link: {
@@ -20,14 +26,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-type LoginFormType = {
-  onLogin?: Function;
-};
-
-export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
+export const LoginForm: FC = () => {
   const classes = useStyles();
   const { dispatch } = useContext(GlobalContext);
 
+  const [showForgotPasswd, setShowForgotPasswd] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -73,10 +76,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
       setPasswordErrorMessage('Password must be at least 6 characters long');
     } else {
       try {
-        const resp = await login(email, password);
-        if (onLogin) {
-          onLogin(resp);
-        }
+        await login(email, password);
       } catch (err) {
         handleLoginError(err.code, err.message);
       }
@@ -87,10 +87,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
     event.preventDefault();
 
     try {
-      const resp = await googleLogin();
-      if (onLogin) {
-        onLogin(resp);
-      }
+      await googleLogin();
     } catch (err) {
       handleLoginError(err.code, err.message);
     }
@@ -100,10 +97,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
     event.preventDefault();
 
     try {
-      const resp = await facebookLogin();
-      if (onLogin) {
-        await onLogin(resp);
-      }
+      await facebookLogin();
     } catch (err) {
       handleLoginError(err.code, err.message);
     }
@@ -120,7 +114,7 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
   return (
     <>
       <Grid container spacing={2} justify="center">
-        <Grid item xs={10} sm={7} className={classes.marginTop}>
+        <Grid item xs={10} sm={5} className={classes.marginTop}>
           <TextField
             id="username"
             label="Username"
@@ -140,7 +134,9 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
             }}
           />
         </Grid>
-        <Grid item xs={10} sm={7} className={classes.marginTop}>
+      </Grid>
+      <Grid container spacing={2} justify="center">
+        <Grid item xs={10} sm={5} className={classes.marginTop}>
           <TextField
             id="username"
             label="Password"
@@ -160,8 +156,18 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
             }}
           />
         </Grid>
-        <Grid item xs={10} sm={7}>
-          <Link to="/verify_email" className={classes.link}>
+      </Grid>
+      <Grid container spacing={2} justify="center">
+        <Grid item xs={10} sm={5}>
+          <Link
+            href="#"
+            className={classes.link}
+            onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              setShowForgotPasswd(true);
+              return null;
+            }}
+          >
             Forgot password?
           </Link>
         </Grid>
@@ -217,6 +223,35 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
           </Button>
         </Grid>
       </Grid>
+      <p>
+        Don't have an account?{' '}
+        <Link
+          href="#"
+          className={classes.link}
+          onClick={(e: React.MouseEvent) => {
+            e.preventDefault();
+
+            dispatch({
+              type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+              payload: 'signup',
+            });
+          }}
+        >
+          Sign up
+        </Link>
+        .
+      </p>
+      {showForgotPasswd && (
+        <SimpleModal
+          title="Forgot password"
+          onClose={() => {
+            setShowForgotPasswd(false);
+            return null;
+          }}
+        >
+          <VerifyEmailForm />
+        </SimpleModal>
+      )}
     </>
   );
 };

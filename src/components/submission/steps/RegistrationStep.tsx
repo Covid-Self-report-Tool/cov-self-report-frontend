@@ -10,6 +10,7 @@ import {
   AgreeToTerms,
   AcctReqExplain,
   EmailSignupFields,
+  SignupLoginBtns,
 } from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
@@ -79,6 +80,21 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
     </Grid>
   );
 
+  const btnsConfig = {
+    email: {
+      onClick: () => setHasChosenEmailReg(true),
+      disabled: !Boolean(state.captcha),
+    },
+    google: {
+      onClick: handleGoogleLogin,
+      disabled: !Boolean(state.captcha),
+    },
+    facebook: {
+      onClick: handleFacebookLogin,
+      disabled: !Boolean(state.captcha),
+    },
+  };
+
   return (
     <>
       <DialogTitle>Submit</DialogTitle>
@@ -101,6 +117,16 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
               <>
                 <Grid container style={{ textAlign: 'center' }}>
                   <Grid item xs={12} style={{ overflow: 'hidden' }}>
+                    <EmailSignupFields
+                      state={state}
+                      dispatch={dispatchForm}
+                      showEmailFields={true}
+                      renderSignupBtns={() => (
+                        <SignupLoginBtns config={btnsConfig} />
+                      )}
+                      // renderEmailSignupBtn={() => <SignupWithEmailBtn />}
+                      renderEmailSignupBtn={() => <div />}
+                    />
                     <EmailSignupFields
                       state={state}
                       dispatch={dispatchForm}

@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { Link as RouteLink, useHistory } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Dialog,
@@ -12,11 +11,9 @@ import {
 type SimpleModalTypes = {
   children: React.ReactNode;
   title: string;
-  // e.g. "Don't have an account?"
-  leftSideLink?: {
-    text: string;
-    to: string;
-  };
+  fullScreen?: boolean;
+  leftSideElems?: () => React.ReactNode; // e.g. "Don't have an account?"
+  onClose?: () => void;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -27,55 +24,53 @@ const useStyles = makeStyles((theme: Theme) => ({
   actionBtn: {
     minWidth: 40,
   },
+  dialogContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));
 
 export const SimpleModal: FC<SimpleModalTypes> = ({
   children,
   title,
-  leftSideLink,
+  leftSideElems,
+  fullScreen = true,
+  onClose,
 }) => {
-  const history = useHistory();
   const classes = useStyles();
   const [open, setOpen] = useState(true);
 
   const handleClose = () => {
     setOpen(false);
-    history.goBack();
+
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
     <Dialog
       open={open}
+      fullScreen={fullScreen}
       aria-labelledby="form-dialog-title"
       onClose={handleClose}
       fullWidth
     >
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-      <DialogContent dividers>{children}</DialogContent>
+      <DialogContent dividers className={classes.dialogContent}>
+        {children}
+      </DialogContent>
       <DialogActions>
-        {leftSideLink ? (
-          <RouteLink
-            to={leftSideLink.to}
-            className={classes.leftSideActionsLink}
-          >
-            {leftSideLink.text}
-          </RouteLink>
-        ) : null}
+        {leftSideElems ? leftSideElems() : null}
         <Button
           className={classes.actionBtn}
-          onClick={() => history.goBack()}
+          onClick={() => handleClose()}
           color="primary"
           size="small"
         >
-          Back
-        </Button>
-        <Button
-          className={classes.actionBtn}
-          onClick={() => history.push('/')}
-          color="primary"
-          size="small"
-        >
-          Exit to map
+          Close
         </Button>
       </DialogActions>
     </Dialog>

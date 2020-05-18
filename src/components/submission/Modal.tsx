@@ -9,15 +9,15 @@ import {
   Step,
   StepLabel,
   CircularProgress,
+  Link,
 } from '@material-ui/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
-import { isValidUserAgent } from 'utils';
 import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
-import { GlobalContext, UnsupportedBrowserMsg } from 'components';
+import { GlobalContext } from 'components';
 import {
   SymptomStep,
   TestingStep,
@@ -252,9 +252,20 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       <DialogActions>
         <IfFirebaseUnAuthed>
           {() => (
-            <RouteLink to="/login" className={classes.link}>
+            <Link
+              href="#"
+              className={classes.link}
+              onClick={(e: React.MouseEvent) => {
+                e.preventDefault();
+
+                dispatch({
+                  type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+                  payload: 'signup',
+                });
+              }}
+            >
               Already have an account?
-            </RouteLink>
+            </Link>
           )}
         </IfFirebaseUnAuthed>
         <Button size="small" to="/" component={RouteLink} color="primary">

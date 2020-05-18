@@ -16,6 +16,7 @@ export const initialState = {
     countries: true,
   },
   showSplash: false,
+  loginSignupModal: null,
   hasSeenSplash: !!localStorage.getItem('hasSeenSplash') || false,
   lastCountriesUpdate: null, // human-friendly timestamp of first country in JHU
 };
@@ -29,6 +30,11 @@ const reducer = (
       return {
         ...state,
         activeCountrySymbKey: action.payload,
+      };
+    case 'TOGGLE_LOGIN_SIGNUP_MODAL':
+      return {
+        ...state,
+        loginSignupModal: action.payload,
       };
     case 'TOGGLE_UI_ALERT':
       return {
