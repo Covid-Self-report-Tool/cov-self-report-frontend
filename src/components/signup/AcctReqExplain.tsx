@@ -1,8 +1,6 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Box, Typography, Link, Popover } from '@material-ui/core';
-
-import { GlobalContext } from 'components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tinyText: {
@@ -14,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const AcctReqExplain: FC = () => {
-  const { dispatch } = useContext(GlobalContext);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -30,33 +27,15 @@ export const AcctReqExplain: FC = () => {
 
   return (
     <Box marginBottom={1}>
-      <div className={classes.tinyText}>
-        <Link
-          aria-label="account reason explanation"
-          aria-haspopup="true"
-          href="#"
-          onClick={handleClick}
-          className="obvious-link"
-        >
-          Why do I need to sign up?
-        </Link>{' '}
-        Already have an account?{' '}
-        <Link
-          href="#"
-          className="obvious-link"
-          onClick={(e: React.MouseEvent) => {
-            e.preventDefault();
-
-            dispatch({
-              type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
-              payload: 'login',
-            });
-          }}
-        >
-          Sign in.
-        </Link>
-        .
-      </div>
+      <Link
+        aria-label="account reason explanation"
+        aria-haspopup="true"
+        href="#"
+        onClick={handleClick}
+        className={`${classes.tinyText} obvious-link`}
+      >
+        Why do I need to sign up?
+      </Link>{' '}
       <Popover
         id="long-menu"
         anchorEl={anchorEl}

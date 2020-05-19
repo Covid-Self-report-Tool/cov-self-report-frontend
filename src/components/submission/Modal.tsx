@@ -25,7 +25,7 @@ import {
   RegistrationStep,
 } from 'components/submission/steps';
 import { UserContext } from 'context';
-import { formReducer, initialFormState } from 'components/signup';
+import { formReducer, initialFormState, SignInLink } from 'components/signup';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -247,20 +247,9 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       <DialogActions>
         <IfFirebaseUnAuthed>
           {() => (
-            <Link
-              href="#"
-              className="obvious-link"
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-
-                dispatch({
-                  type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
-                  payload: 'signup',
-                });
-              }}
-            >
-              Already have an account?
-            </Link>
+            <>
+              Already have an account? <SignInLink />
+            </>
           )}
         </IfFirebaseUnAuthed>
         <Button size="small" to="/" component={RouteLink} color="primary">

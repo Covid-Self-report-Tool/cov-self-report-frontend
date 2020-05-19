@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
-import { Grid, Button, Typography } from '@material-ui/core';
+import React, { FC, useContext } from 'react';
+import { Grid, Button, Typography, Link } from '@material-ui/core';
 import { Facebook, Email } from '@material-ui/icons';
 
-import { AcctReqExplain } from 'components/signup';
+import { GlobalContext } from 'context';
+import { AcctReqExplain, SignInLink } from 'components/signup';
 
 // TODO: use this for goog/fb click handlers
 // type ClickForPromise = (
@@ -23,7 +24,7 @@ type SignupLoginBtnsType = {
 type SignupLoginBtnConfig = {
   type: SignupProviderTypes;
   disabled?: boolean;
-  onClick: (event: React.SyntheticEvent) => void;
+  onClick: (event: any) => void; // TODO: do it right with React.SyntheticEvent
 };
 
 const GoogleIcon: FC = () => (
@@ -63,9 +64,9 @@ export const SignupLoginBtn: FC<SignupLoginBtnConfig> = ({
 
   return (
     <Button
-      variant="outlined"
+      variant="contained"
       data-cy={cypressDataAttrib}
-      size="small"
+      color="secondary"
       disabled={disabled}
       startIcon={startIcon}
       onClick={onClick}
@@ -76,14 +77,12 @@ export const SignupLoginBtn: FC<SignupLoginBtnConfig> = ({
 };
 
 export const SignupLoginBtns: FC<SignupLoginBtnsType> = ({ config }) => {
+  const { dispatch } = useContext(GlobalContext);
+
   return (
     <>
-      <Typography variant="h5">
-        Choose a signup/login method
-        <small>
-          <AcctReqExplain />
-        </small>
-      </Typography>
+      <Typography variant="h4">Choose a signup method</Typography>
+      <AcctReqExplain />
       <Grid container justify="center" style={{ marginTop: 16 }} spacing={1}>
         {Object.keys(config).map((providerType: string) => {
           // Couldn't figure out how to satisfy TS here
@@ -100,6 +99,9 @@ export const SignupLoginBtns: FC<SignupLoginBtnsType> = ({ config }) => {
           );
         })}
       </Grid>
+      <p style={{ textAlign: 'center' }}>
+        Already have an account? <SignInLink /> .
+      </p>
     </>
   );
 };

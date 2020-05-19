@@ -86,7 +86,10 @@ export const SignupForm: FC = () => {
 
   // Generic success handler: show user success alert, go to home route
   const handleSignupSuccess = () => {
-    history.push('/');
+    dispatch({
+      type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+      payload: null,
+    });
 
     dispatch({
       type: 'TOGGLE_UI_ALERT',

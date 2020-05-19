@@ -3,6 +3,7 @@ import {
   Grid,
   TextField,
   Button,
+  Typography,
   InputAdornment,
   Link,
 } from '@material-ui/core';
@@ -12,13 +13,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { googleLogin, login, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'context';
 import { SimpleModal, VerifyEmailForm } from 'components';
+import { SignupLoginBtn } from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
   marginTop: {
     marginTop: theme.spacing(1),
-  },
-  paper: {
-    padding: 20,
   },
 }));
 
@@ -109,8 +108,25 @@ export const LoginForm: FC = () => {
 
   return (
     <>
+      <Typography variant="h4">Choose a login method</Typography>
+      <Grid
+        container
+        spacing={2}
+        justify="center"
+        className={classes.marginTop}
+      >
+        <Grid item>
+          <SignupLoginBtn type="google" onClick={handleGoogleLogin} />
+        </Grid>
+        <Grid item>
+          <SignupLoginBtn type="facebook" onClick={handleFacebookLogin} />
+        </Grid>
+      </Grid>
+      <Typography variant="body2" className={classes.marginTop} align="center">
+        <p>OR, sign in using email:</p>
+      </Typography>
       <Grid container spacing={2} justify="center">
-        <Grid item xs={10} sm={5} className={classes.marginTop}>
+        <Grid item xs={10} sm={4} className={classes.marginTop}>
           <TextField
             id="username"
             label="Username"
@@ -132,7 +148,7 @@ export const LoginForm: FC = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2} justify="center">
-        <Grid item xs={10} sm={5} className={classes.marginTop}>
+        <Grid item xs={10} sm={4} className={classes.marginTop}>
           <TextField
             id="username"
             label="Password"
@@ -154,7 +170,7 @@ export const LoginForm: FC = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2} justify="center">
-        <Grid item xs={10} sm={5}>
+        <Grid item xs={10} sm={4}>
           <Link
             href="#"
             className="obvious-link"
@@ -185,37 +201,6 @@ export const LoginForm: FC = () => {
             disabled={!email || !password}
           >
             Login with email
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            onClick={handleGoogleLogin}
-            startIcon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 210 210"
-                className="MuiSvgIcon-root"
-              >
-                <path d="M0 105a105.1 105.1 0 01169-83.2l-24.4 31.7a65 65 0 1022.2 71.5H105V85h105v20a105.1 105.1 0 01-210 0z" />
-              </svg>
-            }
-          >
-            Google login
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            style={{ textTransform: 'none' }}
-            startIcon={<Facebook />}
-            onClick={handleFacebookLogin}
-          >
-            Facebook login
           </Button>
         </Grid>
       </Grid>
