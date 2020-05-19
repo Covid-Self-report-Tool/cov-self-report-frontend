@@ -4,15 +4,11 @@ import { Checkbox, FormControlLabel, Link } from '@material-ui/core';
 type AgreeToTermsTypes = {
   hasAgreedToTerms: boolean;
   dispatchForm: any;
-  classes: {
-    link: string;
-  };
 };
 
 export const AgreeToTerms: FC<AgreeToTermsTypes> = ({
   hasAgreedToTerms,
   dispatchForm,
-  classes,
 }) => (
   <FormControlLabel
     control={
@@ -30,7 +26,7 @@ export const AgreeToTerms: FC<AgreeToTermsTypes> = ({
       <span>
         I agree to the{' '}
         <Link
-          className={classes.link}
+          className="obvious-link"
           href="/terms-of-service"
           target="_blank"
           rel="noopener noreferrer"

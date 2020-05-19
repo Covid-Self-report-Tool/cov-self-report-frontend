@@ -17,10 +17,6 @@ type SimpleModalTypes = {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  leftSideActionsLink: {
-    color: theme.palette.info.main,
-    textDecoration: 'none',
-  },
   actionBtn: {
     minWidth: 40,
   },

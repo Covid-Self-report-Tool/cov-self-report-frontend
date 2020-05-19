@@ -2,23 +2,6 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 
-export const GlobalCss = withStyles({
-  // @global is handled by jss-plugin-global.
-  '@global': {
-    '.simpler-font': {
-      fontFamily: "'Roboto', sans-serif",
-    },
-    // Pushes it to left, but not if it's the only element in the actions
-    '.MuiDialogActions-root > *:first-child:not(:last-child)': {
-      marginRight: 'auto',
-    },
-    // Includes <a> elems styled as buttons (e.g. "Cancel")
-    '.MuiDialogActions-root > .MuiButtonBase-root': {
-      minWidth: 40, // override 60px default (too big for sm btns like "Back")
-    },
-  },
-})(() => null);
-
 // Easy access to theme properties when used in `createMuiTheme` overrides
 // CRED: https://stackoverflow.com/a/57127040/1048518
 const covidTheme = createMuiTheme({
@@ -89,5 +72,26 @@ covidTheme.overrides = {
     dividers: dialogContentPadding,
   },
 };
+
+export const GlobalCss = withStyles({
+  // @global is handled by jss-plugin-global.
+  '@global': {
+    '.simpler-font': {
+      fontFamily: "'Roboto', sans-serif",
+    },
+    // Pushes it to left, but not if it's the only element in the actions
+    '.MuiDialogActions-root > *:first-child:not(:last-child)': {
+      marginRight: 'auto',
+    },
+    // Includes <a> elems styled as buttons (e.g. "Cancel")
+    '.MuiDialogActions-root > .MuiButtonBase-root': {
+      minWidth: 40, // override 60px default (too big for sm btns like "Back")
+    },
+    '.obvious-link': {
+      color: covidTheme.palette.info.main,
+      textDecoration: 'none',
+    },
+  },
+})(() => null);
 
 export const theme = responsiveFontSizes(covidTheme);

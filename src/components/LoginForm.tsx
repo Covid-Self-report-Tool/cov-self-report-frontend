@@ -14,10 +14,6 @@ import { GlobalContext } from 'context';
 import { SimpleModal, VerifyEmailForm } from 'components';
 
 const useStyles = makeStyles(theme => ({
-  link: {
-    color: theme.palette.info.main,
-    textDecoration: 'none',
-  },
   marginTop: {
     marginTop: theme.spacing(1),
   },
@@ -161,7 +157,7 @@ export const LoginForm: FC = () => {
         <Grid item xs={10} sm={5}>
           <Link
             href="#"
-            className={classes.link}
+            className="obvious-link"
             onClick={(e: React.MouseEvent) => {
               e.preventDefault();
               setShowForgotPasswd(true);
@@ -227,7 +223,7 @@ export const LoginForm: FC = () => {
         Don't have an account?{' '}
         <Link
           href="#"
-          className={classes.link}
+          className="obvious-link"
           onClick={(e: React.MouseEvent) => {
             e.preventDefault();
 

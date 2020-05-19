@@ -5,9 +5,6 @@ import { Box, Typography, Link, Popover } from '@material-ui/core';
 import { GlobalContext } from 'components';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  link: {
-    color: theme.palette.info.main,
-  },
   tinyText: {
     fontSize: '0.85rem',
   },
@@ -39,14 +36,14 @@ export const AcctReqExplain: FC = () => {
           aria-haspopup="true"
           href="#"
           onClick={handleClick}
-          className={classes.link}
+          className="obvious-link"
         >
           Why do I need to sign up?
         </Link>{' '}
         Already have an account?{' '}
         <Link
           href="#"
-          className={classes.link}
+          className="obvious-link"
           onClick={(e: React.MouseEvent) => {
             e.preventDefault();
 
@@ -90,7 +87,7 @@ export const AcctReqExplain: FC = () => {
                 href="/privacy-policy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={classes.link}
+                className="obvious-link"
               >
                 privacy policy
               </Link>{' '}

@@ -36,9 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 0,
       lineHeight: 0,
     },
-    link: {
-      color: theme.palette.info.main,
-    },
   })
 );
 
@@ -78,7 +75,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
             this with friends who are unwell. Send us your{' '}
             <a
               target="_blank"
-              className={classes.link}
+              className="obvious-link"
               rel="noopener noreferrer"
               href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
             >
@@ -90,7 +87,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
             To get support and learn more about COVID-19, please visit the{' '}
             <a
               target="_blank"
-              className={classes.link}
+              className="obvious-link"
               rel="noopener noreferrer"
               href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
             >

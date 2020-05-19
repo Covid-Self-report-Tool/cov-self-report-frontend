@@ -36,11 +36,6 @@ const useStyles = makeStyles(theme => ({
   stepper: {
     padding: `12px 4px ${theme.spacing(1)}px`,
   },
-  link: {
-    // TODO: make this a CSS class since it's used in 10+ places
-    color: theme.palette.info.main,
-    textDecoration: 'none',
-  },
 }));
 
 interface ModalTypes {
@@ -254,7 +249,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
           {() => (
             <Link
               href="#"
-              className={classes.link}
+              className="obvious-link"
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
 

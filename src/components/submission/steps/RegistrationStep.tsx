@@ -14,9 +14,6 @@ import {
 } from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
-  link: {
-    color: theme.palette.info.main,
-  },
   marginTop: {
     marginTop: 20,
   },
@@ -107,7 +104,6 @@ export const RegistrationStep: FC<RegistrationStepType> = ({
             <AgreeToTerms
               hasAgreedToTerms={formState.hasAgreedToTerms}
               dispatchForm={dispatchForm}
-              classes={{ link: classes.link }}
             />
           </Grid>
         </Grid>
