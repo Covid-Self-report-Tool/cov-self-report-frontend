@@ -139,57 +139,59 @@ export const SignupForm: FC = () => {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      {!symptomsFormState.hasAgreedToTerms && (
-        <Grid container>
-          <Grid item xs={12}>
-            <AgreeToTerms
-              hasAgreedToTerms={symptomsFormState.hasAgreedToTerms}
-              dispatchForm={symptomsFormDispatch}
-            />
-          </Grid>
-        </Grid>
-      )}
-      {symptomsFormState.hasAgreedToTerms && (
-        <IfFirebaseUnAuthed>
-          {() => (
-            <>
-              <Typography variant="h4">Choose a signup method</Typography>
-              <AcctReqExplain />
-              <p style={{ textAlign: 'center' }}>
-                Already have an account? <SignInLink /> .
-              </p>
-              <Grid
-                container
-                justify="center"
-                style={{ marginTop: 16 }}
-                spacing={1}
-              >
-                <Grid item>
-                  <SignupLoginBtn
-                    type="google"
-                    onClick={handleGoogleLogin}
-                    disabled={false}
-                  />
-                </Grid>
-                <Grid item>
-                  <SignupLoginBtn
-                    type="facebook"
-                    onClick={handleFacebookLogin}
-                    disabled={false}
+      <IfFirebaseUnAuthed>
+        {() => (
+          <>
+            <Typography variant="h4">Choose a signup method</Typography>
+            <AcctReqExplain />
+            {!symptomsFormState.hasAgreedToTerms && (
+              <Grid container>
+                <Grid item xs={12}>
+                  <AgreeToTerms
+                    hasAgreedToTerms={symptomsFormState.hasAgreedToTerms}
+                    dispatchForm={symptomsFormDispatch}
                   />
                 </Grid>
               </Grid>
-              <Typography variant="body2">
-                <p style={{ marginTop: 16 }}>OR, sign up with email:</p>
-              </Typography>
-              <EmailSignupFields
-                handleSignupError={handleSignupError}
-                handleSignupSuccess={handleSignupSuccess}
-              />
-            </>
-          )}
-        </IfFirebaseUnAuthed>
-      )}
+            )}
+            {symptomsFormState.hasAgreedToTerms && (
+              <>
+                <Grid
+                  container
+                  justify="center"
+                  style={{ marginTop: 16 }}
+                  spacing={1}
+                >
+                  <Grid item>
+                    <SignupLoginBtn
+                      type="google"
+                      onClick={handleGoogleLogin}
+                      disabled={false}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <SignupLoginBtn
+                      type="facebook"
+                      onClick={handleFacebookLogin}
+                      disabled={false}
+                    />
+                  </Grid>
+                </Grid>
+                <Typography variant="body2">
+                  <p style={{ marginTop: 16 }}>OR, sign up with email:</p>
+                </Typography>
+                <EmailSignupFields
+                  handleSignupError={handleSignupError}
+                  handleSignupSuccess={handleSignupSuccess}
+                />
+              </>
+            )}
+            <p style={{ textAlign: 'center' }}>
+              Already have an account? <SignInLink /> .
+            </p>
+          </>
+        )}
+      </IfFirebaseUnAuthed>
     </div>
   );
 };
