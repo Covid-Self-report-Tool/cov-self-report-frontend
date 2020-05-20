@@ -15,7 +15,7 @@ import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 
 import firebase from 'config/firebase';
 import { postFormData } from 'utils/api';
-import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
+import { signUp } from 'utils/firebase';
 import { GlobalContext } from 'components';
 import {
   SymptomStep,
@@ -24,7 +24,11 @@ import {
   RegistrationStep,
 } from 'components/submission/steps';
 import { UserContext } from 'context';
-import { formReducer, initialFormState, SignInLink } from 'components/signup';
+import {
+  formReducer,
+  emailSignupFormInitialState,
+  SignInLink,
+} from 'components/signup';
 
 const getSteps = () => {
   return ['Symptoms', 'Tests', 'Location', 'Submit'];
@@ -47,11 +51,14 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
+  const {
+    state: symptomsFormState,
+    dispatch: dispatchSymptomsForm,
+  } = useContext(UserContext);
   const { dispatch } = useContext(GlobalContext);
-  const [registrationState, registrationDispatch] = useReducer(
+  const [signupFormState, signupFormDispatch] = useReducer(
     formReducer,
-    initialFormState
+    emailSignupFormInitialState
   );
   const steps = getSteps();
 
@@ -70,18 +77,18 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       case 1:
         // All the last steps of this form
         if (
-          formState.seenPhysician === false ||
-          formState.testedPositive !== undefined ||
-          formState.doctorDiagnosis !== undefined
+          symptomsFormState.seenPhysician === false ||
+          symptomsFormState.testedPositive !== undefined ||
+          symptomsFormState.doctorDiagnosis !== undefined
         ) {
           return false;
         }
 
         return true;
       case 2:
-        return !formState.location;
+        return !symptomsFormState.location;
       case 3:
-        return !registrationState.captcha;
+        return !signupFormState.captcha;
       default:
         return false;
     }
@@ -92,7 +99,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       try {
         const idToken = await firebaseUser.getIdToken(true);
         setSubmitting(true);
-        await postFormData(formState, idToken);
+        await postFormData(symptomsFormState, idToken);
         history.push('/');
         setSuccessConfOpen(true);
       } catch (err) {
@@ -112,7 +119,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const handleSignupError = (code: string, message: string) => {
     switch (code) {
       case 'auth/email-already-in-use':
-        registrationDispatch({
+        signupFormDispatch({
           type: 'SET_FIELD',
           payload: {
             field: 'emailError',
@@ -121,7 +128,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         });
         break;
       case 'auth/invalid-email':
-        registrationDispatch({
+        signupFormDispatch({
           type: 'SET_FIELD',
           payload: {
             field: 'emailError',
@@ -146,26 +153,6 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
-  const handleGoogleLogin = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    try {
-      await googleLogin();
-    } catch (err) {
-      handleSignupError(err.code, err.message);
-    }
-  };
-
-  const handleFacebookLogin = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    try {
-      await facebookLogin();
-    } catch (err) {
-      handleSignupError(err.code, err.message);
-    }
-  };
-
   const handleSubmit = async () => {
     try {
       if (user) {
@@ -174,9 +161,9 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       // hasn't registered yet
       else {
         await signUp(
-          registrationState.email,
-          registrationState.password,
-          registrationState.password2
+          signupFormState.email,
+          signupFormState.password,
+          signupFormState.password2
         );
 
         setSubmitting(true);
@@ -192,17 +179,17 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const isLastStep = () => {
     return (
       user &&
-      formState.location &&
-      formState.hasAgreedToTerms &&
+      symptomsFormState.location &&
+      symptomsFormState.hasAgreedToTerms &&
       activeStep === steps.length - 1
     );
   };
 
   const canSubmit = () => {
     if (user) {
-      return formState.hasAgreedToTerms;
+      return symptomsFormState.hasAgreedToTerms;
     }
-    return formState.hasAgreedToTerms && registrationState.captcha;
+    return symptomsFormState.hasAgreedToTerms && signupFormState.captcha;
   };
 
   const displayStep = (step: number) => {
@@ -211,19 +198,15 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
         return <SymptomStep setActiveStep={setActiveStep} />;
       case 1:
         return (
-          <TestingStep formState={formState} dispatchForm={dispatchForm} />
+          <TestingStep
+            formState={symptomsFormState}
+            dispatchForm={dispatchSymptomsForm}
+          />
         );
       case 2:
         return <LocationDetailsStep />;
       case 3:
-        return (
-          <RegistrationStep
-            state={registrationState}
-            dispatch={registrationDispatch}
-            handleFacebookLogin={handleFacebookLogin}
-            handleGoogleLogin={handleGoogleLogin}
-          />
-        );
+        return <RegistrationStep />;
       default:
         return null;
     }

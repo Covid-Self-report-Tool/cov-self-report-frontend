@@ -1,9 +1,18 @@
 import React, { FC, useReducer, useContext } from 'react';
+import { IfFirebaseUnAuthed } from '@react-firebase/auth';
+import { Grid, Typography } from '@material-ui/core';
 
 import { googleLogin, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'components';
+import { UserContext } from 'context';
 import { initialFormStateType, actionType } from 'components/signup/types';
-import { EmailSignupFields, SignupLoginBtns } from 'components/signup';
+import {
+  EmailSignupFields,
+  AgreeToTerms,
+  AcctReqExplain,
+  SignupLoginBtn,
+  SignInLink,
+} from 'components/signup';
 
 declare global {
   interface Window {
@@ -11,7 +20,7 @@ declare global {
   }
 }
 
-export const initialFormState = {
+export const emailSignupFormInitialState = {
   email: '',
   password: '',
   password2: '',
@@ -52,10 +61,17 @@ window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
   const { dispatch } = useContext(GlobalContext);
-  const [, dispatchForm] = useReducer(formReducer, initialFormState);
+  const [, registrationFormDispatch] = useReducer(
+    formReducer,
+    emailSignupFormInitialState
+  );
+  const {
+    state: symptomsFormState,
+    dispatch: symptomsFormDispatch,
+  } = useContext(UserContext);
 
   const setFormValue = (field: string, value: string) => {
-    dispatchForm({ type: 'SET_FIELD', payload: { field, value } });
+    registrationFormDispatch({ type: 'SET_FIELD', payload: { field, value } });
   };
 
   const handleSignupError = (code: string, message: string) => {
@@ -121,25 +137,59 @@ export const SignupForm: FC = () => {
     }
   };
 
-  const btnsConfig = {
-    google: {
-      onClick: handleGoogleLogin,
-      disabled: false,
-    },
-    facebook: {
-      onClick: handleFacebookLogin,
-      disabled: false,
-    },
-  };
-
   return (
-    <>
-      {/* TODO: add agree to terms checkbox */}
-      <SignupLoginBtns config={btnsConfig} />
-      <EmailSignupFields
-        handleSignupError={handleSignupError}
-        handleSignupSuccess={handleSignupSuccess}
-      />
-    </>
+    <div style={{ textAlign: 'center' }}>
+      {!symptomsFormState.hasAgreedToTerms && (
+        <Grid container>
+          <Grid item xs={12}>
+            <AgreeToTerms
+              hasAgreedToTerms={symptomsFormState.hasAgreedToTerms}
+              dispatchForm={symptomsFormDispatch}
+            />
+          </Grid>
+        </Grid>
+      )}
+      {symptomsFormState.hasAgreedToTerms && (
+        <IfFirebaseUnAuthed>
+          {() => (
+            <>
+              <Typography variant="h4">Choose a signup method</Typography>
+              <AcctReqExplain />
+              <p style={{ textAlign: 'center' }}>
+                Already have an account? <SignInLink /> .
+              </p>
+              <Grid
+                container
+                justify="center"
+                style={{ marginTop: 16 }}
+                spacing={1}
+              >
+                <Grid item>
+                  <SignupLoginBtn
+                    type="google"
+                    onClick={handleGoogleLogin}
+                    disabled={false}
+                  />
+                </Grid>
+                <Grid item>
+                  <SignupLoginBtn
+                    type="facebook"
+                    onClick={handleFacebookLogin}
+                    disabled={false}
+                  />
+                </Grid>
+              </Grid>
+              <Typography variant="body2">
+                <p>OR, log in using email:</p>
+              </Typography>
+              <EmailSignupFields
+                handleSignupError={handleSignupError}
+                handleSignupSuccess={handleSignupSuccess}
+              />
+            </>
+          )}
+        </IfFirebaseUnAuthed>
+      )}
+    </div>
   );
 };

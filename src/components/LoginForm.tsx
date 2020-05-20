@@ -123,7 +123,7 @@ export const LoginForm: FC = () => {
         </Grid>
       </Grid>
       <Typography variant="body2" className={classes.marginTop} align="center">
-        <p>OR, sign in using email:</p>
+        <p>OR, sign up with email:</p>
       </Typography>
       <Grid container spacing={2} justify="center">
         <Grid item xs={10} sm={4} className={classes.marginTop}>
