@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { Container, Button } from '@material-ui/core';
 
-import { triggerBadRequest, getHtmlFromS3 } from 'utils/api';
+import { triggerBadRequest, fetchGithubHtml } from 'utils/api';
 import { Breadcrumb, GlobalContext } from 'components';
 
 const ErrorTriggerBtns: FC = () => {
@@ -24,7 +24,7 @@ const ErrorTriggerBtns: FC = () => {
 
   const handleBadHelpClick = async () => {
     try {
-      await getHtmlFromS3('not-real.html');
+      await fetchGithubHtml('not-real.html');
     } catch (err) {
       dispatch({
         type: 'TOGGLE_UI_ALERT',

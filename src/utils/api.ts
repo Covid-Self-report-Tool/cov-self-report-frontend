@@ -74,7 +74,7 @@ export const getSubmittedCases = async () => {
 // export const getStateData
 // export const getCountyData
 
-export const getHtmlFromS3 = async (filename: string) =>
+export const fetchGithubHtml = async (filename: string) =>
   await superagent
     .get(`${CLOUD_HTML_BASE_URL}/${filename}`)
     .set('Accept', 'text/html; charset=utf8');
@@ -88,7 +88,7 @@ export const bootstrapApp = async () => {
 
 const prefetchAboutData = async () => {
   htmlPages.forEach(async page => {
-    await queryCache.prefetchQuery(page, getHtmlFromS3, {
+    await queryCache.prefetchQuery(page, fetchGithubHtml, {
       staleTime: Infinity,
     });
   });

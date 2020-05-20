@@ -1,5 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Checkbox, FormControlLabel, Link } from '@material-ui/core';
+
+// TODO: break out About stuff into sub-directory
+import { SimpleModal, AboutSection } from 'components';
 
 type AgreeToTermsTypes = {
   hasAgreedToTerms: boolean;
@@ -9,32 +12,51 @@ type AgreeToTermsTypes = {
 export const AgreeToTerms: FC<AgreeToTermsTypes> = ({
   hasAgreedToTerms,
   dispatchForm,
-}) => (
-  <FormControlLabel
-    control={
-      <Checkbox
-        name="checkedB"
-        color="primary"
-        data-cy="has-agreed-to-terms"
-        checked={!!hasAgreedToTerms}
-        onChange={() => {
-          dispatchForm({ type: 'TOGGLE_AGREED' });
-        }}
+}) => {
+  const [showTermsModal, setShowTermsModal] = useState(false);
+
+  return (
+    <>
+      <FormControlLabel
+        control={
+          <Checkbox
+            name="checkedB"
+            color="primary"
+            data-cy="has-agreed-to-terms"
+            checked={!!hasAgreedToTerms}
+            onChange={() => {
+              dispatchForm({ type: 'TOGGLE_AGREED' });
+            }}
+          />
+        }
+        label={
+          <span>
+            I agree to the{' '}
+            <Link
+              className="obvious-link"
+              href="#"
+              onClick={(e: React.MouseEvent) => {
+                e.preventDefault();
+                setShowTermsModal(true);
+              }}
+            >
+              terms of service
+            </Link>
+            .
+          </span>
+        }
       />
-    }
-    label={
-      <span>
-        I agree to the{' '}
-        <Link
-          className="obvious-link"
-          href="/terms-of-service"
-          target="_blank"
-          rel="noopener noreferrer"
+      {showTermsModal && (
+        <SimpleModal
+          title="Terms of service"
+          onClose={() => {
+            setShowTermsModal(false);
+            return null;
+          }}
         >
-          Terms of service
-        </Link>
-        .
-      </span>
-    }
-  />
-);
+          <AboutSection width="100%" filename="terms-of-service.html" />
+        </SimpleModal>
+      )}
+    </>
+  );
+};

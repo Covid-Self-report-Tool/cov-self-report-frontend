@@ -20,14 +20,16 @@ export const RegistrationStep: FC = () => {
         payload: 'signup',
       });
     }
-  }, []);
+  }, [user, dispatch]);
 
   return (
     <>
       <DialogTitle>Submit</DialogTitle>
       <DialogContent dividers>
         <IfFirebaseAuthed>
-          {({ user }) => <span>Logged in as {user.email}</span>}
+          {({ user }) => (
+            <p style={{ textAlign: 'center' }}>Logged in as {user.email}</p>
+          )}
         </IfFirebaseAuthed>
         {/* Fallback in case the user cancels the signup/login modal */}
         <IfFirebaseUnAuthed>{() => <SignupForm />}</IfFirebaseUnAuthed>

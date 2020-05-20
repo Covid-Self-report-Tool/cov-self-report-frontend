@@ -212,6 +212,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
+  // TODO: show full size on mobile
   return (
     <Dialog open aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
       <Stepper activeStep={activeStep} className={classes.stepper}>
