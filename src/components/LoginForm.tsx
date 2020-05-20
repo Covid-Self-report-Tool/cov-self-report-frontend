@@ -58,20 +58,38 @@ export const LoginForm: FC = () => {
     }
   };
 
+  // Generic success handler to show user success alert and close modal
+  const handleLoginSuccess = () => {
+    dispatch({
+      type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+      payload: null,
+    });
+
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Login successful!',
+        severity: 'success',
+      },
+    });
+  };
+
   const resetErrors = () => {
     setEmailErrorMessage('');
     setPasswordErrorMessage('');
   };
 
-  const handleLogin = async (event: React.MouseEvent) => {
+  const handleEmailLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
-
     resetErrors();
+
     if (password.length < 6) {
       setPasswordErrorMessage('Password must be at least 6 characters long');
     } else {
       try {
         await login(email, password);
+        handleLoginSuccess();
       } catch (err) {
         handleLoginError(err.code, err.message);
       }
@@ -83,6 +101,7 @@ export const LoginForm: FC = () => {
 
     try {
       await googleLogin();
+      handleLoginSuccess();
     } catch (err) {
       handleLoginError(err.code, err.message);
     }
@@ -93,6 +112,7 @@ export const LoginForm: FC = () => {
 
     try {
       await facebookLogin();
+      handleLoginSuccess();
     } catch (err) {
       handleLoginError(err.code, err.message);
     }
@@ -123,7 +143,7 @@ export const LoginForm: FC = () => {
         </Grid>
       </Grid>
       <Typography variant="body2" className={classes.marginTop} align="center">
-        <p>OR, sign up with email:</p>
+        OR, log in with email:
       </Typography>
       <Grid container spacing={2} justify="center">
         <Grid item xs={10} sm={4} className={classes.marginTop}>
@@ -196,7 +216,7 @@ export const LoginForm: FC = () => {
             variant="contained"
             color="secondary"
             size="small"
-            onClick={handleLogin}
+            onClick={handleEmailLogin}
             startIcon={<Email />}
             disabled={!email || !password}
           >

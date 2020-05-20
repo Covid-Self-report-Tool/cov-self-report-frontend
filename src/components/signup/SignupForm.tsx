@@ -180,7 +180,7 @@ export const SignupForm: FC = () => {
                 </Grid>
               </Grid>
               <Typography variant="body2">
-                <p>OR, log in using email:</p>
+                <p style={{ marginTop: 16 }}>OR, sign up with email:</p>
               </Typography>
               <EmailSignupFields
                 handleSignupError={handleSignupError}

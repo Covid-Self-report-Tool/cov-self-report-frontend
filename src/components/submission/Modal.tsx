@@ -229,9 +229,9 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
       <DialogActions>
         <IfFirebaseUnAuthed>
           {() => (
-            <>
-              Already have an account? <SignInLink />
-            </>
+            <div>
+              Have an account? <SignInLink />
+            </div>
           )}
         </IfFirebaseUnAuthed>
         <Button size="small" to="/" component={RouteLink} color="primary">
