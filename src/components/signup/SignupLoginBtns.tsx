@@ -1,8 +1,7 @@
-import React, { FC, useContext } from 'react';
-import { Grid, Button, Typography, Link } from '@material-ui/core';
+import React, { FC } from 'react';
+import { Grid, Button, Typography } from '@material-ui/core';
 import { Facebook, Email } from '@material-ui/icons';
 
-import { GlobalContext } from 'context';
 import { AcctReqExplain, SignInLink } from 'components/signup';
 
 // TODO: use this for goog/fb click handlers
@@ -77,8 +76,6 @@ export const SignupLoginBtn: FC<SignupLoginBtnConfig> = ({
 };
 
 export const SignupLoginBtns: FC<SignupLoginBtnsType> = ({ config }) => {
-  const { dispatch } = useContext(GlobalContext);
-
   return (
     <>
       <Typography variant="h4">Choose a signup method</Typography>

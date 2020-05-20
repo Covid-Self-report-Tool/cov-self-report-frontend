@@ -1,8 +1,6 @@
-import React, { FC, useReducer, useContext, useState } from 'react';
-import { useHistory } from 'react-router';
-import { Button } from '@material-ui/core';
+import React, { FC, useReducer, useContext } from 'react';
 
-import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
+import { googleLogin, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'components';
 import { initialFormStateType, actionType } from 'components/signup/types';
 import { EmailSignupFields, SignupLoginBtns } from 'components/signup';
@@ -53,10 +51,8 @@ export const formReducer = (
 window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
-  const history = useHistory();
   const { dispatch } = useContext(GlobalContext);
-  const [showEmailFields, setShowEmailFields] = useState(false);
-  const [state, dispatchForm] = useReducer(formReducer, initialFormState);
+  const [, dispatchForm] = useReducer(formReducer, initialFormState);
 
   const setFormValue = (field: string, value: string) => {
     dispatchForm({ type: 'SET_FIELD', payload: { field, value } });
@@ -84,7 +80,7 @@ export const SignupForm: FC = () => {
     }
   };
 
-  // Generic success handler: show user success alert, go to home route
+  // Generic success handler to show user success alert and close modal
   const handleSignupSuccess = () => {
     dispatch({
       type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
@@ -99,31 +95,6 @@ export const SignupForm: FC = () => {
         severity: 'success',
       },
     });
-  };
-
-  const handleEmailSignup = async () => {
-    dispatchForm({ type: 'RESET_FORM_ERRORS' });
-
-    if (state.password.length < 6) {
-      setFormValue(
-        'passwordError',
-        'Password must be at least 6 characters long'
-      );
-    } else if (state.password2.length < 6) {
-      setFormValue(
-        'passwordError2',
-        'Password must be at least 6 characters long'
-      );
-    } else if (state.password !== state.password2) {
-      setFormValue('passwordError2', 'Passwords do not match');
-    } else {
-      try {
-        await signUp(state.email, state.password, state.captcha);
-        handleSignupSuccess();
-      } catch (err) {
-        handleSignupError(err.code, err.message);
-      }
-    }
   };
 
   // Technically signup OR login
@@ -141,6 +112,7 @@ export const SignupForm: FC = () => {
   // Technically signup OR login
   const handleFacebookLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
+
     try {
       await facebookLogin();
       handleSignupSuccess();
@@ -149,42 +121,25 @@ export const SignupForm: FC = () => {
     }
   };
 
-  const SignupWithEmailBtn: FC = () => (
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={handleEmailSignup}
-      size="medium"
-      disabled={!Boolean(state.captcha)}
-    >
-      Sign up with email
-    </Button>
-  );
-
   const btnsConfig = {
-    email: {
-      onClick: () => {
-        setShowEmailFields(true);
-      },
-      disabled: !Boolean(state.captcha),
-    },
     google: {
       onClick: handleGoogleLogin,
-      disabled: !Boolean(state.captcha),
+      disabled: false,
     },
     facebook: {
       onClick: handleFacebookLogin,
-      disabled: !Boolean(state.captcha),
+      disabled: false,
     },
   };
 
   return (
-    <EmailSignupFields
-      state={state}
-      dispatch={dispatchForm}
-      showEmailFields={showEmailFields}
-      renderSignupBtns={() => <SignupLoginBtns config={btnsConfig} />}
-      renderEmailSignupBtn={() => <SignupWithEmailBtn />}
-    />
+    <>
+      {/* TODO: add agree to terms checkbox */}
+      <SignupLoginBtns config={btnsConfig} />
+      <EmailSignupFields
+        handleSignupError={handleSignupError}
+        handleSignupSuccess={handleSignupSuccess}
+      />
+    </>
   );
 };

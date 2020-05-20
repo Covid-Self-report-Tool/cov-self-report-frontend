@@ -1,11 +1,12 @@
-import React, { FC, useEffect, useContext, useState } from 'react';
+import React, { FC, useEffect, useContext, useState, useReducer } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Grid, TextField, InputAdornment } from '@material-ui/core';
+import { Grid, TextField, InputAdornment, Button } from '@material-ui/core';
 import { AccountCircle, Https } from '@material-ui/icons';
 
 import firebase from 'config/firebase';
-import { initialFormStateType } from 'components/signup/types';
+import { signUp } from 'utils/firebase';
 import { GlobalContext } from 'context';
+import { initialFormState, formReducer } from 'components/signup';
 
 declare global {
   interface Window {
@@ -20,30 +21,51 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type EmailSignupFieldsType = {
-  dispatch: any;
-  state: initialFormStateType;
-  renderSignupBtns: () => React.ReactNode;
-  renderEmailSignupBtn: () => React.ReactNode;
-  showEmailFields: Boolean;
+  handleSignupError: (code: string, message: string) => void;
+  handleSignupSuccess: () => void;
 };
 
 export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
-  state,
-  dispatch,
-  showEmailFields,
-  renderSignupBtns,
-  renderEmailSignupBtn,
+  handleSignupError,
+  handleSignupSuccess,
 }) => {
   const classes = useStyles();
   const [captchaClicked, setCaptchaClicked] = useState(false);
   const { dispatch: dispatchGlobal } = useContext(GlobalContext);
+  const [formState, dispatchForm] = useReducer(formReducer, initialFormState);
 
   const setFormValue = (field: string, value: string) => {
-    dispatch({ type: 'SET_FIELD', payload: { field, value } });
+    dispatchForm({ type: 'SET_FIELD', payload: { field, value } });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValue(e.currentTarget.name, e.currentTarget.value);
+  };
+
+  // Basic form validation for email fields
+  const handleEmailSignup = async () => {
+    dispatchForm({ type: 'RESET_FORM_ERRORS' });
+
+    if (formState.password.length < 6) {
+      setFormValue(
+        'passwordError',
+        'Password must be at least 6 characters long'
+      );
+    } else if (formState.password2.length < 6) {
+      setFormValue(
+        'passwordError2',
+        'Password must be at least 6 characters long'
+      );
+    } else if (formState.password !== formState.password2) {
+      setFormValue('passwordError2', 'Passwords do not match');
+    } else {
+      try {
+        await signUp(formState.email, formState.password, formState.captcha);
+        handleSignupSuccess();
+      } catch (err) {
+        handleSignupError(err.code, err.message);
+      }
+    }
   };
 
   useEffect(() => {
@@ -80,15 +102,7 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
         id="recaptcha"
         style={{ display: !captchaClicked ? 'block' : 'none' }}
       />
-      <div style={{ display: captchaClicked ? 'block' : 'none' }}>
-        {renderSignupBtns()}
-      </div>
-      <Grid
-        container
-        spacing={2}
-        style={{ display: showEmailFields ? 'flex' : 'none' }}
-        justify="center"
-      >
+      <Grid container spacing={2} style={{ display: 'flex' }} justify="center">
         <Grid item xs={12} sm={10} className={classes.marginTop}>
           <TextField
             id="email"
@@ -96,10 +110,10 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             type="email"
             name="email"
             data-cy="register-email-field"
-            value={state.email}
+            value={formState.email}
             onChange={handleChange}
-            error={!!state.emailError}
-            helperText={state.emailError}
+            error={!!formState.emailError}
+            helperText={formState.emailError}
             fullWidth
             required
             variant="outlined"
@@ -119,12 +133,12 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             type="password"
             name="password"
             data-cy="register-password-field"
-            value={state.password}
+            value={formState.password}
             onChange={handleChange}
             fullWidth
             required
-            error={!!state.passwordError}
-            helperText={state.passwordError}
+            error={!!formState.passwordError}
+            helperText={formState.passwordError}
             variant="outlined"
             InputProps={{
               startAdornment: (
@@ -142,12 +156,12 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             type="password"
             name="password2"
             data-cy="register-password2-field"
-            value={state.password2}
+            value={formState.password2}
             onChange={handleChange}
             fullWidth
             required
-            error={!!state.passwordError2}
-            helperText={state.passwordError2}
+            error={!!formState.passwordError2}
+            helperText={formState.passwordError2}
             variant="outlined"
             InputProps={{
               startAdornment: (
@@ -164,7 +178,15 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
           className={classes.marginTop}
           style={{ textAlign: 'center' }}
         >
-          {renderEmailSignupBtn()}
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleEmailSignup}
+            size="medium"
+            disabled={!Boolean(formState.captcha)}
+          >
+            Sign up with email
+          </Button>
         </Grid>
       </Grid>
       <Grid container justify="center"></Grid>

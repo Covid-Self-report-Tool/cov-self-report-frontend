@@ -7,7 +7,7 @@ import {
   InputAdornment,
   Link,
 } from '@material-ui/core';
-import { AccountCircle, Https, Facebook, Email } from '@material-ui/icons';
+import { AccountCircle, Https, Email } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { googleLogin, login, facebookLogin } from 'utils/firebase';
