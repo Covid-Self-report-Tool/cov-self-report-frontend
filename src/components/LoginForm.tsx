@@ -10,6 +10,7 @@ import {
 import { AccountCircle, Https, Email } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { isValidUserAgent } from 'utils';
 import { googleLogin, login, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'context';
 import { SimpleModal, VerifyEmailForm } from 'components';
@@ -24,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 export const LoginForm: FC = () => {
   const classes = useStyles();
   const { dispatch } = useContext(GlobalContext);
+  const isLegitBrowser = isValidUserAgent();
 
   const [showForgotPasswd, setShowForgotPasswd] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
@@ -84,15 +86,11 @@ export const LoginForm: FC = () => {
     event.preventDefault();
     resetErrors();
 
-    if (password.length < 6) {
-      setPasswordErrorMessage('Password must be at least 6 characters long');
-    } else {
-      try {
-        await login(email, password);
-        handleLoginSuccess();
-      } catch (err) {
-        handleLoginError(err.code, err.message);
-      }
+    try {
+      await login(email, password);
+      handleLoginSuccess();
+    } catch (err) {
+      handleLoginError(err.code, err.message);
     }
   };
 
@@ -127,7 +125,7 @@ export const LoginForm: FC = () => {
   };
 
   return (
-    <>
+    <div style={{ textAlign: 'center' }}>
       <Typography variant="h4">Choose a login method</Typography>
       <Grid
         container
@@ -136,11 +134,30 @@ export const LoginForm: FC = () => {
         className={classes.marginTop}
       >
         <Grid item>
-          <SignupLoginBtn type="google" onClick={handleGoogleLogin} />
+          <SignupLoginBtn
+            disabled={!isLegitBrowser}
+            type="google"
+            onClick={handleGoogleLogin}
+          />
         </Grid>
         <Grid item>
-          <SignupLoginBtn type="facebook" onClick={handleFacebookLogin} />
+          <SignupLoginBtn
+            disabled={!isLegitBrowser}
+            type="facebook"
+            onClick={handleFacebookLogin}
+          />
         </Grid>
+        {!isLegitBrowser && (
+          <Grid
+            item
+            xs={11}
+            className="simpler-font"
+            style={{ fontSize: '0.6rem' }}
+          >
+            To log in using Facebook or Google, please open this site in a web
+            browser such as Safari or Chrome.
+          </Grid>
+        )}
       </Grid>
       <Typography variant="body2" className={classes.marginTop} align="center">
         OR, log in with email:
@@ -253,6 +270,6 @@ export const LoginForm: FC = () => {
           <VerifyEmailForm />
         </SimpleModal>
       )}
-    </>
+    </div>
   );
 };

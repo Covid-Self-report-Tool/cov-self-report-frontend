@@ -9,6 +9,7 @@ export const prettyPrint = (value: number) => {
     minimumFractionDigits: 0,
   });
 };
+
 /** https://www.whatismybrowser.com/guides/the-latest-user-agent/
  * Chrome:
  *  { Chrome: Windows, Mac OS, Linux, Android },
@@ -22,17 +23,20 @@ export const prettyPrint = (value: number) => {
  *  { MSIE: IE 8, IE9, IE10 }
  *  { Trident: IE 11 }
  */
+// FB/Google auth do not work from within iOS FB or LinkedIn in-app "browsers"
 export const isValidUserAgent = () => {
   const USER_AGENT = navigator.userAgent;
 
-  return USER_AGENT.indexOf("Chrome") !== -1
-      || USER_AGENT.indexOf("CriOS") !== -1
-      || USER_AGENT.indexOf("Firefox") !== -1
-      || USER_AGENT.indexOf("FxiOS") !== -1
-      || USER_AGENT.indexOf("Safari") !== -1
-      || USER_AGENT.indexOf("MSIE") !== -1
-      || USER_AGENT.indexOf("Trident") !== -1;
-}
+  return (
+    USER_AGENT.indexOf('Chrome') !== -1 ||
+    USER_AGENT.indexOf('CriOS') !== -1 ||
+    USER_AGENT.indexOf('Firefox') !== -1 ||
+    USER_AGENT.indexOf('FxiOS') !== -1 ||
+    USER_AGENT.indexOf('Safari') !== -1 ||
+    USER_AGENT.indexOf('MSIE') !== -1 ||
+    USER_AGENT.indexOf('Trident') !== -1
+  );
+};
 
 // For the ticker card totals...
 export const calculateTotals = (

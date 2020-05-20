@@ -2,6 +2,7 @@ import React, { FC, useReducer, useContext } from 'react';
 import { IfFirebaseUnAuthed } from '@react-firebase/auth';
 import { Grid, Typography } from '@material-ui/core';
 
+import { isValidUserAgent } from 'utils';
 import { googleLogin, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'components';
 import { UserContext } from 'context';
@@ -61,6 +62,7 @@ window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
   const { dispatch } = useContext(GlobalContext);
+  const isLegitBrowser = isValidUserAgent();
   const [, registrationFormDispatch] = useReducer(
     formReducer,
     emailSignupFormInitialState
@@ -166,19 +168,30 @@ export const SignupForm: FC = () => {
                     <SignupLoginBtn
                       type="google"
                       onClick={handleGoogleLogin}
-                      disabled={false}
+                      disabled={!isLegitBrowser}
                     />
                   </Grid>
                   <Grid item>
                     <SignupLoginBtn
                       type="facebook"
                       onClick={handleFacebookLogin}
-                      disabled={false}
+                      disabled={!isLegitBrowser}
                     />
                   </Grid>
+                  {!isLegitBrowser && (
+                    <Grid
+                      item
+                      xs={11}
+                      className="simpler-font"
+                      style={{ fontSize: '0.6rem' }}
+                    >
+                      To sign up using Facebook or Google, please open this site
+                      in a web browser such as Safari or Chrome.
+                    </Grid>
+                  )}
                 </Grid>
-                <Typography variant="body2">
-                  <p style={{ marginTop: 16 }}>OR, sign up with email:</p>
+                <Typography variant="h6">
+                  <p>OR, sign up with email:</p>
                 </Typography>
                 <EmailSignupFields
                   handleSignupError={handleSignupError}
