@@ -27,6 +27,7 @@ interface AboutContTypes {
 
 interface AboutType {
   filename: string;
+  width?: string;
 }
 
 interface BreadcrumbType {
@@ -62,12 +63,14 @@ export const AboutFooter: FC = () => (
   </section>
 );
 
-export const AboutSection: FC<AboutType> = ({ filename }) => {
+export const AboutSection: FC<AboutType> = ({ filename, width = '100%' }) => {
   const { dispatch } = useContext(GlobalContext);
   const { data } = useAbout(filename, dispatch);
 
   return (
-    <div>{data && <div dangerouslySetInnerHTML={{ __html: data.text }} />}</div>
+    <div style={{ width }}>
+      {data && <div dangerouslySetInnerHTML={{ __html: data.text }} />}
+    </div>
   );
 };
 
