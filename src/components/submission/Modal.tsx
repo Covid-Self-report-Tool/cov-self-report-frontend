@@ -1,6 +1,6 @@
 import React, { useState, useContext, FC, useReducer } from 'react';
 import { Link as RouteLink, useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
   Dialog,
   DialogActions,
@@ -9,6 +9,7 @@ import {
   Step,
   StepLabel,
   CircularProgress,
+  useMediaQuery,
 } from '@material-ui/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { IfFirebaseUnAuthed } from '@react-firebase/auth';
@@ -47,6 +48,7 @@ interface ModalTypes {
 
 export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
   const classes = useStyles();
+  const theme = useTheme();
   const history = useHistory();
   const [user] = useAuthState(firebase.auth());
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -61,6 +63,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     emailSignupFormInitialState
   );
   const steps = getSteps();
+  const smallAndUp = useMediaQuery(theme.breakpoints.up('sm')); // >= 600ish px
 
   const handleNext = () => {
     // Next button on registration acts as signup
@@ -212,9 +215,13 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
     }
   };
 
-  // TODO: show full size on mobile
   return (
-    <Dialog open aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
+    <Dialog
+      open
+      aria-labelledby="form-dialog-title"
+      fullWidth
+      fullScreen={!smallAndUp}
+    >
       <Stepper activeStep={activeStep} className={classes.stepper}>
         {steps.map(label => {
           const stepProps: { completed?: boolean } = {};

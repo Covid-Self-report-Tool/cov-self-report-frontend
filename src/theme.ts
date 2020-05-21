@@ -26,7 +26,7 @@ const covidTheme = createMuiTheme({
 
 // Dialogs with dividers are a separate class from those without
 const dialogContentPadding = {
-  padding: `${covidTheme.spacing(3)}px 12px`,
+  padding: `${covidTheme.spacing(3)}px ${covidTheme.spacing(2)}px`,
   [covidTheme.breakpoints.up('sm')]: {
     padding: covidTheme.spacing(3),
   },
@@ -68,8 +68,16 @@ covidTheme.overrides = {
     root: dialogHeadFootSpacing,
   },
   MuiDialogContent: {
-    root: dialogContentPadding,
-    dividers: dialogContentPadding,
+    root: {
+      ...dialogContentPadding,
+      display: 'flex',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      minHeight: 225, // otherwise looks silly when there is not much content
+    },
+    dividers: {
+      ...dialogContentPadding,
+    },
   },
 };
 

@@ -17,14 +17,15 @@ export const RegistrationStep: FC = () => {
                 Almost there! Click the <b>SUBMIT</b> button below to upload
                 your case.
               </h4>
-              <p style={{ fontSize: '0.75rem' }}>
+              <p
+                style={{ fontSize: '0.75rem', marginLeft: 20, marginRight: 20 }}
+              >
                 You are logged in as {user.email} and are ready to submit your
                 case. Just click <b>SUBMIT</b> and you are all set.
               </p>
             </div>
           )}
         </IfFirebaseAuthed>
-        {/* Fallback in case the user cancels the signup/login modal */}
         <IfFirebaseUnAuthed>{() => <SignupForm />}</IfFirebaseUnAuthed>
       </DialogContent>
     </>
