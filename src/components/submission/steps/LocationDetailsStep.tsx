@@ -39,21 +39,43 @@ export const LocationDetailsStep: FC = () => {
           country: null,
         };
 
+        // Note that this is for STORING the location data, not fetching it. The
+        // latter is controlled by the `searchOptions` of <PlacesAutocomplete>
+        // component. So even if we want to fetch all the way down to postal
+        // code level, we still need to store the data at
+        // city/county/state/country levels. See additional in-code comments in
+        // related methods...
         results[0].address_components.forEach((component: any) => {
-          if (component.types.includes('locality')) {
-            addressComponents.city = component.long_name;
-          } else if (component.types.includes('administrative_area_level_1')) {
-            addressComponents.state = component.long_name;
-          } else if (component.types.includes('administrative_area_level_2')) {
-            addressComponents.county = component.long_name;
-          } else if (component.types.includes('country')) {
-            addressComponents.country = component.long_name;
+          const { types, long_name } = component;
+
+          // Docs for this mess
+          // developers.google.com/maps/documentation/geocoding/intro#Types
+          if (
+            types.includes('locality') ||
+            types.includes('neighborhood') ||
+            types.includes('colloquial_area') ||
+            types.includes('sublocality') ||
+            types.includes('sublocality_level_1') ||
+            types.includes('sublocality_level_2') ||
+            types.includes('sublocality_level_3') ||
+            types.includes('sublocality_level_4') ||
+            types.includes('sublocality_level_5')
+          ) {
+            addressComponents.city = long_name;
+          } else if (types.includes('administrative_area_level_1')) {
+            addressComponents.state = long_name;
+          } else if (types.includes('administrative_area_level_2')) {
+            addressComponents.county = long_name;
+          } else if (types.includes('country')) {
+            addressComponents.country = long_name;
           }
         });
+
         dispatchForm({
           type: 'SET_ADDRESS_COMPONENTS',
           payload: addressComponents,
         });
+
         return results;
       })
       .then((results: any) => getLatLng(results[0]))
@@ -79,9 +101,11 @@ export const LocationDetailsStep: FC = () => {
             })
           }
           onSelect={handleSelectAddress}
-          // NOTE: actually need the parentheses around 'regions'
           // https://developers.google.com/places/supported_types#table3
-          searchOptions={{ types: ['(cities)'] }}
+          // `geocode` basically returns everything except businesses, so it
+          // must be filtered client-side. See related in-code comments for more
+          // details.
+          searchOptions={{ types: ['geocode'] }}
           debounce={300}
           shouldFetchSuggestions={
             !!formState.address && formState.address.length > 2
@@ -105,26 +129,47 @@ export const LocationDetailsStep: FC = () => {
               />
               <div className="autocomplete-dropdown-container">
                 {loading && <div>Loading...</div>}
-                {suggestions.map((suggestion, idx) => {
-                  const className = suggestion.active
-                    ? 'suggestion-item--active'
-                    : 'suggestion-item';
-                  // inline style for demonstration purpose
-                  const style = suggestion.active
-                    ? { backgroundColor: grey['600'], cursor: 'pointer' }
-                    : { backgroundColor: '#424242', cursor: 'pointer' };
-                  return (
-                    <div
-                      data-cy={`location-suggestion`}
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                        style,
-                      })}
-                    >
-                      <span>{suggestion.description}</span>
-                    </div>
-                  );
-                })}
+                {suggestions
+                  // Do not include overly broad or overly specific locations.
+                  // This exact set cannot be accomplished using `searchOptions`
+                  // in the Gmaps API, it must be filtered client-side. Note
+                  // that the administrative levels mean different things in
+                  // each country, but overall the below exclusions do what we
+                  // want.
+                  .filter(
+                    suggestion =>
+                      ![
+                        'administrative_area_level_1', // state
+                        'administrative_area_level_2', // county
+                        'country',
+                        'postal_code', // zip code or similar
+                        'premise', // address-ish
+                        'street_address', // address
+                        'subpremise', // address-ish
+                      ].includes(suggestion.types[0])
+                  )
+                  .map(suggestion => {
+                    const className = suggestion.active
+                      ? 'suggestion-item--active'
+                      : 'suggestion-item';
+
+                    // inline style for demonstration purpose
+                    const style = suggestion.active
+                      ? { backgroundColor: grey['600'], cursor: 'pointer' }
+                      : { backgroundColor: '#424242', cursor: 'pointer' };
+
+                    return (
+                      <div
+                        data-cy={`location-suggestion`}
+                        {...getSuggestionItemProps(suggestion, {
+                          className,
+                          style,
+                        })}
+                      >
+                        <span>{suggestion.description}</span>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           )}
