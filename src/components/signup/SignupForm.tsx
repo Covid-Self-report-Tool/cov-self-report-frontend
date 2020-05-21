@@ -190,7 +190,7 @@ export const SignupForm: FC = () => {
                     </Grid>
                   )}
                 </Grid>
-                <Typography variant="h6">
+                <Typography component="div">
                   <p>OR, sign up with email:</p>
                 </Typography>
                 <EmailSignupFields

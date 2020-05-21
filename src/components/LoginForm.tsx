@@ -159,11 +159,11 @@ export const LoginForm: FC = () => {
           </Grid>
         )}
       </Grid>
-      <Typography variant="body2" className={classes.marginTop} align="center">
-        OR, log in with email:
+      <Typography component="div" className={classes.marginTop}>
+        <p className={classes.marginTop}>OR, log in with email:</p>
       </Typography>
-      <Grid container spacing={2} justify="center">
-        <Grid item xs={10} sm={4} className={classes.marginTop}>
+      <Grid container justify="center">
+        <Grid item xs={12} sm={10}>
           <TextField
             id="username"
             label="Username"
@@ -184,8 +184,8 @@ export const LoginForm: FC = () => {
           />
         </Grid>
       </Grid>
-      <Grid container spacing={2} justify="center">
-        <Grid item xs={10} sm={4} className={classes.marginTop}>
+      <Grid container justify="center">
+        <Grid item xs={12} sm={10} className={classes.marginTop}>
           <TextField
             id="username"
             label="Password"
@@ -207,7 +207,7 @@ export const LoginForm: FC = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2} justify="center">
-        <Grid item xs={10} sm={4}>
+        <Grid item xs={12} sm={10}>
           <Link
             href="#"
             className="obvious-link"
