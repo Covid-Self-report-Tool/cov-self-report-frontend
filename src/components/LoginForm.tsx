@@ -1,36 +1,33 @@
 import React, { FC, useState, useContext } from 'react';
 import {
-  Paper,
   Grid,
   TextField,
   Button,
-  FormControlLabel,
-  Checkbox,
+  Typography,
+  InputAdornment,
+  Link,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { Face, Fingerprint } from '@material-ui/icons';
+import { AccountCircle, Https, Email } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { isValidUserAgent } from 'utils';
 import { googleLogin, login, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'context';
+import { SimpleModal, VerifyEmailForm } from 'components';
+import { SignupLoginBtn } from 'components/signup';
 
 const useStyles = makeStyles(theme => ({
-  link: {
-    color: theme.palette.info.main,
-  },
-  paper: {
-    padding: 20,
+  marginTop: {
+    marginTop: theme.spacing(1),
   },
 }));
 
-type LoginFormType = {
-  onLogin?: Function;
-};
-
-export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
+export const LoginForm: FC = () => {
   const classes = useStyles();
   const { dispatch } = useContext(GlobalContext);
+  const isLegitBrowser = isValidUserAgent();
 
+  const [showForgotPasswd, setShowForgotPasswd] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -63,26 +60,37 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
     }
   };
 
+  // Generic success handler to show user success alert and close modal
+  const handleLoginSuccess = () => {
+    dispatch({
+      type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+      payload: null,
+    });
+
+    dispatch({
+      type: 'TOGGLE_UI_ALERT',
+      payload: {
+        open: true,
+        message: 'Login successful!',
+        severity: 'success',
+      },
+    });
+  };
+
   const resetErrors = () => {
     setEmailErrorMessage('');
     setPasswordErrorMessage('');
   };
 
-  const handleLogin = async (event: React.MouseEvent) => {
+  const handleEmailLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
-
     resetErrors();
-    if (password.length < 6) {
-      setPasswordErrorMessage('Password must be at least 6 characters long');
-    } else {
-      try {
-        const resp = await login(email, password);
-        if (onLogin) {
-          onLogin(resp);
-        }
-      } catch (err) {
-        handleLoginError(err.code, err.message);
-      }
+
+    try {
+      await login(email, password);
+      handleLoginSuccess();
+    } catch (err) {
+      handleLoginError(err.code, err.message);
     }
   };
 
@@ -90,10 +98,8 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
     event.preventDefault();
 
     try {
-      const resp = await googleLogin();
-      if (onLogin) {
-        onLogin(resp);
-      }
+      await googleLogin();
+      handleLoginSuccess();
     } catch (err) {
       handleLoginError(err.code, err.message);
     }
@@ -103,10 +109,8 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
     event.preventDefault();
 
     try {
-      const resp = await facebookLogin();
-      if (onLogin) {
-        await onLogin(resp);
-      }
+      await facebookLogin();
+      handleLoginSuccess();
     } catch (err) {
       handleLoginError(err.code, err.message);
     }
@@ -121,85 +125,151 @@ export const LoginForm: FC<LoginFormType> = ({ onLogin }) => {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <div>
-        <Grid container spacing={8} alignItems="flex-end">
-          <Grid item>
-            <Face />
-          </Grid>
-          <Grid item md sm xs>
-            <TextField
-              id="username"
-              label="Username"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              error={!!emailErrorMessage}
-              helperText={emailErrorMessage}
-              fullWidth
-              autoFocus
-              required
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={8} alignItems="flex-end">
-          <Grid item>
-            <Fingerprint />
-          </Grid>
-          <Grid item md sm xs>
-            <TextField
-              id="username"
-              label="Password"
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-              error={!!passwordErrorMessage}
-              helperText={passwordErrorMessage}
-              fullWidth
-              required
-            />
-          </Grid>
-        </Grid>
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <FormControlLabel
-              control={<Checkbox color="primary" />}
-              label="Remember me"
-            />
-          </Grid>
-          <Grid item>
-            <Link to="/verify_email" className={classes.link}>
-              Forgot password?
-            </Link>
-          </Grid>
-        </Grid>
-        <Grid container justify="center" style={{ marginTop: '10px' }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
+    <div style={{ textAlign: 'center' }}>
+      <Typography variant="h4">Choose a login method</Typography>
+      <Grid
+        container
+        spacing={2}
+        justify="center"
+        className={classes.marginTop}
+      >
+        <Grid item>
+          <SignupLoginBtn
+            disabled={!isLegitBrowser}
+            type="google"
             onClick={handleGoogleLogin}
-          >
-            Login with Google
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none' }}
+          />
+        </Grid>
+        <Grid item>
+          <SignupLoginBtn
+            disabled={!isLegitBrowser}
+            type="facebook"
             onClick={handleFacebookLogin}
+          />
+        </Grid>
+        {!isLegitBrowser && (
+          <Grid
+            item
+            xs={11}
+            className="simpler-font"
+            style={{ fontSize: '0.6rem' }}
           >
-            Login with Facebook
+            To log in using Facebook or Google, please open this site in a web
+            browser such as Safari or Chrome.
+          </Grid>
+        )}
+      </Grid>
+      <Typography component="div" className={classes.marginTop}>
+        <p className={classes.marginTop}>OR, log in with email:</p>
+      </Typography>
+      <Grid container justify="center">
+        <Grid item xs={12} sm={10}>
+          <TextField
+            id="username"
+            label="Username"
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            error={!!emailErrorMessage}
+            helperText={emailErrorMessage}
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+      </Grid>
+      <Grid container justify="center">
+        <Grid item xs={12} sm={10} className={classes.marginTop}>
+          <TextField
+            id="username"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            error={!!passwordErrorMessage}
+            helperText={passwordErrorMessage}
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Https />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} justify="center">
+        <Grid item xs={12} sm={10}>
+          <Link
+            href="#"
+            className="obvious-link"
+            onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              setShowForgotPasswd(true);
+              return null;
+            }}
+          >
+            Forgot password?
+          </Link>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        justify="center"
+        className={classes.marginTop}
+        spacing={1}
+        style={{ textAlign: 'center' }}
+      >
+        <Grid item xs={12} sm="auto">
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={handleEmailLogin}
+            startIcon={<Email />}
+            disabled={!email || !password}
+          >
+            Login with email
           </Button>
         </Grid>
-      </div>
-    </Paper>
+      </Grid>
+      <p>
+        Don't have an account?{' '}
+        <Link
+          href="#"
+          className="obvious-link"
+          onClick={(e: React.MouseEvent) => {
+            e.preventDefault();
+
+            dispatch({
+              type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+              payload: 'signup',
+            });
+          }}
+        >
+          Sign up
+        </Link>
+        .
+      </p>
+      {showForgotPasswd && (
+        <SimpleModal
+          title="Forgot password"
+          onClose={() => {
+            setShowForgotPasswd(false);
+            return null;
+          }}
+        >
+          <VerifyEmailForm />
+        </SimpleModal>
+      )}
+    </div>
   );
 };

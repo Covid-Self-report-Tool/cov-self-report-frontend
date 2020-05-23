@@ -65,7 +65,7 @@ export const LocationDetailsStep: FC = () => {
   };
 
   return (
-    <div>
+    <>
       <DialogTitle className={classes.dialogTitle}>
         Where were you when your symptoms began?
       </DialogTitle>
@@ -93,7 +93,7 @@ export const LocationDetailsStep: FC = () => {
             getSuggestionItemProps,
             loading,
           }) => (
-            <div>
+            <>
               <TextField
                 data-cy="location"
                 {...getInputProps({
@@ -126,10 +126,10 @@ export const LocationDetailsStep: FC = () => {
                   );
                 })}
               </div>
-            </div>
+            </>
           )}
         </PlacesAutocomplete>
       </DialogContent>
-    </div>
+    </>
   );
 };

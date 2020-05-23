@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import {
   getCountryGeoJSONData,
   getSubmittedCases,
-  getHtmlFromS3,
+  fetchGithubHtml,
 } from 'utils/api';
 
 const FIVE_MINUTES = 300000;
@@ -39,7 +39,7 @@ export const useSubmitted = (dispatch: any) =>
   });
 
 export const useAbout = (filename: string, dispatch: any) =>
-  useQuery(filename, getHtmlFromS3, {
+  useQuery(filename, fetchGithubHtml, {
     staleTime: Infinity,
     onError: error => {
       dispatch({

@@ -12,4 +12,5 @@ export * from 'components/Snackbar';
 export * from 'components/SplashScreen';
 export * from 'components/SuccessConfModal';
 export * from 'components/UnsupportedBrowserMsg';
+export * from 'components/VerifyEmailForm';
 export * from 'context/GlobalContext';

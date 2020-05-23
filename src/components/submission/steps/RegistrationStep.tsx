@@ -1,142 +1,32 @@
-import React, { FC, useState, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {
-  DialogTitle,
-  DialogContent,
-  Checkbox,
-  FormControlLabel,
-  Link,
-  Grid,
-  Button,
-} from '@material-ui/core';
-import { IfFirebaseUnAuthed, IfFirebaseAuthed } from '@react-firebase/auth';
+import React, { FC } from 'react';
+import { DialogTitle, DialogContent } from '@material-ui/core';
+import 'firebase/auth';
+import { IfFirebaseAuthed, IfFirebaseUnAuthed } from '@react-firebase/auth';
 
-import { SignupFields } from 'components/signup/SignupFields';
-import { initialFormStateType } from 'components/signup/types';
-import { UserContext } from 'context';
+import { SignupForm } from 'components/signup';
 
-const useStyles = makeStyles(theme => ({
-  dialogTitle: {
-    padding: `4px ${theme.spacing(2)}px`,
-  },
-  link: {
-    color: theme.palette.info.main,
-  },
-  marginTop: {
-    marginTop: 20,
-  },
-}));
-
-type RegistrationStepType = {
-  state: initialFormStateType;
-  dispatch: any;
-  handleGoogleLogin: (event: React.MouseEvent<HTMLElement>) => void;
-  handleFacebookLogin: (event: React.MouseEvent<HTMLElement>) => void;
-};
-
-export const RegistrationStep: FC<RegistrationStepType> = ({
-  state,
-  dispatch,
-  handleGoogleLogin,
-  handleFacebookLogin,
-}) => {
-  const classes = useStyles();
-  const { state: formState, dispatch: dispatchForm } = useContext(UserContext);
-
-  const [hasChosenRegistration, setHasChosenRegistration] = useState<Boolean>(
-    false
-  );
-
+export const RegistrationStep: FC = () => {
   return (
     <>
-      <DialogTitle className={classes.dialogTitle}>Submit</DialogTitle>
+      <DialogTitle>Submit</DialogTitle>
       <DialogContent dividers>
-        <IfFirebaseUnAuthed>
-          {() => (
-            <>
-              {!hasChosenRegistration ? (
-                <Grid container>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      data-cy="register-email"
-                      onClick={() => setHasChosenRegistration(true)}
-                    >
-                      Email
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      onClick={handleGoogleLogin}
-                      className={classes.marginTop}
-                    >
-                      Google
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      onClick={handleFacebookLogin}
-                      className={classes.marginTop}
-                    >
-                      Facebook
-                    </Button>
-                  </Grid>
-                </Grid>
-              ) : (
-                <Grid container>
-                  <Grid item xs={12} style={{ overflow: 'hidden' }}>
-                    <SignupFields state={state} dispatch={dispatch} />
-                  </Grid>
-                </Grid>
-              )}
-            </>
-          )}
-        </IfFirebaseUnAuthed>
         <IfFirebaseAuthed>
-          {({ user }) => <span>Logged in as {user.email}</span>}
+          {({ user }) => (
+            <div className="simpler-font" style={{ textAlign: 'center' }}>
+              <h4 style={{ fontWeight: 'normal' }}>
+                Almost there! Click the <b>SUBMIT</b> button below to upload
+                your case.
+              </h4>
+              <p
+                style={{ fontSize: '0.75rem', marginLeft: 20, marginRight: 20 }}
+              >
+                You are logged in as {user.email} and are ready to submit your
+                case. Just click <b>SUBMIT</b> and you are all set.
+              </p>
+            </div>
+          )}
         </IfFirebaseAuthed>
-        <Grid container>
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="checkedB"
-                  color="primary"
-                  data-cy="has-agreed-to-terms"
-                  checked={!!formState.hasAgreedToTerms}
-                  onChange={() => {
-                    dispatchForm({ type: 'TOGGLE_AGREED' });
-                  }}
-                />
-              }
-              label={
-                <span>
-                  I agree to the{' '}
-                  <Link
-                    className={classes.link}
-                    href="/terms-of-service"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Terms of service
-                  </Link>
-                  .
-                </span>
-              }
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Link
-              href="/privacy-policy"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View privacy policy
-            </Link>
-          </Grid>
-        </Grid>
+        <IfFirebaseUnAuthed>{() => <SignupForm />}</IfFirebaseUnAuthed>
       </DialogContent>
     </>
   );
