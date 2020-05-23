@@ -1,18 +1,19 @@
 import React, { FC, useReducer, useContext } from 'react';
-import { useHistory } from 'react-router';
-import { Paper, Grid, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import { signUp, googleLogin, facebookLogin } from 'utils/firebase';
+import { IfFirebaseUnAuthed } from '@react-firebase/auth';
+import { Grid, Typography } from '@material-ui/core';
 
+import { isValidUserAgent } from 'utils';
+import { googleLogin, facebookLogin } from 'utils/firebase';
 import { GlobalContext } from 'components';
+import { UserContext } from 'context';
 import { initialFormStateType, actionType } from 'components/signup/types';
-import { SignupFields } from './SignupFields';
-
-const useStyles = makeStyles({
-  padding: {
-    padding: '20px',
-  },
-});
+import {
+  EmailSignupFields,
+  AgreeToTerms,
+  AcctReqExplain,
+  SignupLoginBtn,
+  SignInLink,
+} from 'components/signup';
 
 declare global {
   interface Window {
@@ -20,7 +21,7 @@ declare global {
   }
 }
 
-export const initialFormState = {
+export const emailSignupFormInitialState = {
   email: '',
   password: '',
   password2: '',
@@ -60,13 +61,19 @@ export const formReducer = (
 window.recaptchaVerifier = window.recaptchaVerifier || {};
 
 export const SignupForm: FC = () => {
-  const history = useHistory();
   const { dispatch } = useContext(GlobalContext);
-  const classes = useStyles();
-  const [state, dispatchForm] = useReducer(formReducer, initialFormState);
+  const isLegitBrowser = isValidUserAgent();
+  const [, registrationFormDispatch] = useReducer(
+    formReducer,
+    emailSignupFormInitialState
+  );
+  const {
+    state: symptomsFormState,
+    dispatch: symptomsFormDispatch,
+  } = useContext(UserContext);
 
   const setFormValue = (field: string, value: string) => {
-    dispatchForm({ type: 'SET_FIELD', payload: { field, value } });
+    registrationFormDispatch({ type: 'SET_FIELD', payload: { field, value } });
   };
 
   const handleSignupError = (code: string, message: string) => {
@@ -91,9 +98,12 @@ export const SignupForm: FC = () => {
     }
   };
 
-  // Generic success handler: show user success alert, go to home route
+  // Generic success handler to show user success alert and close modal
   const handleSignupSuccess = () => {
-    history.push('/');
+    dispatch({
+      type: 'TOGGLE_LOGIN_SIGNUP_MODAL',
+      payload: null,
+    });
 
     dispatch({
       type: 'TOGGLE_UI_ALERT',
@@ -103,31 +113,6 @@ export const SignupForm: FC = () => {
         severity: 'success',
       },
     });
-  };
-
-  const handleEmailSignup = async () => {
-    dispatchForm({ type: 'RESET_FORM_ERRORS' });
-
-    if (state.password.length < 6) {
-      setFormValue(
-        'passwordError',
-        'Password must be at least 6 characters long'
-      );
-    } else if (state.password2.length < 6) {
-      setFormValue(
-        'passwordError2',
-        'Password must be at least 6 characters long'
-      );
-    } else if (state.password !== state.password2) {
-      setFormValue('passwordError2', 'Passwords do not match');
-    } else {
-      try {
-        await signUp(state.email, state.password, state.captcha);
-        handleSignupSuccess();
-      } catch (err) {
-        handleSignupError(err.code, err.message);
-      }
-    }
   };
 
   // Technically signup OR login
@@ -145,6 +130,7 @@ export const SignupForm: FC = () => {
   // Technically signup OR login
   const handleFacebookLogin = async (event: React.MouseEvent) => {
     event.preventDefault();
+
     try {
       await facebookLogin();
       handleSignupSuccess();
@@ -154,37 +140,71 @@ export const SignupForm: FC = () => {
   };
 
   return (
-    <Paper className={classes.padding}>
-      <>
-        <SignupFields state={state} dispatch={dispatchForm} />
-        <Grid container justify="center" style={{ marginTop: '20px' }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleEmailSignup}
-            disabled={!Boolean(state.captcha)}
-          >
-            Sign Up
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleGoogleLogin}
-          >
-            Login with Google
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ textTransform: 'none', marginRight: '20px' }}
-            onClick={handleFacebookLogin}
-          >
-            Login with Facebook
-          </Button>
-        </Grid>
-      </>
-    </Paper>
+    <div style={{ textAlign: 'center' }}>
+      <IfFirebaseUnAuthed>
+        {() => (
+          <>
+            <Typography variant="h4">Choose a signup method</Typography>
+            <AcctReqExplain />
+            {!symptomsFormState.hasAgreedToTerms && (
+              <Grid container>
+                <Grid item xs={12}>
+                  <AgreeToTerms
+                    hasAgreedToTerms={symptomsFormState.hasAgreedToTerms}
+                    dispatchForm={symptomsFormDispatch}
+                  />
+                </Grid>
+              </Grid>
+            )}
+            {symptomsFormState.hasAgreedToTerms && (
+              <>
+                <Grid
+                  container
+                  justify="center"
+                  style={{ marginTop: 16 }}
+                  spacing={1}
+                >
+                  <Grid item>
+                    <SignupLoginBtn
+                      type="google"
+                      onClick={handleGoogleLogin}
+                      disabled={!isLegitBrowser}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <SignupLoginBtn
+                      type="facebook"
+                      onClick={handleFacebookLogin}
+                      disabled={!isLegitBrowser}
+                    />
+                  </Grid>
+                  {!isLegitBrowser && (
+                    <Grid
+                      item
+                      xs={11}
+                      className="simpler-font"
+                      style={{ fontSize: '0.6rem' }}
+                    >
+                      To sign up using Facebook or Google, please open this site
+                      in a web browser such as Safari or Chrome.
+                    </Grid>
+                  )}
+                </Grid>
+                <Typography component="div">
+                  <p>OR, sign up with email:</p>
+                </Typography>
+                <EmailSignupFields
+                  handleSignupError={handleSignupError}
+                  handleSignupSuccess={handleSignupSuccess}
+                />
+              </>
+            )}
+            <p style={{ textAlign: 'center' }}>
+              Already have an account? <SignInLink /> .
+            </p>
+          </>
+        )}
+      </IfFirebaseUnAuthed>
+    </div>
   );
 };

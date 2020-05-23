@@ -37,15 +37,8 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(1),
     },
   },
-  dialogContent: {
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-    [theme.breakpoints.up('sm')]: {
-      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
-    },
-  },
   firstPageBtnsWrap: {
-    marginTop: theme.spacing(1),
-    marginBottom: 4,
+    marginTop: 6,
   },
   datePicker: {
     marginLeft: 5,
@@ -122,10 +115,10 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
     <>
       {!showDates ? (
         <>
-          <DialogTitle className={classes.dialogTitle} id="form-dialog-title">
+          <DialogTitle id="form-dialog-title">
             What are your symptoms?
           </DialogTitle>
-          <DialogContent dividers className={classes.dialogContent}>
+          <DialogContent dividers>
             <Grid container>
               <Grid item xs={6}>
                 {firstHalfSymptoms.map((symptom, idx) => (
@@ -179,6 +172,7 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
             <Grid
               container
               justify="center"
+              spacing={2}
               className={classes.firstPageBtnsWrap}
             >
               <Grid item>
@@ -191,7 +185,6 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
                   I have no symptoms
                 </Button>
               </Grid>
-              <Grid item xs={1} />
               <Grid item>
                 <Button
                   size="small"
@@ -211,7 +204,7 @@ export const SymptomStep: FC<SymptomStepType> = ({ setActiveStep }) => {
           <DialogTitle className={classes.dialogTitle}>
             When did you have these symptoms?
           </DialogTitle>
-          <DialogContent dividers className={classes.dialogContent}>
+          <DialogContent dividers>
             <Grid container>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 {getSymptoms().map((

@@ -35,12 +35,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.success.main,
     marginRight: 4,
   },
-  dialogContent: {
-    '& a': {
-      color: theme.palette.info.main,
-    },
-  },
   dialog: {
+    // DialogTitle child is created dynamically as a <Typography> component. Can
+    // disable that but then we lose the consistency w/the other dialog titles.
     '& .MuiDialogTitle-root > .MuiTypography-root': {
       display: 'flex',
       alignItems: 'center',
@@ -99,6 +96,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
             Provide your{' '}
             <a
               target="_blank"
+              className="obvious-link"
               rel="noopener noreferrer"
               href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
             >
@@ -110,6 +108,7 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
             Learn more about your symptoms at the{' '}
             <a
               target="_blank"
+              className="obvious-link"
               rel="noopener noreferrer"
               href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
             >

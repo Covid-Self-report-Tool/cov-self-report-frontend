@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Dialog,
   DialogActions,
@@ -11,31 +11,62 @@ import {
 type SimpleModalTypes = {
   children: React.ReactNode;
   title: string;
+  fullScreen?: boolean;
+  leftSideElems?: () => React.ReactNode; // e.g. "Don't have an account?"
+  onClose?: () => void;
 };
 
-export const SimpleModal: FC<SimpleModalTypes> = ({ children, title }) => {
-  const history = useHistory();
+const useStyles = makeStyles((theme: Theme) => ({
+  actionBtn: {
+    minWidth: 40,
+  },
+  dialogContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+}));
+
+export const SimpleModal: FC<SimpleModalTypes> = ({
+  children,
+  title,
+  leftSideElems,
+  fullScreen = true,
+  onClose,
+}) => {
+  const classes = useStyles();
   const [open, setOpen] = useState(true);
 
   const handleClose = () => {
     setOpen(false);
-    history.goBack();
+
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
     <Dialog
       open={open}
+      fullScreen={fullScreen}
       aria-labelledby="form-dialog-title"
       onClose={handleClose}
+      fullWidth
     >
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent dividers className={classes.dialogContent}>
+        {children}
+      </DialogContent>
       <DialogActions>
-        <Button onClick={() => history.goBack()} color="primary">
-          Back
-        </Button>
-        <Button onClick={() => history.push('/')} color="primary">
-          Back to Map
+        {leftSideElems ? leftSideElems() : null}
+        <Button
+          className={classes.actionBtn}
+          onClick={() => handleClose()}
+          color="primary"
+          size="small"
+        >
+          Close
         </Button>
       </DialogActions>
     </Dialog>

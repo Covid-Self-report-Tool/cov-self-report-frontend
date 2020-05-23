@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Fab, Popover, Box } from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
 
 import { ShareButtons } from 'components';
 
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   shareBtn: {
     [theme.breakpoints.down(321)]: { display: 'none' },
   },
