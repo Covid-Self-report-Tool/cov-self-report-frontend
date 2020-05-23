@@ -62,7 +62,6 @@ export const ShareButtons: FC = () => {
       justify="center"
       wrap="nowrap"
       alignItems="center"
-      style={{ margin: '12px 0' }}
     >
       {ShareButtonConfig.map((item, i) => (
         <Grid key={i} item>

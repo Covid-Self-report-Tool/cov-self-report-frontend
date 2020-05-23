@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme: Theme) => ({
       alignItems: 'center',
     },
   },
+  dialogContent: {
+    // The recent global default of `center` looks bad here (too many elems...)
+    justifyContent: 'flex-start',
+  },
   divider: {
     margin: theme.spacing(2),
   },
@@ -77,16 +82,18 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
         Submission sent
       </DialogTitle>
       <DialogContent dividers className={classes.dialogContent}>
-        <Typography align="center">
-          Thank you for contributing! So far,{' '}
-          {submissions && submissions.length} users like you have added
-          themselves to the world map.
-        </Typography>
+        <Box textAlign="center" paddingRight={2} paddingLeft={2}>
+          <Typography>
+            Thank you for contributing! To date,{' '}
+            {submissions && submissions.length} users like you have added
+            themselves to the world map.
+          </Typography>
+        </Box>
         <Divider variant="middle" className={classes.divider} />
-        <ShareButtons />
-        <Typography variant="h5" paragraph>
-          What you can do next:
-        </Typography>
+        <Box padding={2}>
+          <ShareButtons />
+        </Box>
+        <Typography variant="h5">What you can do next:</Typography>
         <ol className="simpler-font" style={{ fontSize: 16, paddingLeft: 30 }}>
           <li>
             Share this with your friends and family by using the share buttons
