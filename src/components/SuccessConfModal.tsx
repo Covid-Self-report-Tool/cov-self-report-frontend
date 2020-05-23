@@ -1,19 +1,23 @@
-import React, { FC } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import React, { FC, useContext } from 'react';
+import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
+  Divider,
   Slide,
   Typography,
+  useMediaQuery,
 } from '@material-ui/core';
 import { TransitionProps } from '@material-ui/core/transitions';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 
-import { ShareButtons } from 'components';
+import { GlobalContext, ShareButtons } from 'components';
+import { Disclaimer } from './Disclaimer';
+import { useSubmitted } from '../utils/queries';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement<any, any> },
@@ -27,21 +31,35 @@ interface SuccessConfModalTypes {
   setOpen: React.Dispatch<boolean>;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    icon: {
-      color: theme.palette.success.main,
+const useStyles = makeStyles((theme: Theme) => ({
+  icon: {
+    color: theme.palette.success.main,
+    marginRight: 4,
+  },
+  dialog: {
+    // DialogTitle child is created dynamically as a <Typography> component. Can
+    // disable that but then we lose the consistency w/the other dialog titles.
+    '& .MuiDialogTitle-root > .MuiTypography-root': {
+      display: 'flex',
+      alignItems: 'center',
     },
-    iconWrap: {
-      marginBottom: 0,
-      lineHeight: 0,
-    },
-  })
-);
+  },
+  dialogContent: {
+    // The recent global default of `center` looks bad here (too many elems...)
+    justifyContent: 'flex-start',
+  },
+  divider: {
+    margin: theme.spacing(2),
+  },
+}));
 
 export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
-  const { open, setOpen } = props;
   const classes = useStyles();
+  const theme = useTheme();
+  const { dispatch } = useContext(GlobalContext);
+  const { open, setOpen } = props;
+  const { data: submissions } = useSubmitted(dispatch);
+  const smallAndUp = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleClose = () => {
     setOpen(false);
@@ -50,29 +68,39 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
   return (
     <Dialog
       open={open}
+      fullScreen={!smallAndUp}
       data-cy="successful-submission"
       transitionDuration={{ enter: 900, exit: 400 }}
       TransitionComponent={Transition}
       onClose={handleClose}
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description"
+      className={classes.dialog}
     >
       <DialogTitle id="alert-dialog-slide-title">
-        Submission sent successfully
+        <CheckCircleRoundedIcon className={classes.icon} />
+        Submission sent
       </DialogTitle>
-      <DialogContent dividers>
-        <Typography variant="h2" align="center" className={classes.iconWrap}>
-          <CheckCircleRoundedIcon className={classes.icon} fontSize="inherit" />
-        </Typography>
-        <DialogContentText
-          id="alert-dialog-slide-description"
-          className={`simpler-font`}
-          variant="body2"
-        >
-          <p>
-            Thank you for adding your case to the world map. You're helping us
-            understand COVID-19 so that we can fight it together. Please share
-            this with friends who are unwell. Send us your{' '}
+      <DialogContent dividers className={classes.dialogContent}>
+        <Box textAlign="center" paddingRight={2} paddingLeft={2}>
+          <Typography>
+            Thank you for contributing! To date,{' '}
+            {submissions && submissions.length} users like you have added
+            themselves to the world map.
+          </Typography>
+        </Box>
+        <Divider variant="middle" className={classes.divider} />
+        <Box padding={2}>
+          <ShareButtons />
+        </Box>
+        <Typography variant="h5">What you can do next:</Typography>
+        <ol className="simpler-font" style={{ fontSize: 16, paddingLeft: 30 }}>
+          <li>
+            Share this with your friends and family by using the share buttons
+            above.
+          </li>
+          <li>
+            Provide your{' '}
             <a
               target="_blank"
               className="obvious-link"
@@ -81,10 +109,10 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
             >
               thoughts and feedback
             </a>
-            . Sign up for email updates on the project.
-          </p>
-          <p>
-            To get support and learn more about COVID-19, please visit the{' '}
+            .
+          </li>
+          <li>
+            Learn more about your symptoms at the{' '}
             <a
               target="_blank"
               className="obvious-link"
@@ -94,15 +122,13 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
               World Health Organization’s COVID-19 page
             </a>
             .
-          </p>
-          <p>
-            <ShareButtons />
-          </p>
-          <p>
-            COMING SOON: Get updates on current infections in your area and how
-            they are changing.
-          </p>
-        </DialogContentText>
+          </li>
+          <li>
+            Come back soon and get updates on trends of potential and confirmed
+            infections in your area.
+          </li>
+        </ol>
+        <Disclaimer />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">

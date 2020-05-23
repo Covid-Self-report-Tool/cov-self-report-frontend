@@ -56,7 +56,13 @@ const ShareButtonConfig = [
 
 export const ShareButtons: FC = () => {
   return (
-    <Grid container spacing={1} justify="center" wrap="nowrap">
+    <Grid
+      container
+      spacing={1}
+      justify="center"
+      wrap="nowrap"
+      alignItems="center"
+    >
       {ShareButtonConfig.map((item, i) => (
         <Grid key={i} item>
           {item}

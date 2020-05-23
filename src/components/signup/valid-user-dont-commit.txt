@@ -1,6 +1,0 @@
-// import { isValidUserAgent } from 'utils';
-// import { UnsupportedBrowserMsg, SimpleModal } from 'components';
-
-// if (!isValidUserAgent()) {
-//     return <UnsupportedBrowserMsg />;
-//   }
