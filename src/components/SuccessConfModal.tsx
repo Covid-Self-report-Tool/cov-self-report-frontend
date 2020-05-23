@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {
   Button,
@@ -12,8 +12,10 @@ import {
 } from '@material-ui/core';
 import { TransitionProps } from '@material-ui/core/transitions';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
+import { GlobalContext, ShareButtons } from 'components';
+import { Disclaimer } from './Disclaimer';
+import { useSubmitted } from '../utils/queries';
 
-import { ShareButtons } from 'components';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement<any, any> },
@@ -41,12 +43,18 @@ const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.info.main,
       },
     },
-  })
+    disclaimer: {
+      fontSize: 13,
+    },
+  }),
 );
 
 export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
   const { open, setOpen } = props;
   const classes = useStyles();
+
+  const { state, dispatch } = useContext(GlobalContext);
+  const { data: submissions } = useSubmitted(dispatch);
 
   const handleClose = () => {
     setOpen(false);
@@ -75,36 +83,54 @@ export const SuccessConfModal: FC<SuccessConfModalTypes> = props => {
           variant="body2"
         >
           <p>
-            Thank you for adding your case to the world map. You're helping us
-            understand COVID-19 so that we can fight it together. Please share
-            this with friends who are unwell. Send us your{' '}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
+            Thank you for contributing! So far, {submissions && submissions.length} users like you have
+            added themselves to the world map.
+          </p>
+          <p>
+            <ShareButtons/>
+          </p>
+          <p>
+            <DialogContentText
+              id="alert-dialog-slide-description"
+              variant="body2"
             >
-              thoughts and feedback
-            </a>
-            . Sign up for email updates on the project.
+              What you can do next:
+            </DialogContentText>
+            <ol>
+              <li>
+                Share this with your friends and family by using the share buttons above.
+              </li>
+              <li>
+                Share your{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfkQJMihQUlA6scYvjr1A1OZiXGRRxQLkD1YIiklGDq5YTclQ/viewform?usp=sf_link"
+                >
+                  thoughts and feedback
+                </a>
+                .
+              </li>
+              <li>
+                Learn more about your symptoms at the{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
+                >
+                  World Health Organization’s COVID-19 page
+                </a>
+                .
+              </li>
+              <li>
+                Come back soon and get updates on trends of potential and confirmed
+                infections in your area.
+              </li>
+            </ol>
           </p>
-          <p>
-            To get support and learn more about COVID-19, please visit the{' '}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
-            >
-              World Health Organization’s COVID-19 page
-            </a>
-            .
-          </p>
-          <p>
-            <ShareButtons />
-          </p>
-          <p>
-            COMING SOON: Get updates on current infections in your area and how
-            they are changing.
-          </p>
+          <div className={classes.disclaimer}>
+            <Disclaimer/>
+          </div>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
