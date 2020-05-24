@@ -202,11 +202,15 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
               variant="contained"
               data-cy={'register-email'}
               color="secondary"
-              disabled={!captchaVerified}
+              disabled={!captchaVerified || submitting}
               startIcon={<Email />}
               onClick={handleEmailSignup}
             >
-              {!submitting ? 'Sign up with email' : <CircularProgress />}
+              {!submitting ? (
+                'Sign up with email'
+              ) : (
+                <CircularProgress size={28} />
+              )}
             </Button>
           </Grid>
         </Grid>

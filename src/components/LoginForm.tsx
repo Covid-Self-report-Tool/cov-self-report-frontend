@@ -239,9 +239,9 @@ export const LoginForm: FC = () => {
             size="small"
             onClick={handleEmailLogin}
             startIcon={<Email />}
-            disabled={!email || !password}
+            disabled={!email || !password || submitting}
           >
-            {!submitting ? 'Log in with email' : <CircularProgress />}
+            {!submitting ? 'Log in with email' : <CircularProgress size={28} />}
           </Button>
         </Grid>
       </Grid>
