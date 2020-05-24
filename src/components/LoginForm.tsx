@@ -6,6 +6,7 @@ import {
   Typography,
   InputAdornment,
   Link,
+  CircularProgress,
 } from '@material-ui/core';
 import { AccountCircle, Https, Email } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,6 +33,7 @@ export const LoginForm: FC = () => {
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const handleLoginError = (code: string, message: string) => {
     switch (code) {
@@ -87,9 +89,11 @@ export const LoginForm: FC = () => {
     resetErrors();
 
     try {
+      setSubmitting(true);
       await login(email, password);
       handleLoginSuccess();
     } catch (err) {
+      setSubmitting(false);
       handleLoginError(err.code, err.message);
     }
   };
@@ -235,9 +239,9 @@ export const LoginForm: FC = () => {
             size="small"
             onClick={handleEmailLogin}
             startIcon={<Email />}
-            disabled={!email || !password}
+            disabled={!email || !password || submitting}
           >
-            Login with email
+            {!submitting ? 'Log in with email' : <CircularProgress size={28} />}
           </Button>
         </Grid>
       </Grid>

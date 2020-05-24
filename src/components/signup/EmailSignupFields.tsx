@@ -1,16 +1,18 @@
 import React, { FC, useEffect, useContext, useState, useReducer } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Grid, TextField, InputAdornment } from '@material-ui/core';
-import { AccountCircle, Https } from '@material-ui/icons';
+import {
+  Grid,
+  TextField,
+  InputAdornment,
+  CircularProgress,
+  Button,
+} from '@material-ui/core';
+import { AccountCircle, Email, Https } from '@material-ui/icons';
 
 import firebase from 'config/firebase';
 import { signUp } from 'utils/firebase';
 import { GlobalContext } from 'context';
-import {
-  emailSignupFormInitialState,
-  formReducer,
-  SignupLoginBtn,
-} from 'components/signup';
+import { emailSignupFormInitialState, formReducer } from 'components/signup';
 
 declare global {
   interface Window {
@@ -35,6 +37,7 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
 }) => {
   const classes = useStyles();
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const { dispatch: dispatchGlobal } = useContext(GlobalContext);
   const [formState, dispatchForm] = useReducer(
     formReducer,
@@ -67,9 +70,11 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
       setFormValue('passwordError2', 'Passwords do not match');
     } else {
       try {
+        setSubmitting(true);
         await signUp(formState.email, formState.password, formState.captcha);
         handleSignupSuccess();
       } catch (err) {
+        setSubmitting(false);
         handleSignupError(err.code, err.message);
       }
     }
@@ -193,12 +198,20 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             />
           </Grid>
           <Grid item xs={12} sm={8}>
-            <SignupLoginBtn
-              type="email"
-              textOverride="Sign up with email"
+            <Button
+              variant="contained"
+              data-cy={'register-email'}
+              color="secondary"
+              disabled={!captchaVerified || submitting}
+              startIcon={<Email />}
               onClick={handleEmailSignup}
-              disabled={!captchaVerified}
-            />
+            >
+              {!submitting ? (
+                'Sign up with email'
+              ) : (
+                <CircularProgress size={28} />
+              )}
+            </Button>
           </Grid>
         </Grid>
       </div>

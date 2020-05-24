@@ -273,7 +273,7 @@ export const Modal: FC<ModalTypes> = ({ setSuccessConfOpen }) => {
             data-cy="submit-button"
             disabled={!canSubmit() || submitting}
           >
-            {!submitting ? 'Submit' : <CircularProgress />}
+            {!submitting ? 'Submit' : <CircularProgress size={28} />}
           </Button>
         )}
       </DialogActions>
