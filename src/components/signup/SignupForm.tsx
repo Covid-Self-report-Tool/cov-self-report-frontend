@@ -77,7 +77,7 @@ export const SignupForm: FC = () => {
   };
 
   const handleSignupError = (code: string, message: string) => {
-    switch (code) {
+    switch (message) {
       case 'auth/email-already-in-use':
         setFormValue('emailError', 'That email is already in use');
         break;
