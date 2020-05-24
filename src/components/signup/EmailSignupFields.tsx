@@ -12,11 +12,7 @@ import { AccountCircle, Email, Https } from '@material-ui/icons';
 import firebase from 'config/firebase';
 import { signUp } from 'utils/firebase';
 import { GlobalContext } from 'context';
-import {
-  emailSignupFormInitialState,
-  formReducer,
-  SignupLoginBtn,
-} from 'components/signup';
+import { emailSignupFormInitialState, formReducer } from 'components/signup';
 
 declare global {
   interface Window {
