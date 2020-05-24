@@ -1,7 +1,13 @@
 import React, { FC, useEffect, useContext, useState, useReducer } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Grid, TextField, InputAdornment } from '@material-ui/core';
-import { AccountCircle, Https } from '@material-ui/icons';
+import {
+  Grid,
+  TextField,
+  InputAdornment,
+  CircularProgress,
+  Button,
+} from '@material-ui/core';
+import { AccountCircle, Email, Https } from '@material-ui/icons';
 
 import firebase from 'config/firebase';
 import { signUp } from 'utils/firebase';
@@ -35,6 +41,7 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
 }) => {
   const classes = useStyles();
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const { dispatch: dispatchGlobal } = useContext(GlobalContext);
   const [formState, dispatchForm] = useReducer(
     formReducer,
@@ -67,9 +74,11 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
       setFormValue('passwordError2', 'Passwords do not match');
     } else {
       try {
+        setSubmitting(true);
         await signUp(formState.email, formState.password, formState.captcha);
         handleSignupSuccess();
       } catch (err) {
+        setSubmitting(false);
         handleSignupError(err.code, err.message);
       }
     }
@@ -193,12 +202,16 @@ export const EmailSignupFields: FC<EmailSignupFieldsType> = ({
             />
           </Grid>
           <Grid item xs={12} sm={8}>
-            <SignupLoginBtn
-              type="email"
-              textOverride="Sign up with email"
-              onClick={handleEmailSignup}
+            <Button
+              variant="contained"
+              data-cy={'register-email'}
+              color="secondary"
               disabled={!captchaVerified}
-            />
+              startIcon={<Email />}
+              onClick={handleEmailSignup}
+            >
+              {!submitting ? 'Sign up with email' : <CircularProgress />}
+            </Button>
           </Grid>
         </Grid>
       </div>
