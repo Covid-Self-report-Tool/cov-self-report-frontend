@@ -7,7 +7,7 @@ name: CI
 on:
   push:
     branches:
-      - jason/gh-actions
+      - jason/gh-actions-init
   # pull_request:
     # branches: [ master ]
 
