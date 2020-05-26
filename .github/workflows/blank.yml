@@ -4,10 +4,8 @@ name: Dev Build
 # request events but only for the master branch
 on:
   push:
-    branches:
-      - jason/gh-actions-init
-  # pull_request:
-  # branches: [ master ]
+    branches-ignore:
+      - "master"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in
 # parallel
@@ -52,6 +50,15 @@ jobs:
           REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.DEV_FIREBASE_MESSAGING_SENDER_ID }}
           REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.DEV_FIREBASE_PROJECT_ID }}
           REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.DEV_FIREBASE_STORAGE_BUCKET }}
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.DEV_AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: "build"
 
   multi_line_job:
     name: Should run in parallel with build
