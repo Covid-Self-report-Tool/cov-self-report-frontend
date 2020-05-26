@@ -59,6 +59,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
           SOURCE_DIR: "build"
+          DEST_DIR: "$GITHUB_REF"
 
   multi_line_job:
     name: Should run in parallel with build
