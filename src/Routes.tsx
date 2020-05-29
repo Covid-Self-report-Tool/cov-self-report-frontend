@@ -37,7 +37,7 @@ const Routes: FC = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <GlobalCss />
-            <Router basename={process.env.PUBLIC_URL}>
+            <Router basename="/review/jason/gh-pages-init">
               <Dashboard>
                 <Route path="/models">
                   <Models />
