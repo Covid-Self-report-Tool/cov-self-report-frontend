@@ -41,10 +41,11 @@ jobs:
         run: node -v
       - name: Install npm dependencies
         run: npm ci
-      - name: Get/set branch name
-        id: branch_name
-        run: |
-          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+      # CRED: https://stackoverflow.com/a/58035262/1048518
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: Build project
         run: npm run build
         env:
@@ -61,14 +62,11 @@ jobs:
           REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.DEV_FIREBASE_STORAGE_BUCKET }}
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
-        env:
-          TARGET_FOLDER: review/${{ steps.branch_name.outputs.SOURCE_BRANCH }}
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # The branch the action should deploy to
-          BRANCH: gh-pages
+          BRANCH: gh-pages # The branch the action should deploy to
           FOLDER: build # The folder the action should deploy
-          TARGET_FOLDER: ${{ env.TARGET_FOLDER }}
+          TARGET_FOLDER: review/${{ steps.extract_branch.outputs.branch }}
   #
   # TODO: add something useful to run in parallel...
   # multi_line_job:
