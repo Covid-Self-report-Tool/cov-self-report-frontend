@@ -65,15 +65,17 @@ jobs:
           SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
         with:
           ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: review # The branch the action should deploy to.
-          FOLDER: build # The folder the action should deploy.
-          TARGET_FOLDER: "$SOURCE_BRANCH"
-
-  multi_line_job:
-    name: Should run in parallel with build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run multi-line script w/o checkout
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          BRANCH: "review/$SOURCE_BRANCH" # The branch the action should deploy to
+          FOLDER: build # The folder the action should deploy
+          TARGET_FOLDER: review
+  #
+  # TODO: add something useful to run in parallel...
+  # multi_line_job:
+  #   name: Should run in parallel with build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Run multi-line script w/o checkout
+  #       run: |
+  #         echo Add other actions to build,
+  #         echo test, and deploy your project.
+  #
