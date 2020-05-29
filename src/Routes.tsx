@@ -37,7 +37,7 @@ const Routes: FC = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <GlobalCss />
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
               <Dashboard>
                 <Route path="/models">
                   <Models />
