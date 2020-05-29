@@ -53,7 +53,7 @@ export const Home: FC = () => {
         <SharingPopoutMenu />
       </Box>
       <Box position="absolute" bottom={0} left={8} zIndex={1}>
-        <Link href="/terms-of-service" color="textSecondary">
+        <Link href="./terms-of-service" color="textSecondary">
           Terms of service
         </Link>
       </Box>
