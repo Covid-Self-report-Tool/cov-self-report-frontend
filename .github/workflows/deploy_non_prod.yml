@@ -68,7 +68,7 @@ jobs:
           # The branch the action should deploy to
           BRANCH: gh-pages
           FOLDER: build # The folder the action should deploy
-          TARGET_FOLDER: $TARGET_FOLDER
+          TARGET_FOLDER: ${{ env.TARGET_FOLDER }}
   #
   # TODO: add something useful to run in parallel...
   # multi_line_job:
