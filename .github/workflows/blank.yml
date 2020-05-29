@@ -1,3 +1,4 @@
+# CRED: https://bit.ly/3cblh32 (for most of this process)
 name: Dev Build
 
 # Controls when the action will run. Triggers the workflow on push or pull
@@ -28,6 +29,10 @@ jobs:
       # access it
       - name: git checkout the repo
         uses: actions/checkout@v2
+        # If you're using actions/checkout@v2 you must set persist-credentials
+        # to false in most cases for the gh-pages deployment to work correctly.
+        with:
+          persist-credentials: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -35,7 +40,11 @@ jobs:
       - name: Confirm Node version
         run: node -v
       - name: Install npm dependencies
-        run: npm install
+        run: npm ci
+      - name: Get/set branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
       - name: Build project
         run: npm run build
         env:
@@ -50,16 +59,15 @@ jobs:
           REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.DEV_FIREBASE_MESSAGING_SENDER_ID }}
           REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.DEV_FIREBASE_PROJECT_ID }}
           REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.DEV_FIREBASE_STORAGE_BUCKET }}
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read --delete
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         env:
-          AWS_S3_BUCKET: ${{ secrets.DEV_AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: "build"
-          DEST_DIR: "$GITHUB_REF"
+          SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
+        with:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: review # The branch the action should deploy to.
+          FOLDER: build # The folder the action should deploy.
+          TARGET_FOLDER: "$SOURCE_BRANCH"
 
   multi_line_job:
     name: Should run in parallel with build
