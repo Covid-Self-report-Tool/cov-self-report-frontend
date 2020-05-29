@@ -64,7 +64,7 @@ jobs:
         env:
           SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
         with:
-          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: "review/$SOURCE_BRANCH" # The branch the action should deploy to
           FOLDER: build # The folder the action should deploy
           TARGET_FOLDER: review
