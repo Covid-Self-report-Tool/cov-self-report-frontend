@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Comment PR with dynamic message
-        uses: ./
+        uses: thollander/actions-comment-pull-request@master
         with:
           message: "Review link:
             https://covid-self-report-tool.github.io/cov-self-report-frontend/review/${{
