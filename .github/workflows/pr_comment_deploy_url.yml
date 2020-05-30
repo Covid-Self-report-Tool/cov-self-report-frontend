@@ -5,13 +5,15 @@ jobs:
     runs-on: ubuntu-latest
     name: An example job to comment a PR
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v2.x
       - name: Checkout
         uses: actions/checkout@v1
-
       - name: Comment PR with dynamic message
         uses: ./
         with:
-          message:
-            "Dynamic message : your current branch is ${{ github.head_ref }}.
-            Check [Contexts and expression syntax](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions) available variables."
+          message: "Review link:
+            https://covid-self-report-tool.github.io/cov-self-report-frontend/review/${{
+            env.GITHUB_REF_SLUG}}. Check [Contexts and expression
+            syntax](https://bit.ly/3djEzoe) for available variables."
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -37,7 +37,7 @@ const Routes: FC = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <GlobalCss />
-            <Router basename="/review/jason/gh-pages-init">
+            <Router basename="/cov-self-report-frontend/review/jason/gh-pages-init">
               <Dashboard>
                 <Route path="/models">
                   <Models />
