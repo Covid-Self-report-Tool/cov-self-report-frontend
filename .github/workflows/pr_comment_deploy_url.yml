@@ -15,6 +15,6 @@ jobs:
         uses: thollander/actions-comment-pull-request@master
         with:
           message: "### 🔗🔗 Review link 🔗🔗\n
-            This is the deployment URL for the reviewer:
+            This is the deployment URL for the reviewer:\n
             ${{ env.BASE_REVIEW_URL }}/${{ env.GITHUB_HEAD_REF_SLUG }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
