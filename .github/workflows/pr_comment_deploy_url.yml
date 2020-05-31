@@ -14,6 +14,7 @@ jobs:
           BASE_REVIEW_URL: https://covid-self-report-tool.github.io/cov-self-report-frontend/review
         uses: thollander/actions-comment-pull-request@master
         with:
-          message: "### Review link:\n
-            <br>${{ env.BASE_REVIEW_URL }}/${{ env.GITHUB_REF_SLUG }}"
+          message: "### 🔗🔗 Review link 🔗🔗\n
+            This is the deployment URL for the reviewer:
+            ${{ env.BASE_REVIEW_URL }}/${{ env.GITHUB_HEAD_REF_SLUG }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
