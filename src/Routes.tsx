@@ -37,7 +37,7 @@ const Routes: FC = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <GlobalCss />
-            <Router>
+            <Router basename={process.env.REACT_APP_ROUTER_BASENAME || '/'}>
               <Dashboard>
                 <Route path="/models">
                   <Models />

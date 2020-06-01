@@ -117,7 +117,7 @@ export const SplashScreen: FC = () => {
           </Grid>
           <Typography align="center" gutterBottom variant="subtitle2">
             This is an open source public data project -{' '}
-            <Link href="/about#our-story">Read our story and learn more</Link>
+            <Link href="./about#our-story">Read our story and learn more</Link>
           </Typography>
         </DialogContent>
         <DialogActions>

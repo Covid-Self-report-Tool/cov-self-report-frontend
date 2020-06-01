@@ -63,7 +63,7 @@ export const AcctReqExplain: FC = () => {
               provide on this website. We use Firebase for secure logins and
               will never store your password on this website. Read our{' '}
               <Link
-                href="/privacy-policy"
+                href="./privacy-policy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="obvious-link"

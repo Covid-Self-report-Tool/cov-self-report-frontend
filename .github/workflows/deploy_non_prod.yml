@@ -1,0 +1,83 @@
+# CRED: https://bit.ly/3cblh32 (for most of this process)
+name: Dev Build
+
+# Controls when the action will run. Triggers the workflow on push or pull
+# request events but only for the master branch
+on:
+  push:
+    branches-ignore:
+      - "master"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in
+# parallel
+jobs:
+  # Job ID
+  build:
+    # The name of the job displayed on GitHub.
+    name: Build React project
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    # Steps represent a sequence of tasks that to be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can
+      # access it
+      - name: git checkout the repo
+        uses: actions/checkout@v2
+        # If you're using actions/checkout@v2 you must set persist-credentials
+        # to false in most cases for the gh-pages deployment to work correctly.
+        with:
+          persist-credentials: false
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Confirm Node version
+        run: node -v
+      - name: Install npm dependencies
+        run: npm ci
+      # CRED: https://stackoverflow.com/a/58035262/1048518
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract_branch
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v2.x
+      - name: Build project
+        run: npm run build
+        env:
+          REACT_APP_ROUTER_BASENAME: /cov-self-report-frontend/review/${{ env.GITHUB_REF_SLUG }}
+          REACT_APP_BACKEND_URL: ${{ secrets.DEV_BACKEND_URL }}
+          REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.DEV_GOOGLE_MAPS_API_KEY }}
+          REACT_APP_MAPBOX_TOKEN: ${{ secrets.DEV_MAPBOX_TOKEN }}
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.DEV_FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_APP_ID: ${{ secrets.DEV_FIREBASE_APP_ID }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.DEV_FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.DEV_FIREBASE_DATABASE_URL }}
+          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.DEV_FIREBASE_MEASUREMENT_ID }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.DEV_FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.DEV_FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.DEV_FIREBASE_STORAGE_BUCKET }}
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to
+          FOLDER: build # The folder the action should deploy
+          TARGET_FOLDER: review/${{ env.GITHUB_REF_SLUG }}
+  #
+  # TODO: add something useful to run in parallel...
+  # multi_line_job:
+  #   name: Should run in parallel with build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Run multi-line script w/o checkout
+  #       run: |
+  #         echo Add other actions to build,
+  #         echo test, and deploy your project.
+  #

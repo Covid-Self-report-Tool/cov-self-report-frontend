@@ -1,0 +1,20 @@
+on: pull_request
+
+jobs:
+  example_comment_pr:
+    runs-on: ubuntu-latest
+    name: Add deploy/review URL to pull request
+    steps:
+      - name: Inject slug variables
+        uses: rlespinasse/github-slug-action@v2.x
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Add review URL as PR comment
+        env:
+          BASE_REVIEW_URL: https://covid-self-report-tool.github.io/cov-self-report-frontend/review
+        uses: thollander/actions-comment-pull-request@master
+        with:
+          message: "### 🔗🔗 Review link 🔗🔗\n
+            This is the deployment URL for the reviewer:\n
+            ${{ env.BASE_REVIEW_URL }}/${{ env.GITHUB_HEAD_REF_SLUG }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
