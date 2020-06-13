@@ -7,7 +7,7 @@ import { tickersConfig } from 'config/map';
 
 import { GlobalContext, SharingPopoutMenu, SplashScreen } from 'components';
 import { TickerCards } from 'components/ticker-cards';
-import { Map } from 'components/map';
+import { Map, MapboxWordmark } from 'components/map';
 import { calculateTotals } from 'utils';
 import { useCountryTotals, useSubmitted } from 'utils/queries';
 
@@ -49,14 +49,15 @@ export const Home: FC = () => {
   return (
     <>
       <SplashScreen />
-      <Box position="absolute" bottom={29} left={8} zIndex={1}>
+      <Box position="absolute" bottom={54} left={8} zIndex={1}>
         <SharingPopoutMenu />
       </Box>
-      <Box position="absolute" bottom={0} left={8} zIndex={1}>
+      <Box position="absolute" bottom={25} left={8} zIndex={1}>
         <Link href="./terms-of-service" color="textSecondary">
           Terms of service
         </Link>
       </Box>
+      <MapboxWordmark />
       <Map data={countryTotals || []} submittedFeats={submissions} />
       <TickerCards
         config={tickersConfig}
