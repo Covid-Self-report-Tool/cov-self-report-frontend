@@ -1,0 +1,26 @@
+{
+  "name": "COVID-19 Self-reporting Tool",
+  "description": "An open data tool that tracks self-reported and confirmed infections",
+  "short_name": "CSRT",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48 32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#005f66",
+  "background_color": "#3f858c"
+}
